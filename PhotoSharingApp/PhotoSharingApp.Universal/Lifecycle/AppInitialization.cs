@@ -48,7 +48,7 @@ namespace PhotoSharingApp.Universal.Lifecycle
             try
             {
                 // Try to restore sign in status
-                await photoService.RestoreSignInStatusAsync();
+                // await photoService.RestoreSignInStatusAsync();
             }
             catch (Exception)
             {

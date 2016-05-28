@@ -22,10 +22,13 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
+using Windows.UI;
 using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 using Microsoft.Practices.ServiceLocation;
 using PhotoSharingApp.Universal.ViewModels;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace PhotoSharingApp.Universal.Views
 {
@@ -37,8 +40,28 @@ namespace PhotoSharingApp.Universal.Views
         public SignInPage()
         {
             InitializeComponent();
-            InputPane.GetForCurrentView().Showing += Keyboard_OnHide;
-            InputPane.GetForCurrentView().Hiding += Keyboard_OnShow;
+            //InputPane.GetForCurrentView().Showing += Keyboard_OnHide;
+            //InputPane.GetForCurrentView().Hiding += Keyboard_OnShow;
+            var _offSet = 0;
+
+            Windows.UI.ViewManagement.InputPane.GetForCurrentView().Showing += (s, args) =>
+            {
+                //SignInImage.Visibility = Visibility.Collapsed;
+                _offSet = (int)args.OccludedRect.Height;
+                args.EnsuredFocusedElementInView = true;
+                var trans = new TranslateTransform();
+                trans.Y = -(_offSet/2);
+                this.RenderTransform = trans;
+            };
+
+            Windows.UI.ViewManagement.InputPane.GetForCurrentView().Hiding += (s, args) =>
+            {
+                //SignInImage.Visibility = Visibility.Visible;
+                var trans = new TranslateTransform();
+                trans.Y = 0;
+                this.RenderTransform = trans;
+                args.EnsuredFocusedElementInView = false;
+            };
             ViewModel = ServiceLocator.Current.GetInstance<SignInViewModel>();
             DataContext = ViewModel;
         }
@@ -51,20 +74,41 @@ namespace PhotoSharingApp.Universal.Views
         private void LoginButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             //this.Frame.Navigate(typeof(MainPage));
+            ErrorProviderTextBlock.Text = "Incorrect username or password!";
+            ErrorProviderTextBlock.Visibility = Visibility.Visible;
 
         }
-        private void Keyboard_OnShow(InputPane sender, InputPaneVisibilityEventArgs args)
-        {
-            this.LoginScrollViewer.Height = this.ActualHeight - args.OccludedRect.Height - 50;
-        }
+        //private void Keyboard_OnShow(InputPane sender, InputPaneVisibilityEventArgs args)
+        //{
+        //    this.LoginScrollViewer.Height = this.ActualHeight - args.OccludedRect.Height - 50;
+        //}
 
-        private void Keyboard_OnHide(InputPane sender, InputPaneVisibilityEventArgs args)
-        {
-            this.LoginScrollViewer.Height = this.ActualHeight;
-        }
+        //private void Keyboard_OnHide(InputPane sender, InputPaneVisibilityEventArgs args)
+        //{
+        //    this.LoginScrollViewer.Height = this.ActualHeight;
+        //}
         private void UsernameTextBox_GotFocus(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            
+            UsernameTextBox.SelectAll();
+            UsernamePath.Fill = new SolidColorBrush(Colors.Teal);
+            ErrorProviderTextBlock.Visibility = Visibility.Collapsed;
+        }
+
+        private void UsernameTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            UsernamePath.Fill = new SolidColorBrush(Colors.Gray);
+        }
+
+        private void PassWordPasswordBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            PassWordPasswordBox.SelectAll();
+            PasswordPath.Fill = new SolidColorBrush(Colors.Teal);
+            ErrorProviderTextBlock.Visibility = Visibility.Collapsed;
+        }
+
+        private void PassWordPasswordBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            PasswordPath.Fill = new SolidColorBrush(Colors.Gray);
         }
     }
 }
