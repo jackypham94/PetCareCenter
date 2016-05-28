@@ -1,0 +1,112 @@
+﻿<Page
+    x:Class="PhotoSharingApp.Universal.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PhotoSharingApp.Universal.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:PhotoSharingApp.Universal.Controls"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <Style TargetType="TextBlock" x:Key="EnumerationContentStyle">
+            <Setter Property="FontSize" Value="{ThemeResource ContentControlFontSize}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="TextContentStyle" BasedOn="{StaticResource EnumerationContentStyle}">
+            <Setter Property="Margin" Value="0,24,0,12" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Light" />
+            <Setter Property="MaxWidth" Value="500" />
+        </Style>
+    </Page.Resources>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="layoutRoot">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <controls:PageHeader>
+            <controls:PageHeader.HeaderContent>
+                <TextBlock Text="SHOPPING" Style="{ThemeResource PageTitleTextBlockStyle}" />
+            </controls:PageHeader.HeaderContent>
+        </controls:PageHeader>
+        <ScrollViewer Grid.Row="1" IsTabStop="False">
+
+            <RelativePanel>
+                <ItemsControl RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                    <ItemsControl.ItemContainerTransitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition IsStaggeringEnabled="True"
+                                                 FromVerticalOffset="100" />
+                        </TransitionCollection>
+                    </ItemsControl.ItemContainerTransitions>
+                    <Rectangle Fill="WhiteSmoke" Height="200"></Rectangle>
+                    <TextBlock Text="Demo" Style="{StaticResource TextContentStyle}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Fill="WhiteSmoke" Height="150" Margin="0,0,5,0"></Rectangle>
+                        <Rectangle Grid.Column="1" Fill="WhiteSmoke" Height="150" Margin="2.5,0"></Rectangle>
+                        <Rectangle Grid.Column="2" Fill="WhiteSmoke" Height="150" Margin="5,0,0,0"></Rectangle>
+                    </Grid>
+                    <TextBlock Style="{StaticResource TextContentStyle}">
+            	<Run Text="Having bussy day? Long trip?"/>
+            	<LineBreak/>
+                <Run Text="You don't have time for pet? Your pet is sickness?"/>
+                <LineBreak/>
+            	<Run Text="We'll take care your pet"/>
+                    </TextBlock>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Fill="WhiteSmoke" Height="150" Margin="0,0,5,0"></Rectangle>
+                        <Rectangle Grid.Column="1" Fill="WhiteSmoke" Height="150" Margin="2.5,0"></Rectangle>
+                        <Rectangle Grid.Column="2" Fill="WhiteSmoke" Height="150" Margin="5,0,0,0"></Rectangle>
+                    </Grid>
+                    <TextBlock Style="{StaticResource TextContentStyle}">
+            	        <Run Text="Having bussy day? Long trip?"/>
+            	        <LineBreak/>
+                        <Run Text="You don't have time for pet? Your pet is sickness?"/>
+                        <LineBreak/>
+            	        <Run Text="We'll take care your pet"/>
+                    </TextBlock>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Fill="WhiteSmoke" Height="150" Margin="0,0,5,0"></Rectangle>
+                        <Rectangle Grid.Column="1" Fill="WhiteSmoke" Height="150" Margin="2.5,0"></Rectangle>
+                        <Rectangle Grid.Column="2" Fill="WhiteSmoke" Height="150" Margin="5,0,0,0"></Rectangle>
+                    </Grid>
+                    <TextBlock Style="{StaticResource TextContentStyle}">
+            	        <Run Text="Having bussy day? Long trip?"/>
+            	        <LineBreak/>
+                        <Run Text="You don't have time for pet? Your pet is sickness?"/>
+                        <LineBreak/>
+            	        <Run Text="We'll take care your pet"/>
+                    </TextBlock>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Fill="WhiteSmoke" Height="150" Margin="0,0,5,0"></Rectangle>
+                        <Rectangle Grid.Column="1" Fill="WhiteSmoke" Height="150" Margin="2.5,0"></Rectangle>
+                        <Rectangle Grid.Column="2" Fill="WhiteSmoke" Height="150" Margin="5,0,0,0"></Rectangle>
+                    </Grid>
+                </ItemsControl>
+            </RelativePanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
