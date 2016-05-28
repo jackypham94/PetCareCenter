@@ -297,8 +297,12 @@ namespace PhotoSharingApp.Universal.Views
                     .SingleOrDefault();
             }
 
+            //togglePaneButton.Background = itemToHighlight == null ?
+            //    new SolidColorBrush((Color)Application.Current.Resources["AppAccentLightColor"]) :
+            //    new SolidColorBrush(Colors.White);
+
             togglePaneButton.Background = itemToHighlight == null ?
-                new SolidColorBrush((Color)Application.Current.Resources["AppAccentLightColor"]) :
+                new SolidColorBrush(Colors.WhiteSmoke) :
                 new SolidColorBrush(Colors.White);
 
             ListViewItem container;

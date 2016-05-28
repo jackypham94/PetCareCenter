@@ -24,20 +24,26 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.WindowsAzure.MobileServices;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using Windows.ApplicationModel;
+using Windows.ApplicationModel.DataTransfer;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.Facades;
-using PhotoSharingApp.Universal.Services;
+using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Views;
 using Windows.ApplicationModel.Resources;
-using PhotoSharingApp.Universal.Models;
+using Microsoft.WindowsAzure.MobileServices;
+using PhotoSharingApp.Universal.Extensions;
+using PhotoSharingApp.Universal.Services;
 
 namespace PhotoSharingApp.Universal.ViewModels
 {
     /// <summary>
-    /// The ViewModel for the sign-in view.
+    /// ViewModel for Welcome screen.
     /// </summary>
-    public class SignInViewModel : ViewModelBase
+    public class RegisterViewModel : ViewModelBase
     {
         private readonly IDialogService _dialogService;
         private readonly INavigationFacade _navigationFacade;
@@ -49,22 +55,19 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <param name="navigationFacade">The navigation facade.</param>
         /// <param name="photoService">The photo service.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public SignInViewModel(INavigationFacade navigationFacade)
+        public RegisterViewModel(INavigationFacade navigationFacade, IPhotoService photoService,
+            IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
+            _photoService = photoService;
+            _dialogService = dialogService;
 
             // Initialize commands
-            //ChooseAuthProviderCommand = new RelayCommand<MobileServiceAuthenticationProvider>(OnChooseAuthProvider);
+            ChooseAuthProviderCommand = new RelayCommand<MobileServiceAuthenticationProvider>(OnChooseAuthProvider);
 
-            NavigateToTargetPageCommand = new RelayCommand(OnNavigateToTargetPage);
             // Initialize auth providers
-            //AuthenticationProviders = photoService.GetAvailableAuthenticationProviders();
+            AuthenticationProviders = photoService.GetAvailableAuthenticationProviders();
         }
-
-        /// <summary>
-        /// Gets the navigate to target page command.
-        /// </summary>
-        public RelayCommand NavigateToTargetPageCommand { get; }
 
         /// <summary>
         /// Gets or sets the authentication providers.
@@ -85,7 +88,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <value>
         /// The choose authentication provider command.
         /// </value>
-        //public RelayCommand<MobileServiceAuthenticationProvider> ChooseAuthProviderCommand { get; private set; }
+        public RelayCommand<MobileServiceAuthenticationProvider> ChooseAuthProviderCommand { get; private set; }
 
         /// <summary>
         /// Enables or disables the trigger to redirect
@@ -102,11 +105,11 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             try
             {
-                //await _photoService.SignInAsync(authenticationProviderProvider);
+                await _photoService.SignInAsync(authenticationProviderProvider);
 
                 if (RedirectToProfilePage)
                 {
-                    _navigationFacade.NavigateToMainPage();
+                    _navigationFacade.NavigateToProfileView();
                     _navigationFacade.RemoveBackStackFrames(1);
                 }
             }
@@ -122,11 +125,6 @@ namespace PhotoSharingApp.Universal.ViewModels
             {
                 await _dialogService.ShowNotification("GenericError_Title", "GenericError_Message");
             }
-        }
-
-        private void OnNavigateToTargetPage()
-        {
-            _navigationFacade.NavigateToRegisterPage();
         }
     }
 }

@@ -378,6 +378,14 @@ namespace PhotoSharingApp.Universal.Facades
         }
 
         /// <summary>
+        /// Navigates to the Register Page.
+        /// </summary>
+        public void NavigateToRegisterPage()
+        {
+            Navigate(typeof(RegisterViewModel));
+        }
+
+        /// <summary>
         /// Displays a dialog that lets the user pick
         /// a category.
         /// Removes the specified number of frames from the back stack.

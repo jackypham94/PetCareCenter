@@ -50,6 +50,7 @@ namespace PhotoSharingApp.Universal.Registries
             NavigationFacade.AddType(typeof(CategoriesPage), typeof(CategoriesViewModel));
             NavigationFacade.AddType(typeof(WelcomePage), typeof(WelcomeViewModel));
             NavigationFacade.AddType(typeof(MainPage), typeof(MainPageViewModel));
+            NavigationFacade.AddType(typeof(RegisterPage), typeof(RegisterViewModel));
 
 #if DEBUG
             NavigationFacade.AddType(typeof(DebugPage), typeof(DebugViewModel));

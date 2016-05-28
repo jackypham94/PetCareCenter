@@ -32,8 +32,7 @@
                 <TextBlock Text="SHOPPING" Style="{ThemeResource PageTitleTextBlockStyle}" />
             </controls:PageHeader.HeaderContent>
         </controls:PageHeader>
-        <ScrollViewer Grid.Row="1" IsTabStop="False">
-
+        <ScrollViewer Grid.Row="1">
             <RelativePanel>
                 <ItemsControl RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
                     <ItemsControl.ItemContainerTransitions>
@@ -55,11 +54,11 @@
                         <Rectangle Grid.Column="2" Fill="WhiteSmoke" Height="150" Margin="5,0,0,0"></Rectangle>
                     </Grid>
                     <TextBlock Style="{StaticResource TextContentStyle}">
-            	<Run Text="Having bussy day? Long trip?"/>
-            	<LineBreak/>
-                <Run Text="You don't have time for pet? Your pet is sickness?"/>
-                <LineBreak/>
-            	<Run Text="We'll take care your pet"/>
+            	        <Run Text="Having bussy day? Long trip?"/>
+            	        <LineBreak/>
+                        <Run Text="You don't have time for pet? Your pet is sickness?"/>
+                        <LineBreak/>
+            	        <Run Text="We'll take care your pet"/>  
                     </TextBlock>
                     <Grid>
                         <Grid.ColumnDefinitions>

@@ -1,0 +1,89 @@
+﻿<Page
+    x:Class="PhotoSharingApp.Universal.Views.HistoryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PhotoSharingApp.Universal.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:PhotoSharingApp.Universal.Controls"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <Style TargetType="TextBlock" x:Key="EnumerationContentStyle">
+            <Setter Property="FontSize" Value="{ThemeResource ContentControlFontSize}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="TextContentStyle" BasedOn="{StaticResource EnumerationContentStyle}">
+            <!--<Setter Property="Margin" Value="0,24,0,12" />-->
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Light" />
+            <Setter Property="MaxWidth" Value="500" />
+        </Style>
+    </Page.Resources>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="layoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <controls:PageHeader>
+            <controls:PageHeader.HeaderContent>
+                <TextBlock Text="HISTORY" Style="{ThemeResource PageTitleTextBlockStyle}" />
+            </controls:PageHeader.HeaderContent>
+        </controls:PageHeader>
+        <ScrollViewer Grid.Row="1">
+            <RelativePanel>
+                <ItemsControl RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                    <ItemsControl.ItemContainerTransitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition IsStaggeringEnabled="True"
+                                                 FromVerticalOffset="100" />
+                        </TransitionCollection>
+                    </ItemsControl.ItemContainerTransitions>
+
+                    <StackPanel RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                        <Grid>
+                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
+                        </Grid>
+                        <Grid Margin="0,5,0,0">
+                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
+                        </Grid>
+                        <Grid Margin="0,5,0,0">
+                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
+                        </Grid>
+                        <Grid Margin="0,5,0,0">
+                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
+                        </Grid>
+                        <Grid Margin="0,5,0,0">
+                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
+                        </Grid>
+                        <Grid Margin="0,5,0,0">
+                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
+                        </Grid>
+                        <Grid Margin="0,5,0,0">
+                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
+                        </Grid>
+                        <Grid Margin="0,5,0,0">
+                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
+                        </Grid>
+                        <Grid Margin="0,5,0,0">
+                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
+                        </Grid>
+                    </StackPanel>
+
+                </ItemsControl>
+            </RelativePanel>
+
+        </ScrollViewer>
+    </Grid>
+</Page>

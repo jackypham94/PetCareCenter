@@ -9,7 +9,7 @@ namespace PhotoSharingApp.Universal.NavigationBar
     /// Navigation bar menu item that navigates to the
     /// <see cref="WelcomePage" />.
     /// </summary>
-    public class CartNavigationBarMenuItem : NavigationBarMenuItemBase,
+    public class HistoryNavigationBarMenuItem : NavigationBarMenuItemBase,
         INavigationBarMenuItem
     {
         /// <summary>
@@ -17,7 +17,7 @@ namespace PhotoSharingApp.Universal.NavigationBar
         /// </summary>
         public Type DestPage
         {
-            get { return typeof(CartPage); }
+            get { return typeof(HistoryPage); }
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace PhotoSharingApp.Universal.NavigationBar
         /// </summary>
         public string Label
         {
-            get { return "Cart"; }
+            get { return "History"; }
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace PhotoSharingApp.Universal.NavigationBar
         /// </summary>
         public override Symbol Symbol
         {
-            get { return Symbol.Shop; }
+            get { return Symbol.Library; }
         }
     }
 }
