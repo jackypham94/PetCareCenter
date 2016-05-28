@@ -50,7 +50,8 @@ namespace PhotoSharingApp.Universal.Views
 
         private void LoginButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainPage));
+            //this.Frame.Navigate(typeof(MainPage));
+
         }
         private void Keyboard_OnShow(InputPane sender, InputPaneVisibilityEventArgs args)
         {
@@ -60,6 +61,10 @@ namespace PhotoSharingApp.Universal.Views
         private void Keyboard_OnHide(InputPane sender, InputPaneVisibilityEventArgs args)
         {
             this.LoginScrollViewer.Height = this.ActualHeight;
+        }
+        private void UsernameTextBox_GotFocus(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            
         }
     }
 }
