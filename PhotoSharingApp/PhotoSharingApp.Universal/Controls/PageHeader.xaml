@@ -66,7 +66,7 @@
                 </Border>
             </Grid>
 
-            <Grid HorizontalAlignment="Right" VerticalAlignment="Center"
+            <!--<Grid HorizontalAlignment="Right" VerticalAlignment="Center"
                 Visibility="{Binding ViewModel.CurrentUser, ElementName=controlRoot, Converter={StaticResource NullToVisibilityConverter}}" >
                 <Grid x:Name="goldBalanceContainer">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right"
@@ -97,7 +97,7 @@
                         </TextBlock>
                     </StackPanel>
                 </Grid>
-            </Grid>
+            </Grid>-->
         </Grid>
 
         <VisualStateManager.VisualStateGroups>

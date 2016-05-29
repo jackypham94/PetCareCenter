@@ -48,7 +48,7 @@ namespace PhotoSharingApp.Universal.Lifecycle
             try
             {
                 // Try to restore sign in status
-                // await photoService.RestoreSignInStatusAsync();
+                 await photoService.RestoreSignInStatusAsync();
             }
             catch (Exception)
             {
@@ -57,13 +57,13 @@ namespace PhotoSharingApp.Universal.Lifecycle
 
             try
             {
-                var config = await photoService.GetConfig();
-                AppEnvironment.Instance.SetConfig(config);
+                //var config = await photoService.GetConfig();
+               // AppEnvironment.Instance.SetConfig(config);
             }
             catch (Exception)
             {
                 // Setting default config
-                AppEnvironment.Instance.SetConfig(new DefaultConfig());
+                //AppEnvironment.Instance.SetConfig(new DefaultConfig());
             }
         }
     }

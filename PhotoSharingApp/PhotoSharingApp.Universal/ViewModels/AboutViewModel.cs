@@ -164,7 +164,7 @@ namespace PhotoSharingApp.Universal.ViewModels
 
         public string GroupName
         {
-            get { return "CWD Group Project"; }
+            get { return "SWD Group Project"; }
         }
 
         public string Member

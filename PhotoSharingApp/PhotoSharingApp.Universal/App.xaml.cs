@@ -143,7 +143,7 @@ namespace PhotoSharingApp.Universal
             // Place our app shell in the current Window
             Window.Current.Content = shell;
 
-            GoldReceivedNotificationClickedHandler(args);
+            //GoldReceivedNotificationClickedHandler(args);
         }
 
         /// <summary>

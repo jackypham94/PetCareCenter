@@ -6,6 +6,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Microsoft.Practices.ServiceLocation;
+using PhotoSharingApp.Universal.Commands;
+using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.ViewModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -20,14 +22,18 @@ namespace PhotoSharingApp.Universal.Views
         public RegisterPage()
         {
             this.InitializeComponent();
-            var viewModel = ServiceLocator.Current.GetInstance<RegisterViewModel>();
-            DataContext = viewModel;
+            ViewModel = ServiceLocator.Current.GetInstance<RegisterViewModel>();
+            DataContext = ViewModel;
 
             InputPane.GetForCurrentView().Showing += ItemDetailPage_Showing;
             InputPane.GetForCurrentView().Hiding += ItemDetailPage_Hiding;
 
 
         }
+        /// <summary>
+        /// Gets the ViewModel.
+        /// </summary>
+        public RegisterViewModel ViewModel { get; }
         void ItemDetailPage_Hiding(InputPane sender, InputPaneVisibilityEventArgs args)
         {
             layoutRoot.Margin = new Thickness(0);
@@ -95,6 +101,11 @@ namespace PhotoSharingApp.Universal.Views
         private void PhoneTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             PhoneTextBox.SelectAll();
+        }
+
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        {
+            ErrorProviderTextBlock.Text = "This function is developing!";
         }
     }
 }

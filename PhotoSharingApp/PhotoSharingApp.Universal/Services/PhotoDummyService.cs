@@ -611,12 +611,12 @@ namespace PhotoSharingApp.Universal.Services
 
         private void InitUser()
         {
-            User = new User
-            {
-                ProfilePictureUrl = "https://canaryappstorage.blob.core.windows.net/dummy-container/a11_tn.jpg",
-                GoldBalance = 50,
-                UserId = "a71a39ee-8d81-4d1a-8209-903a2444acf5"
-            };
+            //User = new User
+            //{
+            //    ProfilePictureUrl = "https://canaryappstorage.blob.core.windows.net/dummy-container/a11_tn.jpg",
+            //    GoldBalance = 50,
+            //    UserId = "a71a39ee-8d81-4d1a-8209-903a2444acf5"
+            //};
         }
 
         /// <summary>

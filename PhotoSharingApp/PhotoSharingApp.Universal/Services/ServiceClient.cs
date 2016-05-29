@@ -601,14 +601,14 @@ namespace PhotoSharingApp.Universal.Services
         {
             var user = await _authenticationHandler.RestoreSignInStatus();
 
-            if (user != null)
-            {
-                AppEnvironment.Instance.CurrentUser = user;
+            //if (user != null)
+            //{
+            //    AppEnvironment.Instance.CurrentUser = user;
 
-                // To enable existing users to register for Push notifications without having to
-                // log out and log in again.
-                RegisterForNotifications();
-            }
+            //    // To enable existing users to register for Push notifications without having to
+            //    // log out and log in again.
+            //    RegisterForNotifications();
+            //}
         }
 
         /// <summary>

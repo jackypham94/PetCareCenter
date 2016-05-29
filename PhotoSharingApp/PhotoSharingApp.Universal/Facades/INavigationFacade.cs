@@ -50,6 +50,11 @@ namespace PhotoSharingApp.Universal.Facades
         void NavigateToRegisterPage();
 
         /// <summary>
+        /// Navidates to the SignIn Page
+        /// </summary>
+        void NavigateToSignInPage();
+
+        /// <summary>
         /// Navigates to the about view.
         /// </summary>
         void NavigateToAboutView();

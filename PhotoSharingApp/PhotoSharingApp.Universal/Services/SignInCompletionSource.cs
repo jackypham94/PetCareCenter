@@ -23,6 +23,8 @@
 //  ---------------------------------------------------------------------------------
 
 
+using System.Threading.Tasks;
+
 namespace PhotoSharingApp.Universal.Services
 {
     /// <summary>

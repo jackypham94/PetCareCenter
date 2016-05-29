@@ -173,7 +173,7 @@ namespace PhotoSharingApp.Universal.Services
                 user.MobileServiceAuthenticationToken = credential.Password;
 
                 // Set the user from the stored credentials.
-                AzureAppService.Current.CurrentUser = user;
+                //AzureAppService.Current.CurrentUser = user;
 
                 try
                 {
@@ -189,7 +189,7 @@ namespace PhotoSharingApp.Universal.Services
                         // Remove the credentials.
                         ResetPasswordVault();
 
-                        AzureAppService.Current.CurrentUser = null;
+                        //AzureAppService.Current.CurrentUser = null;
                         credential = null;
                     }
                 }

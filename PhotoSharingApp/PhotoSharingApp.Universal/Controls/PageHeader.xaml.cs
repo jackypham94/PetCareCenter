@@ -49,11 +49,11 @@ namespace PhotoSharingApp.Universal.Controls
         /// <summary>
         /// The gold balance.
         /// </summary>
-        public static readonly DependencyProperty GoldBalanceProperty = DependencyProperty.Register(
-            "GoldBalance", typeof(int), typeof(PageHeader),
-            new PropertyMetadata(default(int), GoldBalancePropertyChanged));
+        //public static readonly DependencyProperty GoldBalanceProperty = DependencyProperty.Register(
+        //    "GoldBalance", typeof(int), typeof(PageHeader),
+        //    new PropertyMetadata(default(int), GoldBalancePropertyChanged));
 
-        private bool _goldCounterBindingInitialized;
+        //private bool _goldCounterBindingInitialized;
 
         public PageHeader()
         {
@@ -63,11 +63,11 @@ namespace PhotoSharingApp.Universal.Controls
 
             // Let the UI listen to ViewModel changes, as we want
             // to perform animations once the gold count changes.
-            SetBinding(GoldBalanceProperty, new Binding
-            {
-                Source = ViewModel.CurrentUser,
-                Path = new PropertyPath("GoldBalance")
-            });
+            //SetBinding(GoldBalanceProperty, new Binding
+            //{
+            //    Source = ViewModel.CurrentUser,
+            //    Path = new PropertyPath("GoldBalance")
+            //});
 
             Loaded += (s, a) =>
             {
@@ -82,11 +82,11 @@ namespace PhotoSharingApp.Universal.Controls
         /// <summary>
         /// Gets or sets the gold balance.
         /// </summary>
-        public int GoldBalance
-        {
-            get { return (int)GetValue(GoldBalanceProperty); }
-            set { SetValue(GoldBalanceProperty, value); }
-        }
+        //public int GoldBalance
+        //{
+        //    get { return (int)GetValue(GoldBalanceProperty); }
+        //    set { SetValue(GoldBalanceProperty, value); }
+        //}
 
         /// <summary>
         /// Gets or sets the header content.
@@ -107,42 +107,42 @@ namespace PhotoSharingApp.Universal.Controls
             titleBar.Margin = new Thickness(e.Right, 0, 0, 0);
         }
 
-        private static void GoldBalancePropertyChanged(DependencyObject dependencyObject,
-            DependencyPropertyChangedEventArgs e)
-        {
-            var pageHeaderView = dependencyObject as PageHeader;
-            pageHeaderView?.OnGoldBalanceChanged();
-        }
+        //private static void GoldBalancePropertyChanged(DependencyObject dependencyObject,
+        //    DependencyPropertyChangedEventArgs e)
+        //{
+        //    var pageHeaderView = dependencyObject as PageHeader;
+        //    //pageHeaderView?.OnGoldBalanceChanged();
+        //}
 
-        private async void OnGoldBalanceChanged()
-        {
-            // Suppress playing the gold counter animation when
-            // data binding is set up.
-            if (!_goldCounterBindingInitialized)
-            {
-                _goldCounterBindingInitialized = true;
-            }
-            else
-            {
-                var action = new Action(() =>
-                {
-                    goldButton.PlayMovingCoinAnimation();
-                    flipStoryboard.Begin();
-                });
+        //private async void OnGoldBalanceChanged()
+        //{
+        //    // Suppress playing the gold counter animation when
+        //    // data binding is set up.
+        //    if (!_goldCounterBindingInitialized)
+        //    {
+        //        _goldCounterBindingInitialized = true;
+        //    }
+        //    else
+        //    {
+        //        var action = new Action(() =>
+        //        {
+        //            goldButton.PlayMovingCoinAnimation();
+        //            flipStoryboard.Begin();
+        //        });
 
-                // The gold counter change can be triggered by non-UI
-                // components (push notifications), so we need to make sure
-                // we do the UI update on the right thread.
-                if (Dispatcher.HasThreadAccess)
-                {
-                    action();
-                }
-                else
-                {
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                        () => action());
-                }
-            }
-        }
+        //        // The gold counter change can be triggered by non-UI
+        //        // components (push notifications), so we need to make sure
+        //        // we do the UI update on the right thread.
+        //        if (Dispatcher.HasThreadAccess)
+        //        {
+        //            action();
+        //        }
+        //        else
+        //        {
+        //            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+        //                () => action());
+        //        }
+        //    }
+        //}
     }
 }

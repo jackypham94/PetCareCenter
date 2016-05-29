@@ -307,7 +307,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="controls:GoldButton">
+    <!--<Style TargetType="controls:GoldButton">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
         <Setter Property="BorderBrush" Value="{ThemeResource SystemControlForegroundTransparentBrush}" />
@@ -392,7 +392,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>-->
 
     <Style x:Key="HeroFlipViewStyle" TargetType="FlipView">
         <Setter Property="Background" Value="{ThemeResource SystemControlPageBackgroundListLowBrush}" />

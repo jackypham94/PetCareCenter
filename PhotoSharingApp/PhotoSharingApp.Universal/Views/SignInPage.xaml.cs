@@ -39,11 +39,11 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class SignInPage : Page
     {
-        private readonly INavigationFacade _navigationFacade;
         public SignInPage()
         {
             InitializeComponent();
-            var offSet = 0;
+            ViewModel = ServiceLocator.Current.GetInstance<SignInViewModel>();
+            DataContext = ViewModel;
 
             //InputPane.GetForCurrentView().Showing += (s, args) =>
             //{
@@ -66,9 +66,6 @@ namespace PhotoSharingApp.Universal.Views
 
             InputPane.GetForCurrentView().Showing += ItemDetailPage_Showing;
             InputPane.GetForCurrentView().Hiding += ItemDetailPage_Hiding;
-
-            ViewModel = ServiceLocator.Current.GetInstance<SignInViewModel>();
-            DataContext = ViewModel;
         }
 
         void ItemDetailPage_Hiding(InputPane sender, InputPaneVisibilityEventArgs args)
@@ -119,11 +116,6 @@ namespace PhotoSharingApp.Universal.Views
         private void PassWordPasswordBox_LostFocus(object sender, RoutedEventArgs e)
         {
             PasswordPath.Fill = new SolidColorBrush(Colors.Gray);
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            _navigationFacade.NavigateToMainPage();
         }
 
         private void LoginScrollViewer_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)

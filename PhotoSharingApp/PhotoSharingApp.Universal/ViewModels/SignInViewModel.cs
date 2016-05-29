@@ -39,16 +39,8 @@ namespace PhotoSharingApp.Universal.ViewModels
     /// </summary>
     public class SignInViewModel : ViewModelBase
     {
-        private readonly IDialogService _dialogService;
         private readonly INavigationFacade _navigationFacade;
-        private readonly IPhotoService _photoService;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SignInViewModel" /> class.
-        /// </summary>
-        /// <param name="navigationFacade">The navigation facade.</param>
-        /// <param name="photoService">The photo service.</param>
-        /// <param name="dialogService">The dialog service.</param>
         public SignInViewModel(INavigationFacade navigationFacade)
         {
             _navigationFacade = navigationFacade;
@@ -97,32 +89,6 @@ namespace PhotoSharingApp.Universal.ViewModels
         // dialog, which should not do any redirections.
         /// </summary>
         public bool RedirectToProfilePage { get; set; } = true;
-
-        private async void OnChooseAuthProvider(MobileServiceAuthenticationProvider authenticationProviderProvider)
-        {
-            try
-            {
-                //await _photoService.SignInAsync(authenticationProviderProvider);
-
-                if (RedirectToProfilePage)
-                {
-                    _navigationFacade.NavigateToMainPage();
-                    _navigationFacade.RemoveBackStackFrames(1);
-                }
-            }
-            catch (AuthenticationException)
-            {
-                await _dialogService.ShowNotification("AuthenticationFailed_Message", "AuthenticationFailed_Title");
-            }
-            catch (AuthenticationCanceledException)
-            {
-                // User canceled, do nothing in this case.
-            }
-            catch (Exception)
-            {
-                await _dialogService.ShowNotification("GenericError_Title", "GenericError_Message");
-            }
-        }
 
         private void OnNavigateToTargetPage()
         {

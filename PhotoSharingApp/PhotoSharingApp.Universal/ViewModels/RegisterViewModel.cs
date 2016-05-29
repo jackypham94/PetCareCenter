@@ -45,86 +45,23 @@ namespace PhotoSharingApp.Universal.ViewModels
     /// </summary>
     public class RegisterViewModel : ViewModelBase
     {
-        private readonly IDialogService _dialogService;
         private readonly INavigationFacade _navigationFacade;
-        private readonly IPhotoService _photoService;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SignInViewModel" /> class.
-        /// </summary>
-        /// <param name="navigationFacade">The navigation facade.</param>
-        /// <param name="photoService">The photo service.</param>
-        /// <param name="dialogService">The dialog service.</param>
-        public RegisterViewModel(INavigationFacade navigationFacade, IPhotoService photoService,
-            IDialogService dialogService)
+        public RegisterViewModel(INavigationFacade navigationFacade)
         {
             _navigationFacade = navigationFacade;
-            _photoService = photoService;
-            _dialogService = dialogService;
-
-            // Initialize commands
-            ChooseAuthProviderCommand = new RelayCommand<MobileServiceAuthenticationProvider>(OnChooseAuthProvider);
-
-            // Initialize auth providers
-            AuthenticationProviders = photoService.GetAvailableAuthenticationProviders();
+            NavigateToTargetPageCommand = new RelayCommand(OnNavigateToTargetPage);
         }
 
         /// <summary>
-        /// Gets or sets the authentication providers.
+        /// Gets the navigate to target page command.
         /// </summary>
-        /// <value>
-        /// The authentication providers.
-        /// </value>
-        public List<MobileServiceAuthenticationProvider> AuthenticationProviders { get; set; }
+        public RelayCommand NavigateToTargetPageCommand { get; }
 
-        /// <summary>
-        /// Gets the authentication reassurance message.
-        /// </summary>
-        public string AuthenticationReassuranceMessage { get; } = ResourceLoader.GetForCurrentView().GetString("SignInPage_ReassuranceMessage");
-
-        /// <summary>
-        /// Gets the choose authentication provider command.
-        /// </summary>
-        /// <value>
-        /// The choose authentication provider command.
-        /// </value>
-        public RelayCommand<MobileServiceAuthenticationProvider> ChooseAuthProviderCommand { get; private set; }
-
-        /// <summary>
-        /// Enables or disables the trigger to redirect
-        /// to the profile page after a successful sign-in.
-        /// 
-        /// The default use case is that users will directly navigate to the
-        // sign-in page which should redirect to the profile page.
-        // Alternatively, users can sign-in using the sign-in
-        // dialog, which should not do any redirections.
-        /// </summary>
-        public bool RedirectToProfilePage { get; set; } = true;
-
-        private async void OnChooseAuthProvider(MobileServiceAuthenticationProvider authenticationProviderProvider)
+        private void OnNavigateToTargetPage()
         {
-            try
-            {
-                await _photoService.SignInAsync(authenticationProviderProvider);
-
-                if (RedirectToProfilePage)
-                {
-                    _navigationFacade.NavigateToProfileView();
-                    _navigationFacade.RemoveBackStackFrames(1);
-                }
-            }
-            catch (AuthenticationException)
-            {
-                await _dialogService.ShowNotification("AuthenticationFailed_Message", "AuthenticationFailed_Title");
-            }
-            catch (AuthenticationCanceledException)
-            {
-                // User canceled, do nothing in this case.
-            }
-            catch (Exception)
-            {
-                await _dialogService.ShowNotification("GenericError_Title", "GenericError_Message");
-            }
+            _navigationFacade.NavigateToSignInPage();
+            _navigationFacade.RemoveBackStackFrames(2);
         }
     }
 }

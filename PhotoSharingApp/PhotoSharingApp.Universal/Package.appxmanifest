@@ -3,8 +3,8 @@
   <Identity Name="78cd9283-885a-402d-85cb-660a9d57f405" Publisher="CN=sampleCode" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="78cd9283-885a-402d-85cb-660a9d57f405" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>SnapGold Beta App</DisplayName>
-    <PublisherDisplayName>sampleCode</PublisherDisplayName>
+    <DisplayName>PetCareCenter Beta App</DisplayName>
+    <PublisherDisplayName>Jacky</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
