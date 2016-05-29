@@ -28,6 +28,7 @@ using Windows.UI.Xaml;
 using Microsoft.Practices.ServiceLocation;
 using PhotoSharingApp.Universal.ViewModels;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using PhotoSharingApp.Universal.Facades;
 
@@ -44,27 +45,42 @@ namespace PhotoSharingApp.Universal.Views
             InitializeComponent();
             var offSet = 0;
 
-            InputPane.GetForCurrentView().Showing += (s, args) =>
-            {
-                //SignInImage.Visibility = Visibility.Collapsed;
-                offSet = (int)args.OccludedRect.Height;
-                args.EnsuredFocusedElementInView = true;
-                var trans = new TranslateTransform();
-                trans.Y = -(offSet/2);
-                this.RenderTransform = trans;
-            };
+            //InputPane.GetForCurrentView().Showing += (s, args) =>
+            //{
+            //    //SignInImage.Visibility = Visibility.Collapsed;
+            //    offSet = (int)args.OccludedRect.Height;
+            //    args.EnsuredFocusedElementInView = true;
+            //    var trans = new TranslateTransform();
+            //    trans.Y = -(offSet/2);
+            //    this.RenderTransform = trans;
+            //};
 
-            InputPane.GetForCurrentView().Hiding += (s, args) =>
-            {
-                //SignInImage.Visibility = Visibility.Visible;
-                var trans = new TranslateTransform();
-                trans.Y = 0;
-                this.RenderTransform = trans;
-                args.EnsuredFocusedElementInView = false;
-            };
+            //InputPane.GetForCurrentView().Hiding += (s, args) =>
+            //{
+            //    //SignInImage.Visibility = Visibility.Visible;
+            //    var trans = new TranslateTransform();
+            //    trans.Y = 0;
+            //    this.RenderTransform = trans;
+            //    args.EnsuredFocusedElementInView = false;
+            //};
+
+            InputPane.GetForCurrentView().Showing += ItemDetailPage_Showing;
+            InputPane.GetForCurrentView().Hiding += ItemDetailPage_Hiding;
 
             ViewModel = ServiceLocator.Current.GetInstance<SignInViewModel>();
             DataContext = ViewModel;
+        }
+
+        void ItemDetailPage_Hiding(InputPane sender, InputPaneVisibilityEventArgs args)
+        {
+            layoutRoot.Margin = new Thickness(0);
+            args.EnsuredFocusedElementInView = true;
+        }
+
+        private void ItemDetailPage_Showing(InputPane sender, InputPaneVisibilityEventArgs args)
+        {
+            layoutRoot.Margin = new Thickness(0, 0, 0, args.OccludedRect.Height);
+            args.EnsuredFocusedElementInView = true;
         }
 
         /// <summary>
@@ -108,6 +124,16 @@ namespace PhotoSharingApp.Universal.Views
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             _navigationFacade.NavigateToMainPage();
+        }
+
+        private void LoginScrollViewer_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
+                // Make sure to set the Handled to true, otherwise the RoutedEvent might fire twice
+                e.Handled = true;
+            }
         }
     }
 }

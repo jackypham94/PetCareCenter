@@ -127,6 +127,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         private void OnNavigateToTargetPage()
         {
             _navigationFacade.NavigateToRegisterPage();
+            //_navigationFacade.RemoveBackStackFrames(1);
         }
     }
 }

@@ -31,9 +31,11 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <RelativePanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Viewbox Height="80" x:Name="headerImage"
+            <Viewbox Height="70" x:Name="headerImage"
                      RelativePanel.AlignHorizontalCenterWithPanel="True">
-                <SymbolIcon Symbol="GoToStart" />
+                <!--<SymbolIcon Symbol="GoToStart" />-->
+                <Path Data="M12.89,3L14.85,3.4L11.11,21L9.15,20.6L12.89,3M19.59,12L16,8.41V5.58L22.42,12L16,18.41V15.58L19.59,12M1.58,12L8,5.58V8.41L4.41,12L8,15.58V18.41L1.58,12Z" 
+                      Fill="Teal" />
             </Viewbox>
             <ItemsControl ItemsSource="{Binding AuthenticationProviders}"
                           RelativePanel.Below="headerImage"
@@ -66,19 +68,39 @@
                     <Run Text="{Binding ServerVersion}" />
                 </TextBlock>
 
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}">
+                    <Run Text="Develope by: " x:Uid="ServerVersionTitleTb" />
+                    <Run Text="{Binding GroupName}" />
+                </TextBlock>
+
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}">
+                    <Run Text="Member: " x:Uid="ServerVersionTitleTb" />
+                    <Run Text="{Binding Member}" />
+                </TextBlock>
+
                 <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="0,12,0,0"
                         TextWrapping="Wrap" VerticalAlignment="Center">
                 <Run Text="User Id: " x:Uid="UserIdTitleTb" />
                 <Run Text="{Binding UserId}" />
                 </TextBlock>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,12,0,0">
+                    <Path Data="M3,12V6.75L9,5.43V11.91L3,12M20,3V11.75L10,11.9V5.21L20,3M3,13L9,13.09V19.9L3,18.75V13M20,13.25V22L10,20.09V13.1L20,13.25Z"
+                      Fill="Teal" />
+                    <Path Data="M17,8.5L12.25,12.32L17,16V8.5M4.7,18.4L2,16.7V7.7L5,6.7L9.3,10.03L18,2L22,4.5V20L17,22L9.34,14.66L4.7,18.4M5,14L6.86,12.28L5,10.5V14Z" 
+                      Fill="BlueViolet" Margin="10,0,0,0" />
+                    <Path Data="M17.36,20.2V14.82H19.15V22H3V14.82H4.8V20.2H17.36M6.77,14.32L7.14,12.56L15.93,14.41L15.56,16.17L6.77,14.32M7.93,10.11L8.69,8.5L16.83,12.28L16.07,13.9L7.93,10.11M10.19,6.12L11.34,4.74L18.24,10.5L17.09,11.87L10.19,6.12M14.64,1.87L20,9.08L18.56,10.15L13.2,2.94L14.64,1.87M6.59,18.41V16.61H15.57V18.41H6.59Z" 
+                      Fill="CadetBlue" Margin="10,0,0,0" />
+                </StackPanel>
 
-                <Button Margin="0,6,0,0" Command="{Binding CopyUserIdToClipboardCommand}"
+
+
+                <!--<Button Margin="0,6,0,0" Command="{Binding CopyUserIdToClipboardCommand}"
                         VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
                         <SymbolIcon Symbol="Copy" Margin="0,0,6,0"></SymbolIcon>
                         <TextBlock>Copy User Id to clipboard</TextBlock>
                     </StackPanel>
-                </Button>
+                </Button>-->
             </ItemsControl>
         </RelativePanel>
     </Grid>

@@ -17,7 +17,7 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="layoutRoot">
 
-        <ScrollViewer x:Name="LoginScrollViewer" VerticalScrollMode="Enabled">
+        <ScrollViewer x:Name="LoginScrollViewer" VerticalScrollMode="Enabled" KeyDown="LoginScrollViewer_KeyDown">
             <RelativePanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <ItemsControl Width="300">
                     <ItemsControl.ItemContainerTransitions>
@@ -38,7 +38,7 @@
                     <Grid Margin="0,5,0,0">
                         <Path x:Name="UsernamePath" Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
                               Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
-                        <TextBox x:Name="UsernameTextBox" Text="username" InputScope="Url" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" GotFocus="UsernameTextBox_GotFocus" LostFocus="UsernameTextBox_LostFocus"/>
+                        <TextBox x:Name="UsernameTextBox" Text="username" InputScope="Default" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" GotFocus="UsernameTextBox_GotFocus" LostFocus="UsernameTextBox_LostFocus"/>
                     </Grid>
                     <TextBlock Text="Password" Margin="0,5,0,0"></TextBlock>
                     <Grid Margin="0,5,0,0">
@@ -83,7 +83,7 @@
             </RelativePanel>-->
                     <TextBlock Text="{Binding AuthenticationReassuranceMessage}"
                        RelativePanel.Below="MasterPanel" TextWrapping="Wrap" VerticalAlignment="Bottom"
-                       HorizontalAlignment="Center" Margin="0,5,0,0" />
+                       HorizontalAlignment="Center" Margin="0,5,0,10" />
                 </ItemsControl>
             </RelativePanel>
         </ScrollViewer>

@@ -162,6 +162,16 @@ namespace PhotoSharingApp.Universal.ViewModels
             }
         }
 
+        public string GroupName
+        {
+            get { return "CWD Group Project"; }
+        }
+
+        public string Member
+        {
+            get { return "\n- Do Quoc Bao\n- Pham Van Ngoc\n- Lam Pham Nhat Minh"; }
+        }
+
         /// <summary>
         /// Loads the state.
         /// </summary>

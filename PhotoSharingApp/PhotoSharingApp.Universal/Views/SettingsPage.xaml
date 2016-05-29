@@ -36,9 +36,9 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <RelativePanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Viewbox Height="80" x:Name="headerImage"
+            <Viewbox Height="70" x:Name="headerImage"
                      RelativePanel.AlignHorizontalCenterWithPanel="True">
-                <SymbolIcon Symbol="Setting" />
+                <SymbolIcon Symbol="Setting" Foreground="Teal" />
             </Viewbox>
             <ItemsControl ItemsSource="{Binding AuthenticationProviders}"
                           RelativePanel.Below="headerImage"
