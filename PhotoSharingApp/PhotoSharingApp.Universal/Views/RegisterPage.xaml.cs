@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
 using Windows.Foundation;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -8,6 +11,7 @@ using Windows.UI.Xaml.Media;
 using Microsoft.Practices.ServiceLocation;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.Facades;
+using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.ViewModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -30,11 +34,13 @@ namespace PhotoSharingApp.Universal.Views
 
 
         }
+
         /// <summary>
         /// Gets the ViewModel.
         /// </summary>
         public RegisterViewModel ViewModel { get; }
-        void ItemDetailPage_Hiding(InputPane sender, InputPaneVisibilityEventArgs args)
+
+        private void ItemDetailPage_Hiding(InputPane sender, InputPaneVisibilityEventArgs args)
         {
             layoutRoot.Margin = new Thickness(0);
             args.EnsuredFocusedElementInView = true;
@@ -71,41 +77,211 @@ namespace PhotoSharingApp.Universal.Views
         private void NameTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             NameTextBox.SelectAll();
+            ErrorNameTextBlock.Visibility = Visibility.Collapsed;
+            //SetTextBlockVisibilityCollapsed();
         }
 
         private void UsernameTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             UsernameTextBox.SelectAll();
+            ErrorUsernameTextBlock.Visibility = Visibility.Collapsed;
+            ErrorProviderTextBlock.Visibility = Visibility.Collapsed;
+            //SetTextBlockVisibilityCollapsed();
         }
 
         private void PassWordPasswordBox_GotFocus(object sender, RoutedEventArgs e)
         {
             PassWordPasswordBox.SelectAll();
+            ErrorPasswordTextBlock.Visibility = Visibility.Collapsed;
+            //SetTextBlockVisibilityCollapsed();
         }
 
         private void ConfirmPassWordPasswordBox_GotFocus(object sender, RoutedEventArgs e)
         {
             ConfirmPassWordPasswordBox.SelectAll();
+            ErrorConfirmPasswordTextBlock.Visibility = Visibility.Collapsed;
+            //SetTextBlockVisibilityCollapsed();
         }
 
         private void EmailTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             EmailTextBox.SelectAll();
+            ErrorEmailTextBlock.Visibility = Visibility.Collapsed;
+            //SetTextBlockVisibilityCollapsed();
         }
 
         private void AddressTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             AddressTextBox.SelectAll();
+            ErrorAddressTextBlock.Visibility = Visibility.Collapsed;
+            //SetTextBlockVisibilityCollapsed();
         }
 
         private void PhoneTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            PhoneTextBox.SelectAll();
+            //PhoneTextBox.SelectAll();
+            ErrorPhoneTextBlock.Visibility = Visibility.Collapsed;
+            //SetTextBlockVisibilityCollapsed();
         }
 
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        private async void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            ErrorProviderTextBlock.Text = "This function is developing!";
+            CreateNewUser newUser = new CreateNewUser();
+            newUser.Name = NameTextBox.Text.Trim();
+            newUser.Username = UsernameTextBox.Text.Trim();
+            newUser.Password = PassWordPasswordBox.Password.Trim();
+            newUser.Email = EmailTextBox.Text.Trim();
+            newUser.Address = AddressTextBox.Text.Trim();
+            newUser.Phone = PhoneTextBox.Text.Trim();
+            newUser.Gender = GenderList.SelectedIndex;
+
+            bool check = CheckInfo(newUser);
+
+            if (check)
+            {
+                //request POST to api
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://192.168.11.26:62252/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    // New code:
+                    HttpResponseMessage response = await client.PutAsJsonAsync("api/Users/", newUser);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        int i = 0;
+                    }
+                    else
+                    {
+                        ErrorProviderTextBlock.Text = "Username is already existed!";
+                        ErrorProviderTextBlock.Visibility = Visibility.Visible;
+                    }
+                    //ErrorProviderTextBlock.Text = "This function is developing!";
+                }
+            }
         }
+
+        private bool CheckInfo(CreateNewUser user)
+        {
+            Regex myRegex = null;
+            Match m = null;
+            bool check = true;
+
+            //check name
+            if (user.Name.Length == 0)
+            {
+                ErrorNameTextBlock.Text = "Please enter your name!";
+                ErrorNameTextBlock.Visibility = Visibility.Visible;
+                check = false;
+            }
+
+            //check username
+            if (user.Username.Length == 0)
+            {
+                ErrorUsernameTextBlock.Text = "Please enter your username!";
+                ErrorUsernameTextBlock.Visibility = Visibility.Visible;
+                check = false;
+            }
+
+            //check password
+            if (user.Password.Length == 0)
+            {
+                ErrorPasswordTextBlock.Text = "Please enter your password!";
+                ErrorPasswordTextBlock.Visibility = Visibility.Visible;
+                check = false;
+            }
+
+            //check password confirm
+            if (ConfirmPassWordPasswordBox.Password.Trim().Length == 0)
+            {
+                ErrorConfirmPasswordTextBlock.Text = "Please confirm your password!";
+                ErrorConfirmPasswordTextBlock.Visibility = Visibility.Visible;
+                check = false;
+            }
+            else
+            {
+                if (!ConfirmPassWordPasswordBox.Password.Trim().Equals(user.Password))
+                {
+                    ErrorConfirmPasswordTextBlock.Text = "Password not match!";
+                    ErrorConfirmPasswordTextBlock.Visibility = Visibility.Visible;
+                    check = false;
+                }
+            }           
+
+            //check email
+            myRegex = new Regex(@"^\w+@\w+[.]\w+$");
+            m = myRegex.Match(user.Email);
+            if (user.Email.Length == 0)
+            {
+                ErrorEmailTextBlock.Text = "Please enter your email!";
+                ErrorEmailTextBlock.Visibility = Visibility.Visible;
+                check = false;
+            }
+            else
+            {
+                if (!m.Success)
+                {
+                    ErrorEmailTextBlock.Text = "Wrong email format!";
+                    ErrorEmailTextBlock.Visibility = Visibility.Visible;
+                    check = false;
+                }
+            }
+            
+            //check address
+            if (user.Address.Length == 0)
+            {
+                ErrorAddressTextBlock.Text = "Please enter your address!";
+                ErrorAddressTextBlock.Visibility = Visibility.Visible;
+                check = false;
+            }
+
+            //check phone
+            myRegex = new Regex(@"\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$");
+            m = myRegex.Match(user.Phone);
+            if (user.Phone.Length == 0)
+            {
+                ErrorPhoneTextBlock.Text = "Please enter your phone number!";
+                ErrorPhoneTextBlock.Visibility = Visibility.Visible;
+                check = false;
+            }
+            else
+            {
+                if (!m.Success)
+                {
+                    ErrorPhoneTextBlock.Text = "Wrong phone number format!\nPlease input phone number with area code.";
+                    ErrorPhoneTextBlock.Visibility = Visibility.Visible;
+                    check = false;
+                }
+            }          
+
+            //check gender
+            //if (-1 == user.Gender)
+            //{
+            //    ErrorGenderTextBlock.Text = "Please choose your gender!";
+            //    ErrorGenderTextBlock.Visibility = Visibility.Visible;
+            //    check = false;
+            //}
+
+            return check;
+        }
+
+        private void SetTextBlockVisibilityCollapsed()
+        {
+            ErrorNameTextBlock.Visibility = Visibility.Collapsed;
+            ErrorUsernameTextBlock.Visibility = Visibility.Collapsed;
+            ErrorPasswordTextBlock.Visibility = Visibility.Collapsed;
+            ErrorConfirmPasswordTextBlock.Visibility = Visibility.Collapsed;
+            ErrorEmailTextBlock.Visibility = Visibility.Collapsed;
+            ErrorPhoneTextBlock.Visibility = Visibility.Collapsed;
+            ErrorAddressTextBlock.Visibility = Visibility.Collapsed;
+            //ErrorGenderTextBlock.Visibility = Visibility.Collapsed;
+            ErrorProviderTextBlock.Visibility = Visibility.Collapsed;
+        }
+
+        //private void GenderList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    SetTextBlockVisibilityCollapsed();
+        //}
     }
 }
