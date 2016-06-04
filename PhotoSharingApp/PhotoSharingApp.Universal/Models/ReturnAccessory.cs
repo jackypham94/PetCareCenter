@@ -1,7 +1,7 @@
 ﻿
 namespace PhotoSharingApp.Universal.Models
 {
-    public class ReturnAccessory
+    class ReturnAccessory
     {
         public int Id { get; set; }
         public string Name { get; set; }
