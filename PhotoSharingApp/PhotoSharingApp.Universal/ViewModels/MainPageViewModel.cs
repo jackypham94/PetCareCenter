@@ -67,11 +67,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <summary>
         /// The instructional items.
         /// </summary>
-<<<<<<< HEAD
         public List<ReturnAccessoryCombination> AccessoryCombinations { get; private set; }
-=======
-        public static IList<ReturnAccessoryCombination> AccessoryCombinations { get; private set; }
->>>>>>> origin/master
 
         /// <summary>
         /// Gets the navigate to target page command.
@@ -108,11 +104,7 @@ namespace PhotoSharingApp.Universal.ViewModels
                 HttpResponseMessage response = await client.GetAsync("api/AccessoryCategoriesDisplay").ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
-<<<<<<< HEAD
                     AccessoryCombinations = await  response.Content.ReadAsAsync< List<ReturnAccessoryCombination>>();
-=======
-                    AccessoryCombinations = await  response.Content.ReadAsAsync > ReturnAccessoryCombination > ();
->>>>>>> origin/master
                 }
             }
 
