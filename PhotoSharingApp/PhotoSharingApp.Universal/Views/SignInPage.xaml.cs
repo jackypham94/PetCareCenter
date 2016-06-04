@@ -113,7 +113,9 @@ namespace PhotoSharingApp.Universal.Views
                 {
                     UserInfo info = await response.Content.ReadAsAsync<UserInfo>();
                     // To do: Login to home page
-                    int i = 0;
+                    //_navigationFacade.NavigateToMainPage();
+                    //_navigationFacade.RemoveBackStackFrames(1);
+                    this.Frame.Navigate(typeof (MainPage));
                 }
                 else
                 {
