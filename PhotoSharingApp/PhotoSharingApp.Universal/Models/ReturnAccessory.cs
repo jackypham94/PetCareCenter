@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PhotoSharingApp.Universal.Models
 {
-    class ReturnAccessory
+    public class ReturnAccessory
     {
         public int Id { get; set; }
         public string Name { get; set; }
