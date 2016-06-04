@@ -200,3 +200,4 @@ FakesAssemblies/
 *.opt
 
 project.lock.json
+PhotoSharingApp/PhotoSharingApp.Universal/ViewModels/MainPageViewModel.cs

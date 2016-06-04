@@ -142,7 +142,7 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Margin="0,10,0,0">
-                                        <Grid>
+                                        <Grid MinWidth="720">
                                             <TextBlock x:Name="Category1TextBlock" Text="{Binding Category.CategoryName}" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
                                             <TextBlock Text="View All" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"></TextBlock>
                                         </Grid>
@@ -150,13 +150,9 @@
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel>
-                                                        <Border Background="WhiteSmoke" Width="150" Height="150">
-                                                            <!--<Image Source="{Binding Image}" Stretch="UniformToFill"/>-->
-                                                        </Border>
+                                                        <Image Height="150" Width="150" Source="{Binding ImagePath}" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                         <StackPanel VerticalAlignment="Top" Margin="10,0,0,0">
-                                                            <!--<TextBlock Text="{Binding Id}" TextWrapping="NoWrap"/>-->
                                                             <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"/>
-                                                            <!--<TextBlock Text="{Binding StockQuantity }" MaxHeight="60"/>-->
                                                             <Button Content="Add to cart"></Button>
                                                         </StackPanel>
                                                     </StackPanel>
@@ -168,47 +164,6 @@
                             </ListView.ItemTemplate>
                         </ListView>
 
-                        <!--<Grid>
-                            <TextBlock x:Name="Category2TextBlock" Text="CATEGORY 2" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
-                            <TextBlock Text="View All" HorizontalAlignment="Right" VerticalAlignment="Center"></TextBlock>
-                        </Grid>
-                        <ListView x:Name="Category2ListView" Style="{StaticResource VerticalListView}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Margin="6">
-                                        <Border Background="WhiteSmoke" Width="150" Height="150">
-                                            <Image Source="{Binding Image}" Stretch="UniformToFill"/>
-                                        </Border>
-                                        <StackPanel VerticalAlignment="Top" Margin="10,0,0,0">
-                                            <TextBlock Text="{Binding Id}" TextWrapping="NoWrap"/>
-                                            <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"/>
-                                            <TextBlock Text="{Binding StockQuantity }" MaxHeight="60"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-
-                        <Grid>
-                            <TextBlock x:Name="Category3TextBlock" Text="CATEGORY 3" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
-                            <TextBlock Text="View All" HorizontalAlignment="Right" VerticalAlignment="Center"></TextBlock>
-                        </Grid>
-                        <ListView x:Name="Category3ListView" Style="{StaticResource VerticalListView}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Margin="6">
-                                        <Border Background="WhiteSmoke" Width="150" Height="150">
-                                            <Image Source="{Binding Image}" Stretch="UniformToFill"/>
-                                        </Border>
-                                        <StackPanel VerticalAlignment="Top" Margin="10,0,0,0">
-                                            <TextBlock Text="{Binding Id}" TextWrapping="NoWrap"/>
-                                            <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"/>
-                                            <TextBlock Text="{Binding StockQuantity }" MaxHeight="60"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>-->
 
                         <TextBlock Style="{StaticResource TextContentStyle}" Margin="0,10,0,0">
             	        <Run Text="Having bussy day? Long trip?"/>
