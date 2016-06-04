@@ -41,7 +41,7 @@ namespace PhotoSharingApp.Universal.Services
     /// to have data available at design-time for layouting. This data
     /// can also be used to simulate fetching data from a real service.
     /// </summary>
-    public class PhotoDummyService : IPhotoService
+    public class PetCareDummyService : IPetCareService
     {
         private readonly Random _random;
         private List<User> _sampleUsers;
@@ -52,7 +52,7 @@ namespace PhotoSharingApp.Universal.Services
         /// Photos, Annotations and Leaderboards for using
         /// dummy service.
         /// </summary>
-        public PhotoDummyService()
+        public PetCareDummyService()
         {
             _random = new Random();
 

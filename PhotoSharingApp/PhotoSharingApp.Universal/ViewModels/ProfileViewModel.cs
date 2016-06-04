@@ -49,19 +49,19 @@ namespace PhotoSharingApp.Universal.ViewModels
         private bool _isBusy;
         private readonly INavigationFacade _navigationFacade;
         private int _photosCount;
-        private readonly IPhotoService _photoService;
+        private readonly IPetCareService _petCareService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProfileViewModel" /> class.
         /// </summary>
         /// <param name="navigationFacade">The navigation facade.</param>
-        /// <param name="photoService">The photo service.</param>
+        /// <param name="petCareService">The photo service.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public ProfileViewModel(INavigationFacade navigationFacade, IPhotoService photoService,
+        public ProfileViewModel(INavigationFacade navigationFacade, IPetCareService petCareService,
             IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
-            _photoService = photoService;
+            _petCareService = petCareService;
             _dialogService = dialogService;
 
             Photos = new IncrementalLoadingCollection<Photo>(s =>
@@ -70,11 +70,11 @@ namespace PhotoSharingApp.Universal.ViewModels
                 {
                     if (IsShowingCurrentUser)
                     {
-                        var stream = await photoService.GetPhotosForCurrentUser(s);
+                        var stream = await petCareService.GetPhotosForCurrentUser(s);
                         return stream;
                     }
 
-                    return await photoService.GetPhotosForUser(User, s);
+                    return await petCareService.GetPhotosForUser(User, s);
                 };
                 return f();
             }, async () => await _dialogService.ShowGenericServiceErrorNotification(),
@@ -238,7 +238,7 @@ namespace PhotoSharingApp.Universal.ViewModels
             try
             {
                 IsBusy = true;
-                await _photoService.DeletePhoto(photo);
+                await _petCareService.DeletePhoto(photo);
                 await OnRefresh();
             }
             catch (ServiceException)
@@ -276,7 +276,7 @@ namespace PhotoSharingApp.Universal.ViewModels
             try
             {
                 IsBusy = true;
-                await _photoService.UpdateUserProfilePhoto(photo);
+                await _petCareService.UpdateUserProfilePhoto(photo);
 
                 User = AppEnvironment.Instance.CurrentUser;
             }

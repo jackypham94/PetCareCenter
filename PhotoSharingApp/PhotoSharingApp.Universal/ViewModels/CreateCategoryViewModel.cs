@@ -43,16 +43,16 @@ namespace PhotoSharingApp.Universal.ViewModels
         private readonly CategoryMatchFinder _categoryMatchFinder;
         private readonly IDialogService _dialogService;
         private bool _isBusy;
-        private readonly IPhotoService _photoService;
+        private readonly IPetCareService _petCareService;
 
         /// <summary>
         /// Creates a new instance.
         /// </summary>
-        /// <param name="photoService">The photo service.</param>
+        /// <param name="petCareService">The photo service.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public CreateCategoryViewModel(IPhotoService photoService, IDialogService dialogService)
+        public CreateCategoryViewModel(IPetCareService petCareService, IDialogService dialogService)
         {
-            _photoService = photoService;
+            _petCareService = petCareService;
             _dialogService = dialogService;
             _categoryMatchFinder = new CategoryMatchFinder();
 
@@ -133,7 +133,7 @@ namespace PhotoSharingApp.Universal.ViewModels
             {
                 IsBusy = true;
                 _categoryMatchFinder.ValidateCategoryAcceptanceCriteria(Category.Name, _categories);
-                await _photoService.CreateCategory(Category.Name);
+                await _petCareService.CreateCategory(Category.Name);
 
                 return true;
             }
@@ -164,7 +164,7 @@ namespace PhotoSharingApp.Universal.ViewModels
             {
                 IsBusy = true;
 
-                _categories = await _photoService.GetCategories();
+                _categories = await _petCareService.GetCategories();
             }
             catch (ServiceException)
             {

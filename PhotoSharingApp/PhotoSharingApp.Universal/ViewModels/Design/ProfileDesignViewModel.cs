@@ -36,7 +36,7 @@ namespace PhotoSharingApp.Universal.ViewModels.Design
     {
         public ProfileDesignViewModel()
         {
-            var service = new PhotoDummyService();
+            var service = new PetCareDummyService();
             var photos = service.PhotoStreams.First();
 
             Photos = new ObservableCollection<Photo>(photos.Photos);

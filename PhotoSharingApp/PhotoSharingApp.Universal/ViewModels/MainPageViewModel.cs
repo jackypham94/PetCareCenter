@@ -43,7 +43,6 @@ namespace PhotoSharingApp.Universal.ViewModels
     {
         private readonly INavigationFacade _navigationFacade;
 
-        private InstructionItem _selectedInstructionItem;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WelcomeViewModel" /> class.
@@ -101,7 +100,7 @@ namespace PhotoSharingApp.Universal.ViewModels
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 // New code:
-                HttpResponseMessage response = await client.GetAsync("api/AccessoryCategoriesDisplay").ConfigureAwait(false);
+                HttpResponseMessage response = await client.GetAsync("/api/AccessoryCategoriesDisplay").ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     AccessoryCombinations = await  response.Content.ReadAsAsync< List<ReturnAccessoryCombination>>();

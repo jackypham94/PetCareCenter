@@ -35,7 +35,7 @@ namespace PhotoSharingApp.Universal.ViewModels.Design
     {
         public UploadDesignViewModel()
         {
-            var dummyService = new PhotoDummyService();
+            var dummyService = new PetCareDummyService();
             Category = dummyService.TopCategories.First();
             Photo = dummyService.PhotoStreams.First().Photos.First();
         }

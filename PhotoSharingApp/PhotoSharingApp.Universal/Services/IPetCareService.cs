@@ -31,7 +31,7 @@ using PhotoSharingApp.Universal.Models;
 
 namespace PhotoSharingApp.Universal.Services
 {
-    public interface IPhotoService
+    public interface IPetCareService
     {
         /// <summary>
         /// Creates a new category.

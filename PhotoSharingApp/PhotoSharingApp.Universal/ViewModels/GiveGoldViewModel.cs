@@ -38,16 +38,16 @@ namespace PhotoSharingApp.Universal.ViewModels
         private string _annotationText;
         private readonly IDialogService _dialogService;
         private bool _isBusy;
-        private readonly IPhotoService _photoService;
+        private readonly IPetCareService _petCareService;
 
         /// <summary>
         /// Creates a new instance.
         /// </summary>
-        /// <param name="photoService">The photo service.</param>
+        /// <param name="petCareService">The photo service.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public GiveGoldViewModel(IPhotoService photoService, IDialogService dialogService)
+        public GiveGoldViewModel(IPetCareService petCareService, IDialogService dialogService)
         {
-            _photoService = photoService;
+            _petCareService = petCareService;
             _dialogService = dialogService;
 
             // Initialize commands
@@ -125,7 +125,7 @@ namespace PhotoSharingApp.Universal.ViewModels
             {
                 IsBusy = true;
 
-                var serviceResult = await _photoService.PostAnnotation(Photo, _annotationText, GoldToGive);
+                var serviceResult = await _petCareService.PostAnnotation(Photo, _annotationText, GoldToGive);
 
                 // If annotation was succesfully posted, update HasUserGivenGold, and store annotation
                 if (serviceResult != null)

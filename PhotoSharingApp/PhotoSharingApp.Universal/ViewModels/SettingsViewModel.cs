@@ -39,18 +39,18 @@ namespace PhotoSharingApp.Universal.ViewModels
     {
         private readonly IDialogService _dialogService;
         private readonly INavigationFacade _navigationFacade;
-        private readonly IPhotoService _photoService;
+        private readonly IPetCareService _petCareService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsViewModel" /> class.
         /// </summary>
-        /// <param name="photoService">The photo service.</param>
+        /// <param name="petCareService">The photo service.</param>
         /// <param name="navigationFacade">The navigation facade.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public SettingsViewModel(IPhotoService photoService, INavigationFacade navigationFacade,
+        public SettingsViewModel(IPetCareService petCareService, INavigationFacade navigationFacade,
             IDialogService dialogService)
         {
-            _photoService = photoService;
+            _petCareService = petCareService;
             _navigationFacade = navigationFacade;
             _dialogService = dialogService;
 
@@ -96,7 +96,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             try
             {
-                await _photoService.SignOutAsync();
+                await _petCareService.SignOutAsync();
 
                 // Resetting the current user.
                 AppEnvironment.Instance.CurrentUser = null;

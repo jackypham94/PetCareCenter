@@ -50,19 +50,19 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <summary>
         /// The photo service
         /// </summary>
-        private readonly IPhotoService _photoService;
+        private readonly IPetCareService _petCareService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LeaderboardViewModel" /> class.
         /// </summary>
         /// <param name="navigationFacade">The navigation facade.</param>
-        /// <param name="photoService">The photo service.</param>
+        /// <param name="petCareService">The photo service.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public LeaderboardViewModel(INavigationFacade navigationFacade, IPhotoService photoService,
+        public LeaderboardViewModel(INavigationFacade navigationFacade, IPetCareService petCareService,
             IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
-            _photoService = photoService;
+            _petCareService = petCareService;
             _dialogService = dialogService;
 
             PhotoSelectedCommand = new RelayCommand<Photo>(OnPhotoSelected);
@@ -130,7 +130,7 @@ namespace PhotoSharingApp.Universal.ViewModels
 
             try
             {
-                Leaderboard = await _photoService.GetLeaderboardData(5, 5, 5, 5);
+                Leaderboard = await _petCareService.GetLeaderboardData(5, 5, 5, 5);
             }
             catch (ServiceException)
             {

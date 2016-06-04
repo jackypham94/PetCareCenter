@@ -36,7 +36,7 @@ namespace PhotoSharingApp.Universal.ViewModels.Design
     {
         public StreamDesignViewModel()
         {
-            var service = new PhotoDummyService();
+            var service = new PetCareDummyService();
             var photos = service.PhotoStreams.First();
 
             Category = service.TopCategories.First();

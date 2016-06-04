@@ -82,7 +82,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <summary>
         /// The photo service
         /// </summary>
-        private readonly IPhotoService _photoService;
+        private readonly IPetCareService _petCareService;
 
         /// <summary>
         /// The event handler for handling a successful upload.
@@ -98,16 +98,16 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// Initializes a new instance of the <see cref="UploadViewModel" /> class.
         /// </summary>
         /// <param name="navigationFacade">The navigation facade.</param>
-        /// <param name="photoService">The photo service.</param>
+        /// <param name="petCareService">The photo service.</param>
         /// <param name="authEnforcementHandler">Authentication enforcement handler.</param>
         /// <param name="uploadFinishedHandler">The handler that is called when the upload finished.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public UploadViewModel(INavigationFacade navigationFacade, IPhotoService photoService,
+        public UploadViewModel(INavigationFacade navigationFacade, IPetCareService petCareService,
             IAuthEnforcementHandler authEnforcementHandler, IUploadFinishedHandler uploadFinishedHandler,
             IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
-            _photoService = photoService;
+            _petCareService = petCareService;
             _authEnforcementHandler = authEnforcementHandler;
             _uploadFinishedHandler = uploadFinishedHandler;
             _dialogService = dialogService;
@@ -352,7 +352,7 @@ namespace PhotoSharingApp.Universal.ViewModels
                 Photo.Caption = Comment;
                 Photo.CategoryId = Category.Id;
 
-                await _photoService.UpdatePhoto(Photo);
+                await _petCareService.UpdatePhoto(Photo);
 
                 _navigationFacade.NavigateToPhotoDetailsView(Category.ToCategoryPreview(), Photo);
             }
@@ -409,7 +409,7 @@ namespace PhotoSharingApp.Universal.ViewModels
 
                 var stream = await file.OpenStreamForReadAsync();
 
-                var uploadedPhoto = await _photoService.UploadPhoto(stream, file.Path, Comment, Category.Id);
+                var uploadedPhoto = await _petCareService.UploadPhoto(stream, file.Path, Comment, Category.Id);
 
                 // Refresh gold balance
                 AppEnvironment.Instance.CurrentUser = uploadedPhoto.User;

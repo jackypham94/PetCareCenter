@@ -63,10 +63,10 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// Initializes a new instance of the <see cref="StreamViewModel" /> class.
         /// </summary>
         /// <param name="navigationFacade">The navigation facade.</param>
-        /// <param name="photoService">The photo service.</param>
+        /// <param name="petCareService">The photo service.</param>
         /// <param name="authEnforcementHandler">the authentication enforcement handler</param>
         /// <param name="dialogService">The dialog service.</param>
-        public StreamViewModel(INavigationFacade navigationFacade, IPhotoService photoService,
+        public StreamViewModel(INavigationFacade navigationFacade, IPetCareService petCareService,
             IAuthEnforcementHandler authEnforcementHandler, IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
@@ -77,7 +77,7 @@ namespace PhotoSharingApp.Universal.ViewModels
             {
                 Func<Task<PagedResponse<Photo>>> f = async () =>
                 {
-                    var stream = await photoService.GetPhotosForCategoryId(Category.Id, s);
+                    var stream = await petCareService.GetPhotosForCategoryId(Category.Id, s);
 
                     if (SelectedPhotoThumbnail != null
                         && SelectedPhoto == null)

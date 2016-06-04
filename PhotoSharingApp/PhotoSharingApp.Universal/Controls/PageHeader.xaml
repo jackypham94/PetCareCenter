@@ -62,7 +62,7 @@
                 <Border Grid.Column="2" VerticalAlignment="Center" Background="DarkCyan"
                         Padding="6,3" Visibility="{Binding ViewModel.IsDummyServiceEnabled, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=controlRoot}">
                     <TextBlock Text="BETA" Foreground="White" FontWeight="Bold"
-                               FontSize="9"></TextBlock>
+                               FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
                 </Border>
             </Grid>
 

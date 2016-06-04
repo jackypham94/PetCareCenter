@@ -35,7 +35,7 @@ namespace PhotoSharingApp.Universal.ViewModels.Design
     {
         public CategoriesChooserDesignViewModel()
         {
-            var photoDummyService = new PhotoDummyService();
+            var photoDummyService = new PetCareDummyService();
 
             FilteredCategories = photoDummyService.Categories;
         }

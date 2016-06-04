@@ -49,7 +49,7 @@ namespace PhotoSharingApp.Universal.Registries
             // Top items
             Container.RegisterTypeWithName<INavigationBarMenuItem, MainPageNavigationBarMenuItem>();
             //Container.RegisterTypeWithName<INavigationBarMenuItem, CategoriesNavigationBarMenuItem>();
-            //Container.RegisterTypeWithName<INavigationBarMenuItem, CameraNavigationBarMenuItem>();
+            Container.RegisterTypeWithName<INavigationBarMenuItem, SearchNavigationBarMenuItem>();
             Container.RegisterTypeWithName<INavigationBarMenuItem, CartNavigationBarMenuItem>();
             Container.RegisterTypeWithName<INavigationBarMenuItem, HistoryNavigationBarMenuItem>();
             Container.RegisterTypeWithName<INavigationBarMenuItem, WelcomeNavigationBarMenuItem>();

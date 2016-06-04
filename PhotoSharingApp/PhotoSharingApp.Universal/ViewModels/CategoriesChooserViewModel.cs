@@ -43,18 +43,18 @@ namespace PhotoSharingApp.Universal.ViewModels
         private readonly CategoryMatchFinder _categoryMatchFinder;
         private readonly IDialogService _dialogService;
         private bool _isBusy;
-        private readonly IPhotoService _photoService;
+        private readonly IPetCareService _petCareService;
         private string _searchText;
         private Category _selectedCategory;
 
         /// <summary>
         /// Creates a new instance.
         /// </summary>
-        /// <param name="photoService">The photo service.</param>
+        /// <param name="petCareService">The photo service.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public CategoriesChooserViewModel(IPhotoService photoService, IDialogService dialogService)
+        public CategoriesChooserViewModel(IPetCareService petCareService, IDialogService dialogService)
         {
-            _photoService = photoService;
+            _petCareService = petCareService;
             _dialogService = dialogService;
             _categoryMatchFinder = new CategoryMatchFinder();
 
@@ -175,7 +175,7 @@ namespace PhotoSharingApp.Universal.ViewModels
             {
                 IsBusy = true;
 
-                Categories = await _photoService.GetCategories();
+                Categories = await _petCareService.GetCategories();
             }
             finally
             {
@@ -198,7 +198,7 @@ namespace PhotoSharingApp.Universal.ViewModels
 
                     // Validate category name.
                     _categoryMatchFinder.ValidateCategoryAcceptanceCriteria(SearchText, Categories);
-                    var category = await _photoService.CreateCategory(SearchText);
+                    var category = await _petCareService.CreateCategory(SearchText);
 
                     // The created category needs to be added to the view
                     // and pre-selected so that the user can continue immediately.

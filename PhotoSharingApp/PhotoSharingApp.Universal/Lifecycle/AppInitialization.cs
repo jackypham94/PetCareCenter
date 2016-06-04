@@ -43,7 +43,7 @@ namespace PhotoSharingApp.Universal.Lifecycle
         public static async Task DoInitializations()
         {
             // Sign/In and get current user
-            var photoService = ServiceLocator.Current.GetInstance<IPhotoService>();
+            var photoService = ServiceLocator.Current.GetInstance<IPetCareService>();
 
             try
             {

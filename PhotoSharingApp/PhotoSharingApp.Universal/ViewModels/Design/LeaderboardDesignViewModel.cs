@@ -34,7 +34,7 @@ namespace PhotoSharingApp.Universal.ViewModels.Design
     {
         public LeaderboardDesignViewModel()
         {
-            var service = new PhotoDummyService();
+            var service = new PetCareDummyService();
             Leaderboard = service.LeaderboardData;
         }
 

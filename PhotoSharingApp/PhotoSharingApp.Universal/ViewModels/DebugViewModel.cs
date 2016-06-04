@@ -48,18 +48,18 @@ namespace PhotoSharingApp.Universal.ViewModels
         private readonly IDialogService _dialogService;
         private bool _isServiceConnected;
         private ServiceEnvironmentBase _selectedService;
-        private IPhotoService _photoService;
+        private IPetCareService _petCareService;
 
         /// <summary>
         /// Creates a new instance.
         /// </summary>
-        /// <param name="photoService">The photo service.</param>
+        /// <param name="petCareService">The photo service.</param>
         /// <param name="authenticationHandler">The authentication handler.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public DebugViewModel(IPhotoService photoService, IAuthenticationHandler authenticationHandler,
+        public DebugViewModel(IPetCareService petCareService, IAuthenticationHandler authenticationHandler,
             IDialogService dialogService)
         {
-            _photoService = photoService;
+            _petCareService = petCareService;
             _authenticationHandler = authenticationHandler;
             _dialogService = dialogService;
 
@@ -74,7 +74,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             get
             {
-                var dummyService = _photoService as PhotoDummyService;
+                var dummyService = _petCareService as PetCareDummyService;
                 if (dummyService != null)
                 {
                     return dummyService.IsErrorSimulationEnabled;
@@ -84,7 +84,7 @@ namespace PhotoSharingApp.Universal.ViewModels
             }
             set
             {
-                var dummyService = _photoService as PhotoDummyService;
+                var dummyService = _petCareService as PetCareDummyService;
                 if (dummyService != null)
                 {
                     dummyService.IsErrorSimulationEnabled = value;
@@ -150,7 +150,7 @@ namespace PhotoSharingApp.Universal.ViewModels
 
                 // Auth credentials will not work across different environments,
                 // so we need to sign out the user.
-                _photoService.SignOutAsync();
+                _petCareService.SignOutAsync();
 
                 AzureAppService.Reset();
                 AppEnvironment.Instance.CurrentUser = null;
@@ -159,8 +159,8 @@ namespace PhotoSharingApp.Universal.ViewModels
                 // sure we do not use invalid credentials from other environments.
                 _authenticationHandler.ResetPasswordVault();
 
-                UnityBootstrapper.Container.RegisterType<IPhotoService, ServiceClient>();
-                _photoService = ServiceLocator.Current.GetInstance<IPhotoService>();
+                UnityBootstrapper.Container.RegisterType<IPetCareService, ServiceClient>();
+                _petCareService = ServiceLocator.Current.GetInstance<IPetCareService>();
 
                 RefreshConfig();
                 NotifyPropertyChanged(nameof(SelectedService));
@@ -179,32 +179,32 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             get
             {
-                var currentService = ServiceLocator.Current.GetInstance<IPhotoService>();
-                return currentService is PhotoDummyService;
+                var currentService = ServiceLocator.Current.GetInstance<IPetCareService>();
+                return currentService is PetCareDummyService;
             }
             set
             {
-                _photoService?.SignOutAsync();
+                _petCareService?.SignOutAsync();
 
                 if (value)
                 {
-                    // PhotoDummyService needs to be container controlled as we generate random Guids at runtime.
+                    // PetCareDummyService needs to be container controlled as we generate random Guids at runtime.
                     // Otherwise, e.g. navigation to a category would fail as a new instance of this class
                     // would have newly generated category Ids which are not matching with the ones passed.
-                    UnityBootstrapper.Container.RegisterType<IPhotoService, PhotoDummyService>(
+                    UnityBootstrapper.Container.RegisterType<IPetCareService, PetCareDummyService>(
                         new ContainerControlledLifetimeManager());
                 }
                 else
                 {
                     AzureAppService.Reset();
-                    UnityBootstrapper.Container.RegisterType<IPhotoService, ServiceClient>();
+                    UnityBootstrapper.Container.RegisterType<IPetCareService, ServiceClient>();
                 }
 
                 // By default we switch on the CurrentAppSimulator if dummy service is enabled.
                 UseStoreMock = value;
 
                 RefreshConfig();
-                _photoService = ServiceLocator.Current.GetInstance<IPhotoService>();
+                _petCareService = ServiceLocator.Current.GetInstance<IPetCareService>();
 
                 NotifyPropertyChanged(nameof(UsePhotoDummyService));
             }
@@ -241,7 +241,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             try
             {
-                var currentService = ServiceLocator.Current.GetInstance<IPhotoService>();
+                var currentService = ServiceLocator.Current.GetInstance<IPetCareService>();
                 var config = await currentService.GetConfig();
                 AppEnvironment.Instance.SetConfig(config);
                 IsServiceConnected = true;

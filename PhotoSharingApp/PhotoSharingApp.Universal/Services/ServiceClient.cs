@@ -45,7 +45,7 @@ namespace PhotoSharingApp.Universal.Services
     /// <summary>
     /// The service client that hits the real service via HTTP(S).
     /// </summary>
-    public class ServiceClient : IPhotoService
+    public class ServiceClient : IPetCareService
     {
         private readonly IAuthenticationHandler _authenticationHandler;
         private readonly MobileServiceClient _mobileServiceClient;

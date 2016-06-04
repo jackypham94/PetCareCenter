@@ -201,6 +201,7 @@
     <Compile Include="NavigationBar\MainPageNavigationBarMenuItem.cs" />
     <Compile Include="NavigationBar\AboutNavigationBarMenuItem.cs" />
     <Compile Include="NavigationBar\CartNavigationBarMenuItem.cs" />
+    <Compile Include="NavigationBar\SearchNavigationBarMenuItem.cs" />
     <Compile Include="ServiceEnvironments\ServiceEnvironment.cs" />
     <Compile Include="ServiceEnvironments\ServiceEnvironmentBase.cs" />
     <Compile Include="Services\InsufficientBalanceException.cs" />
@@ -282,9 +283,9 @@
     <Compile Include="Registries\ViewRegistry.cs" />
     <Compile Include="Serialization\SerializationHelper.cs" />
     <Compile Include="Services\AuthenticationHandler.cs" />
-    <Compile Include="Services\IPhotoService.cs" />
+    <Compile Include="Services\IPetCareService.cs" />
     <Compile Include="Services\AzureAppService.cs" />
-    <Compile Include="Services\PhotoDummyService.cs" />
+    <Compile Include="Services\PetCareDummyService.cs" />
     <Compile Include="Services\ServiceClient.cs" />
     <Compile Include="Services\ServiceException.cs" />
     <Compile Include="Storage\FilePickerHelper.cs" />

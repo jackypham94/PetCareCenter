@@ -91,7 +91,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <summary>
         /// The photo service
         /// </summary>
-        private readonly IPhotoService _photoService;
+        private readonly IPetCareService _petCareService;
 
         /// <summary>
         /// The current hero image
@@ -102,14 +102,14 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// Initializes a new instance of the <see cref="CategoriesViewModel" /> class.
         /// </summary>
         /// <param name="navigationFacade">The navigation facade.</param>
-        /// <param name="photoService">The photo service.</param>
+        /// <param name="petCareService">The photo service.</param>
         /// <param name="authEnforcementHandler">The auth enforcement handler.</param>
         /// <param name="dialogService">The dialog service</param>
-        public CategoriesViewModel(INavigationFacade navigationFacade, IPhotoService photoService,
+        public CategoriesViewModel(INavigationFacade navigationFacade, IPetCareService petCareService,
             IAuthEnforcementHandler authEnforcementHandler, IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
-            _photoService = photoService;
+            _petCareService = petCareService;
             _authEnforcementHandler = authEnforcementHandler;
             _dialogService = dialogService;
 
@@ -301,13 +301,13 @@ namespace PhotoSharingApp.Universal.ViewModels
                 TopCategories.Clear();
 
                 // Load hero images
-                var heroImages = await _photoService.GetHeroImages(NumberOfHeroImages);
+                var heroImages = await _petCareService.GetHeroImages(NumberOfHeroImages);
                 HeroImages.Clear();
                 heroImages.ForEach(h => HeroImages.Add(h));
 
                 // Load categories
                 var categories =
-                    await _photoService.GetTopCategories(AppEnvironment.Instance.CategoryThumbnailsCount);
+                    await _petCareService.GetTopCategories(AppEnvironment.Instance.CategoryThumbnailsCount);
 
                 IsEmptyDataMessageVisible = !categories.Any();
                 IsStatusContainerVisible = !categories.Any();

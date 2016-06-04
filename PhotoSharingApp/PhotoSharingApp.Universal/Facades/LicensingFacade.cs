@@ -43,12 +43,12 @@ namespace PhotoSharingApp.Universal.Facades
         /// <summary>
         /// The photo service.
         /// </summary>
-        private readonly IPhotoService _photoService;
+        private readonly IPetCareService _petCareService;
 
-        public LicensingFacade(IPhotoService photoService,
+        public LicensingFacade(IPetCareService petCareService,
             IAuthEnforcementHandler authEnforcementHandler)
         {
-            _photoService = photoService;
+            _petCareService = petCareService;
             _authEnforcementHandler = authEnforcementHandler;
         }
 
@@ -110,7 +110,7 @@ namespace PhotoSharingApp.Universal.Facades
                 var receipt = await CurrentAppProxy.RequestProductPurchaseAsync(productLicense.ProductId);
 
                 // Fulfill on PhotoSharingApp servers
-                var user = await _photoService.FulfillGold(receipt.ReceiptXml);
+                var user = await _petCareService.FulfillGold(receipt.ReceiptXml);
 
                 // If previous step was successful, fulfill in Store
                 await CurrentAppProxy.ReportConsumableFulfillmentAsync(productLicense.ProductId, receipt.TransactionId);

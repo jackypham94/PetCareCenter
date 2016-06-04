@@ -76,7 +76,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <summary>
         /// The photo service
         /// </summary>
-        private readonly IPhotoService _photoService;
+        private readonly IPetCareService _petCareService;
 
         /// <summary>
         /// Selected annotation
@@ -87,14 +87,14 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// Initializes a new instance of the <see cref="PhotoDetailsViewModel" /> class.
         /// </summary>
         /// <param name="navigationFacade">The navigation facade.</param>
-        /// <param name="photoService">The photo service.</param>
+        /// <param name="petCareService">The photo service.</param>
         /// <param name="authEnforcementHandler">The auth enforcement handler.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public PhotoDetailsViewModel(INavigationFacade navigationFacade, IPhotoService photoService,
+        public PhotoDetailsViewModel(INavigationFacade navigationFacade, IPetCareService petCareService,
             IAuthEnforcementHandler authEnforcementHandler, IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
-            _photoService = photoService;
+            _petCareService = petCareService;
             _authEnforcementHandler = authEnforcementHandler;
             _dialogService = dialogService;
 
@@ -303,7 +303,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             await base.LoadState();
 
-            Photo = await _photoService.GetPhotoDetails(args.PhotoId);
+            Photo = await _petCareService.GetPhotoDetails(args.PhotoId);
             _isPhotoLoadedFromService = true;
 
             await ShowAnnotations();
@@ -318,7 +318,7 @@ namespace PhotoSharingApp.Universal.ViewModels
 
                 if (deleteAnnotation)
                 {
-                    await _photoService.RemoveAnnotation(_selectedAnnotation);
+                    await _petCareService.RemoveAnnotation(_selectedAnnotation);
                     Annotations.Remove(_selectedAnnotation);
                 }
             }
@@ -371,7 +371,7 @@ namespace PhotoSharingApp.Universal.ViewModels
 
                 if (result)
                 {
-                    await _photoService.ReportAnnotation(_selectedAnnotation);
+                    await _petCareService.ReportAnnotation(_selectedAnnotation);
                 }
             }
             catch (SignInRequiredException)
@@ -398,7 +398,7 @@ namespace PhotoSharingApp.Universal.ViewModels
                 var result = await _dialogService.ShowYesNoNotification("ReportContent_Message", "ReportContent_Title");
                 if (result)
                 {
-                    await _photoService.ReportPhoto(_photo, reason);
+                    await _petCareService.ReportPhoto(_photo, reason);
                 }
             }
             catch (SignInRequiredException)
@@ -432,7 +432,7 @@ namespace PhotoSharingApp.Universal.ViewModels
                 // Avoid making the service call again if it's already been made.
                 if (!_isPhotoLoadedFromService)
                 {
-                    photoWithAnnotations = await _photoService.GetPhotoDetails(Photo.Id);
+                    photoWithAnnotations = await _petCareService.GetPhotoDetails(Photo.Id);
 
                     // Update photo gold count.
                     Photo.GoldCount = photoWithAnnotations.GoldCount;

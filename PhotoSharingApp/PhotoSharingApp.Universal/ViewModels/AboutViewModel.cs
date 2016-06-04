@@ -44,17 +44,17 @@ namespace PhotoSharingApp.Universal.ViewModels
         private string _assemblyVersion;
         private readonly IDialogService _dialogService;
         private bool _isBusy;
-        private readonly IPhotoService _photoService;
+        private readonly IPetCareService _petCareService;
         private string _serverVersion;
 
         /// <summary>
         /// The constructor.
         /// </summary>
-        /// <param name="photoService">The photo service.</param>
+        /// <param name="petCareService">The photo service.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public AboutViewModel(IPhotoService photoService, IDialogService dialogService)
+        public AboutViewModel(IPetCareService petCareService, IDialogService dialogService)
         {
-            _photoService = photoService;
+            _petCareService = petCareService;
             _dialogService = dialogService;
 
             // Read package version
@@ -183,7 +183,7 @@ namespace PhotoSharingApp.Universal.ViewModels
 
             try
             {
-                var config = await _photoService.GetConfig();
+                var config = await _petCareService.GetConfig();
                 ServerVersion = config.BuildVersion;
             }
             catch (Exception)

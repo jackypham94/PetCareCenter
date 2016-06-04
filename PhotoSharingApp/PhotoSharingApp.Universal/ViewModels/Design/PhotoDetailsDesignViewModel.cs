@@ -36,7 +36,7 @@ namespace PhotoSharingApp.Universal.ViewModels.Design
     {
         public PhotoDetailsDesignViewModel()
         {
-            var photoDummyService = new PhotoDummyService();
+            var photoDummyService = new PetCareDummyService();
             Category = photoDummyService.TopCategories.First();
             Photo = photoDummyService.PhotoStreams.First().Photos.First();
             Annotations = photoDummyService.Annotations;

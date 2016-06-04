@@ -67,11 +67,11 @@ namespace PhotoSharingApp.Universal.Registries
             // or remove the DUMMY_SERVICE directive entry in
             // PhotoSharingApp.Universal > Properties > Build > Conditional compilation symbols.
 #if ( DEBUG && DUMMY_SERVICE )
-            Container.RegisterType<IPhotoService, PhotoDummyService>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IPetCareService, PetCareDummyService>(new ContainerControlledLifetimeManager());
             CurrentAppProxy.IsMockEnabled = true;
             CurrentAppSimulatorHelper.InitCurrentAppSimulator();
 #else
-            Container.RegisterType<IPhotoService, ServiceClient>();
+            Container.RegisterType<IPetCareService, ServiceClient>();
 #endif
         }
     }
