@@ -100,7 +100,7 @@ namespace PhotoSharingApp.Universal.Views
             user.Password = password;
             user.Username = username;
 
-            //request POSt to api
+            //request POST to api
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("http://192.168.11.26:62252/");

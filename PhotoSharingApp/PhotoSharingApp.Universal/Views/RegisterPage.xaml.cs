@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using Windows.Foundation;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -8,6 +10,7 @@ using Windows.UI.Xaml.Media;
 using Microsoft.Practices.ServiceLocation;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.Facades;
+using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.ViewModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -30,11 +33,13 @@ namespace PhotoSharingApp.Universal.Views
 
 
         }
+
         /// <summary>
         /// Gets the ViewModel.
         /// </summary>
         public RegisterViewModel ViewModel { get; }
-        void ItemDetailPage_Hiding(InputPane sender, InputPaneVisibilityEventArgs args)
+
+        private void ItemDetailPage_Hiding(InputPane sender, InputPaneVisibilityEventArgs args)
         {
             layoutRoot.Margin = new Thickness(0);
             args.EnsuredFocusedElementInView = true;
@@ -103,9 +108,37 @@ namespace PhotoSharingApp.Universal.Views
             PhoneTextBox.SelectAll();
         }
 
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        private async void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            ErrorProviderTextBlock.Text = "This function is developing!";
+            CreateNewUser newUser = new CreateNewUser();
+            newUser.Name = NameTextBox.Text;
+            newUser.Username = UsernameTextBox.Text;
+            newUser.Password = PassWordPasswordBox.Password;
+            newUser.Email = EmailTextBox.Text;
+            newUser.Address = AddressTextBox.Text;
+            newUser.Phone = PhoneTextBox.Text;
+            newUser.Gender = GenderList.SelectedIndex;
+
+            //request POST to api
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://192.168.11.26:62252/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // New code:
+                HttpResponseMessage response = await client.PutAsJsonAsync("api/Users/", newUser);
+                if (response.IsSuccessStatusCode)
+                {
+                    int i = 0;
+                }
+                else
+                {
+                    ErrorProviderTextBlock.Text = "Username is already existed!";
+                    ErrorProviderTextBlock.Visibility = Visibility.Visible;
+                }
+                //ErrorProviderTextBlock.Text = "This function is developing!";
+            }
         }
     }
 }
