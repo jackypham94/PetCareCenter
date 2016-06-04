@@ -25,6 +25,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.Facades;
@@ -52,13 +54,13 @@ namespace PhotoSharingApp.Universal.ViewModels
             _navigationFacade = navigationFacade;
             NavigateToTargetPageCommand = new RelayCommand<InstructionItem>(OnNavigateToTargetPage);
 
-            InitializeInstructionItems();
+            InitializeCategoryItems();
         }
 
         /// <summary>
         /// The instructional items.
         /// </summary>
-        public IList<InstructionItem> InstructionItems { get; private set; }
+        public static IList<ReturnAccessoryCombination> AccessoryCombinations { get; private set; }
 
         /// <summary>
         /// Gets the navigate to target page command.
@@ -81,50 +83,36 @@ namespace PhotoSharingApp.Universal.ViewModels
             }
         }
 
-        private void InitializeInstructionItems()
+        static async Task InitializeCategoryItems()
         {
-            InstructionItems = new List<InstructionItem>();
+            using (var client = new HttpClient())
+            {
+                var resourceLoader = ResourceLoader.GetForCurrentView();
+                string serverURL = resourceLoader.GetString("ServerURL");
+                client.BaseAddress = new Uri(serverURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var resourceLoader = ResourceLoader.GetForCurrentView();
+                // New code:
+                HttpResponseMessage response = await client.GetAsync("api/AccessoryCategoriesDisplay");
+                if (response.IsSuccessStatusCode)
+                {
+                    AccessoryCombinations = await  response.Content.ReadAsAsync > ReturnAccessoryCombination > ();
+                }
+            }
 
-            var appName = ResourceLoader.GetForCurrentView().GetString("AppName/Text");
-
-            InstructionItems.Add(new InstructionItem(resourceLoader.GetString("WelcomePage_Instruction1_Title"),
-                string.Format(resourceLoader.GetString("WelcomePage_Instruction1_Content"), appName),
-                new Uri("ms-appx:///Assets/Welcome/Instruction1.jpg")));
-
-            InstructionItems.Add(new InstructionItem(resourceLoader.GetString("WelcomePage_Instruction2_Title"),
-                resourceLoader.GetString("WelcomePage_Instruction2_Content"),
-                new Uri("ms-appx:///Assets/Welcome/Instruction1.jpg")));
-
-            InstructionItems.Add(new InstructionItem(resourceLoader.GetString("WelcomePage_Instruction3_Title"),
-                resourceLoader.GetString("WelcomePage_Instruction3_Content"),
-                new Uri("ms-appx:///Assets/Welcome/Instruction2.jpg")));
-
-            InstructionItems.Add(new InstructionItem(resourceLoader.GetString("WelcomePage_Instruction4_Title"),
-                resourceLoader.GetString("WelcomePage_Instruction4_Content"),
-                new Uri("ms-appx:///Assets/Welcome/Instruction3.jpg")));
-
-            InstructionItems.Add(new InstructionItem(resourceLoader.GetString("WelcomePage_Instruction5_Title"),
-                resourceLoader.GetString("WelcomePage_Instruction5_Content"),
-                new Uri("ms-appx:///Assets/Welcome/Instruction4.jpg")));
-
-            InstructionItems.Add(new InstructionItem(resourceLoader.GetString("WelcomePage_Instruction6_Title"),
-                resourceLoader.GetString("WelcomePage_Instruction6_Content"),
-                null,
-                typeof(CategoriesPage)));
         }
 
         /// <summary>
         /// Loads the state.
         /// </summary>
-        public override async Task LoadState()
-        {
-            await base.LoadState();
+        //public override async Task LoadState()
+        //{
+        //    await base.LoadState();
 
-            SelectedInstructionItem = null;
-            SelectedInstructionItem = InstructionItems.FirstOrDefault();
-        }
+        //    SelectedInstructionItem = null;
+        //    SelectedInstructionItem = InstructionItems.FirstOrDefault();
+        //}
 
         private void OnNavigateToTargetPage(InstructionItem instructionItem)
         {
