@@ -48,7 +48,7 @@
                 </LinearGradientBrush>
             </Grid.Background>
         </Grid>
-
+        <TextBlock Text="{Binding Category.CategoryName}"></TextBlock>
         <Grid VerticalAlignment="Bottom" Margin="20" x:Name="heroImageDetailsContainer">
             <Grid.RowDefinitions>
                 <RowDefinition />

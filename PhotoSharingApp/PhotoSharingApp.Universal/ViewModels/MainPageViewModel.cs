@@ -54,13 +54,20 @@ namespace PhotoSharingApp.Universal.ViewModels
             _navigationFacade = navigationFacade;
             NavigateToTargetPageCommand = new RelayCommand<InstructionItem>(OnNavigateToTargetPage);
 
-            InitializeCategoryItems();
+            try
+            {
+                InitializeCategoryItems().Wait();
+            }
+            catch (AggregateException)
+            {
+                //throw;
+            }
         }
 
         /// <summary>
         /// The instructional items.
         /// </summary>
-        public static ReturnAccessoryCombination AccessoryCombinations { get; private set; }
+        public List<ReturnAccessoryCombination> AccessoryCombinations { get; private set; }
 
         /// <summary>
         /// Gets the navigate to target page command.
@@ -70,20 +77,20 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <summary>
         /// Gets or sets the current instructional item.
         /// </summary>
-        public InstructionItem SelectedInstructionItem
-        {
-            get { return _selectedInstructionItem; }
-            set
-            {
-                if (value != _selectedInstructionItem)
-                {
-                    _selectedInstructionItem = value;
-                    NotifyPropertyChanged(nameof(SelectedInstructionItem));
-                }
-            }
-        }
+        //public InstructionItem SelectedInstructionItem
+        //{
+        //    get { return _selectedInstructionItem; }
+        //    set
+        //    {
+        //        if (value != _selectedInstructionItem)
+        //        {
+        //            _selectedInstructionItem = value;
+        //            NotifyPropertyChanged(nameof(SelectedInstructionItem));
+        //        }
+        //    }
+        //}
 
-        static async Task InitializeCategoryItems()
+        public async Task InitializeCategoryItems()
         {
             using (var client = new HttpClient())
             {
@@ -94,10 +101,10 @@ namespace PhotoSharingApp.Universal.ViewModels
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 // New code:
-                HttpResponseMessage response = await client.GetAsync("api/AccessoryCategoriesDisplay");
+                HttpResponseMessage response = await client.GetAsync("api/AccessoryCategoriesDisplay").ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
-                    AccessoryCombinations = await  response.Content.ReadAsAsync< ReturnAccessoryCombination >();
+                    AccessoryCombinations = await  response.Content.ReadAsAsync< List<ReturnAccessoryCombination>>();
                 }
             }
 

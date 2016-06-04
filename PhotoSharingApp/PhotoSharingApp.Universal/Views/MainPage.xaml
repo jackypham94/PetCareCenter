@@ -6,20 +6,54 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:PhotoSharingApp.Universal.Controls"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:valueConverters="using:PhotoSharingApp.Universal.ValueConverters"
+    xmlns:design="using:PhotoSharingApp.Universal.ViewModels.Design"
+    x:Name="pageRoot"
     mc:Ignorable="d">
     <Page.Resources>
-        <Style TargetType="TextBlock" x:Key="EnumerationContentStyle">
-            <Setter Property="FontSize" Value="{ThemeResource ContentControlFontSize}" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-        </Style>
-        <Style TargetType="TextBlock" x:Key="TextContentStyle" BasedOn="{StaticResource EnumerationContentStyle}">
-            <Setter Property="Margin" Value="15,24,0,12" />
+        <DataTemplate x:Key="CategoryDataTempalte">
+            <TextBlock Text="{Binding Category.CategoryName}" Margin="30,0,0,0"/>
+        </DataTemplate>
+        <DataTemplate x:Key="AssessoryDataTemplate">
+            <Grid Width="50" Height="50" Background="WhiteSmoke">
+                <TextBlock Text="{Binding Name}"></TextBlock>
+            </Grid>
+        </DataTemplate>
+        <Style TargetType="TextBlock" x:Key="TextContentStyle">
+            <!--<Setter Property="Margin" Value="15,24,0,12" />-->
             <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="15"/>
             <Setter Property="TextAlignment" Value="Center" />
             <Setter Property="FontWeight" Value="Light" />
             <Setter Property="MaxWidth" Value="500" />
         </Style>
+        <Style TargetType="ListView" x:Key="VerticalListView">
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Enabled" />
+            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Disabled" />
+            <Setter Property="ScrollViewer.ZoomMode" Value="Disabled" />
+            <Setter Property="SelectionMode" Value="None" />
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <StackPanel VerticalAlignment="Top" Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <!--<Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Height" Value="400" />
+                    </Style>
+                </Setter.Value>
+            </Setter>-->
+        </Style>
     </Page.Resources>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="layoutRoot">
 
         <Grid.RowDefinitions>
@@ -27,27 +61,50 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
         <controls:PageHeader>
             <controls:PageHeader.HeaderContent>
                 <TextBlock Text="SHOPPING" Style="{ThemeResource PageTitleTextBlockStyle}" />
             </controls:PageHeader.HeaderContent>
         </controls:PageHeader>
         <Grid  Grid.Row="1">
+            <!--<StackPanel>
+                <FlipView Height="300" ItemsSource="{Binding AccessoryCombinations}">
+                    <FlipView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Category.CategoryName}"></TextBlock>
+                        </DataTemplate>
+                    </FlipView.ItemTemplate>
+                </FlipView>
+                
+                <ListBox x:Name="Category1ListView">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Height="110" Margin="6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}" Width="110" Height="110">
+                                    <Image Source="{Binding Image}" Stretch="UniformToFill"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
+                                    <TextBlock Text="{Binding Id}" TextWrapping="NoWrap"/>
+                                    <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"/>
+                                    <TextBlock Text="{Binding StockQuantity }" MaxHeight="60"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <ComboBox x:Name="TestComboBox" ItemTemplate="{StaticResource CategoryDataTempalte}"></ComboBox>
+            </StackPanel>-->
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <FlipView MaxHeight="200">
-                <FlipView.Items>
-                    <Rectangle Fill="WhiteSmoke"></Rectangle>
-                    <TextBlock Text="1" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"></TextBlock>
-                    <TextBlock Text="2" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"></TextBlock>
-                    <TextBlock Text="3" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"></TextBlock>
-                    <TextBlock Text="4" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"></TextBlock>
-                    <TextBlock Text="5" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"></TextBlock>
-                </FlipView.Items>
-            </FlipView>
             <ScrollViewer Grid.Row="1">
                 <RelativePanel>
                     <ItemsControl RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
@@ -58,70 +115,102 @@
                             </TransitionCollection>
                         </ItemsControl.ItemContainerTransitions>
 
-                        <!--<FlipView VerticalAlignment="Top" MaxHeight="400" Grid.Column="1"
+                        <Grid x:Name="NoConnectionGrid" Visibility="Visible" HorizontalAlignment="Center" Margin="0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Path HorizontalAlignment="Center" VerticalAlignment="Center" Data="M4.93,2.93C3.12,4.74 2,7.24 2,10C2,12.76 3.12,15.26 4.93,17.07L6.34,15.66C4.89,14.22 4,12.22 4,10C4,7.79 4.89,5.78 6.34,4.34L4.93,2.93M19.07,2.93L17.66,4.34C19.11,5.78 20,7.79 20,10C20,12.22 19.11,14.22 17.66,15.66L19.07,17.07C20.88,15.26 22,12.76 22,10C22,7.24 20.88,4.74 19.07,2.93M7.76,5.76C6.67,6.85 6,8.35 6,10C6,11.65 6.67,13.15 7.76,14.24L9.17,12.83C8.45,12.11 8,11.11 8,10C8,8.89 8.45,7.89 9.17,7.17L7.76,5.76M16.24,5.76L14.83,7.17C15.55,7.89 16,8.89 16,10C16,11.11 15.55,12.11 14.83,12.83L16.24,14.24C17.33,13.15 18,11.65 18,10C18,8.35 17.33,6.85 16.24,5.76M12,8A2,2 0 0,0 10,10A2,2 0 0,0 12,12A2,2 0 0,0 14,10A2,2 0 0,0 12,8M11,14V18H10A1,1 0 0,0 9,19H2V21H9A1,1 0 0,0 10,22H14A1,1 0 0,0 15,21H22V19H15A1,1 0 0,0 14,18H13V14H11Z" 
+                                  Fill="Gray" />
+                            <TextBlock Grid.Column="1" TextWrapping="Wrap" Foreground="Gray" Margin="15,0,0,0">
+                                <Span>Can't connect to server</Span>
+                                <LineBreak/>
+                                <Span>Please try again later</Span>
+                            </TextBlock>
+                        </Grid>
+                        <FlipView VerticalAlignment="Top" MaxHeight="200" Grid.Column="1"
                               ItemsSource="{Binding HeroImages}" SelectedItem="{Binding SelectedHeroImage, Mode=TwoWay}"
-                              Style="{StaticResource HeroFlipViewStyle}" x:Name="heroImagesFlipView">
-                        <FlipView.ItemTemplate>
-                            <DataTemplate>
-                                -->
-                        <!--Using a UserControl here to make adaptive triggers work-->
-                        <!--
-                                <controls:HeroImageControl>
-                                    <interactivity:Interaction.Behaviors>
-                                        <core:EventTriggerBehavior EventName="Tapped">
-                                            <core:InvokeCommandAction
-                                            Command="{Binding DataContext.HeroImageSelectedCommand, ElementName=LayoutRoot}"
-                                            CommandParameter="{Binding}" />
-                                        </core:EventTriggerBehavior>
-                                    </interactivity:Interaction.Behaviors>
-                                </controls:HeroImageControl>
-                            </DataTemplate>
-                        </FlipView.ItemTemplate>
-                    </FlipView>-->
-                        <TextBlock Text="Category Name" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
-                        <ListView Height="150">
-                            <StackPanel Height="150" Orientation="Horizontal">
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="0,0,5,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="2.5,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
-                            </StackPanel>
+                              Style="{StaticResource HeroFlipViewStyle}">
+                            <FlipView.Items>
+                                <TextBlock VerticalAlignment="Center" Style="{StaticResource TextContentStyle}" Text="IMAGE 1"/>
+                                <TextBlock VerticalAlignment="Center" Style="{StaticResource TextContentStyle}" Text="IMAGE 2"/>
+                                <TextBlock VerticalAlignment="Center" Style="{StaticResource TextContentStyle}" Text="IMAGE 3"/>
+                                <TextBlock VerticalAlignment="Center" Style="{StaticResource TextContentStyle}" Text="IMAGE 4"/>
+                            </FlipView.Items>
+                        </FlipView>
+                        <ListView x:Name="CategoryListView" Margin="0,10,0,0" SelectionMode="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,10,0,0">
+                                        <Grid>
+                                            <TextBlock x:Name="Category1TextBlock" Text="{Binding Category.CategoryName}" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
+                                            <TextBlock Text="View All" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"></TextBlock>
+                                        </Grid>
+                                        <ListView x:Name="Category1ListView" ItemsSource="{Binding ListOfAccessory}" Style="{StaticResource VerticalListView}">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel>
+                                                        <Border Background="WhiteSmoke" Width="150" Height="150">
+                                                            <!--<Image Source="{Binding Image}" Stretch="UniformToFill"/>-->
+                                                        </Border>
+                                                        <StackPanel VerticalAlignment="Top" Margin="10,0,0,0">
+                                                            <!--<TextBlock Text="{Binding Id}" TextWrapping="NoWrap"/>-->
+                                                            <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"/>
+                                                            <!--<TextBlock Text="{Binding StockQuantity }" MaxHeight="60"/>-->
+                                                            <Button Content="Add to cart"></Button>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
                         </ListView>
 
-                        <TextBlock Text="Category Name" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
-                        <ListView>
-                            <StackPanel Height="150" Orientation="Horizontal">
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="0,0,5,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="2.5,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
-                            </StackPanel>
+                        <!--<Grid>
+                            <TextBlock x:Name="Category2TextBlock" Text="CATEGORY 2" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
+                            <TextBlock Text="View All" HorizontalAlignment="Right" VerticalAlignment="Center"></TextBlock>
+                        </Grid>
+                        <ListView x:Name="Category2ListView" Style="{StaticResource VerticalListView}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="6">
+                                        <Border Background="WhiteSmoke" Width="150" Height="150">
+                                            <Image Source="{Binding Image}" Stretch="UniformToFill"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Top" Margin="10,0,0,0">
+                                            <TextBlock Text="{Binding Id}" TextWrapping="NoWrap"/>
+                                            <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"/>
+                                            <TextBlock Text="{Binding StockQuantity }" MaxHeight="60"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
                         </ListView>
 
-                        <TextBlock Text="Category Name" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
-                        <ScrollViewer HorizontalScrollMode="Enabled">
-                            <StackPanel Height="150" Orientation="Horizontal">
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="0,0,5,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="2.5,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
-                            </StackPanel>
-                        </ScrollViewer>
+                        <Grid>
+                            <TextBlock x:Name="Category3TextBlock" Text="CATEGORY 3" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
+                            <TextBlock Text="View All" HorizontalAlignment="Right" VerticalAlignment="Center"></TextBlock>
+                        </Grid>
+                        <ListView x:Name="Category3ListView" Style="{StaticResource VerticalListView}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="6">
+                                        <Border Background="WhiteSmoke" Width="150" Height="150">
+                                            <Image Source="{Binding Image}" Stretch="UniformToFill"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Top" Margin="10,0,0,0">
+                                            <TextBlock Text="{Binding Id}" TextWrapping="NoWrap"/>
+                                            <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"/>
+                                            <TextBlock Text="{Binding StockQuantity }" MaxHeight="60"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>-->
 
-                        <TextBlock Text="Category Name" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
-                        <ScrollViewer HorizontalScrollMode="Enabled">
-                            <StackPanel Height="150" Orientation="Horizontal">
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="0,0,5,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="2.5,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
-                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
-                            </StackPanel>
-                        </ScrollViewer>
-                        <TextBlock Style="{StaticResource TextContentStyle}">
+                        <TextBlock Style="{StaticResource TextContentStyle}" Margin="0,10,0,0">
             	        <Run Text="Having bussy day? Long trip?"/>
             	        <LineBreak/>
                         <Run Text="You don't have time for pet? Your pet is sickness?"/>

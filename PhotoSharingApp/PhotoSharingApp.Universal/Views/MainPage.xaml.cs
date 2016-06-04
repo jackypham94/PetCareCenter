@@ -30,6 +30,30 @@ namespace PhotoSharingApp.Universal.Views
             this.InitializeComponent();
             _viewModel = ServiceLocator.Current.GetInstance<MainPageViewModel>();
             DataContext = _viewModel;
+            InitializeItem();
+
+        }
+
+        private void InitializeItem()
+        {
+            if (_viewModel.AccessoryCombinations == null)
+            {
+                NoConnectionGrid.Visibility = Visibility.Visible;
+            }
+            else 
+            {
+                NoConnectionGrid.Visibility = Visibility.Collapsed;
+                CategoryListView.ItemsSource = _viewModel.AccessoryCombinations;
+                //Category1TextBlock.Text = _viewModel.AccessoryCombinations[0].Category.CategoryName;
+                //Category1ListView.ItemsSource = _viewModel.AccessoryCombinations[0].ListOfAccessory;
+
+                //Category2TextBlock.Text = _viewModel.AccessoryCombinations[1].Category.CategoryName;
+                //Category2ListView.ItemsSource = _viewModel.AccessoryCombinations[1].ListOfAccessory;
+
+                //Category3TextBlock.Text = _viewModel.AccessoryCombinations[2].Category.CategoryName;
+                //Category3ListView.ItemsSource = _viewModel.AccessoryCombinations[2].ListOfAccessory;
+
+            }
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
