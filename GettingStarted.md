@@ -1,4 +1,4 @@
-# Getting started with the **PhotoSharingApp** sample
+# Getting started with the **PetCareCenter** sample
 
 There are two ways to explore the **PhotoSharingApp** sample:
 

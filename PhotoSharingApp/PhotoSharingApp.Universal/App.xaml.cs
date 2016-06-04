@@ -83,12 +83,12 @@ namespace PhotoSharingApp.Universal
                 }
 
                 // Register launch if the App is not already Running or Suspended
-                //if (args.PreviousExecutionState.Equals(ApplicationExecutionState.NotRunning)
-                //    || args.PreviousExecutionState.Equals(ApplicationExecutionState.Terminated)
-                //    || args.PreviousExecutionState.Equals(ApplicationExecutionState.ClosedByUser))
-                //{
-                //    AppLaunchCounter.RegisterLaunch();
-                //}
+                if (args.PreviousExecutionState.Equals(ApplicationExecutionState.NotRunning)
+                    || args.PreviousExecutionState.Equals(ApplicationExecutionState.Terminated)
+                    || args.PreviousExecutionState.Equals(ApplicationExecutionState.ClosedByUser))
+                {
+                    AppLaunchCounter.RegisterLaunch();
+                }
 
                 // Ensure the current window is active
                 Window.Current.Activate();
@@ -143,7 +143,7 @@ namespace PhotoSharingApp.Universal
             // Place our app shell in the current Window
             Window.Current.Content = shell;
 
-            //GoldReceivedNotificationClickedHandler(args);
+            GoldReceivedNotificationClickedHandler(args);
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace PhotoSharingApp.Universal
 
             // Refresh launch counter, needs to be done
             // after AppLaunchCounter.IsFirstLaunch() is being checked.
-            //AppLaunchCounter.RegisterLaunch();
+            AppLaunchCounter.RegisterLaunch();
 
             // Ensure the current window is active
             Window.Current.Activate();

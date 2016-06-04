@@ -270,4 +270,7 @@
   <data name="WelcomePage_Instruction6_Title" xml:space="preserve">
     <value>Ready?</value>
   </data>
+  <data name="ServerURL" xml:space="preserve">
+    <value>http://192.168.11.26:62252/</value>
+  </data>
 </root>

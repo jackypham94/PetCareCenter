@@ -13,7 +13,7 @@
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
         <Style TargetType="TextBlock" x:Key="TextContentStyle" BasedOn="{StaticResource EnumerationContentStyle}">
-            <Setter Property="Margin" Value="0,24,0,12" />
+            <Setter Property="Margin" Value="15,24,0,12" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="TextAlignment" Value="Center" />
             <Setter Property="FontWeight" Value="Light" />
@@ -32,80 +32,105 @@
                 <TextBlock Text="SHOPPING" Style="{ThemeResource PageTitleTextBlockStyle}" />
             </controls:PageHeader.HeaderContent>
         </controls:PageHeader>
-        <ScrollViewer Grid.Row="1">
-            <RelativePanel>
-                <ItemsControl RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-                    <ItemsControl.ItemContainerTransitions>
-                        <TransitionCollection>
-                            <EntranceThemeTransition IsStaggeringEnabled="True"
+        <Grid  Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <FlipView MaxHeight="200">
+                <FlipView.Items>
+                    <Rectangle Fill="WhiteSmoke"></Rectangle>
+                    <TextBlock Text="1" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"></TextBlock>
+                    <TextBlock Text="2" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"></TextBlock>
+                    <TextBlock Text="3" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"></TextBlock>
+                    <TextBlock Text="4" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"></TextBlock>
+                    <TextBlock Text="5" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"></TextBlock>
+                </FlipView.Items>
+            </FlipView>
+            <ScrollViewer Grid.Row="1">
+                <RelativePanel>
+                    <ItemsControl RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                        <ItemsControl.ItemContainerTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition IsStaggeringEnabled="True"
                                                  FromVerticalOffset="100" />
-                        </TransitionCollection>
-                    </ItemsControl.ItemContainerTransitions>
-                    <Rectangle Fill="WhiteSmoke" Height="200"></Rectangle>
-                    <TextBlock Text="Demo" Style="{StaticResource TextContentStyle}"/>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Rectangle Fill="WhiteSmoke" Height="150" Margin="0,0,5,0"></Rectangle>
-                        <Rectangle Grid.Column="1" Fill="WhiteSmoke" Height="150" Margin="2.5,0"></Rectangle>
-                        <Rectangle Grid.Column="2" Fill="WhiteSmoke" Height="150" Margin="5,0,0,0"></Rectangle>
-                    </Grid>
-                    <TextBlock Style="{StaticResource TextContentStyle}">
-            	        <Run Text="Having bussy day? Long trip?"/>
-            	        <LineBreak/>
-                        <Run Text="You don't have time for pet? Your pet is sickness?"/>
-                        <LineBreak/>
-            	        <Run Text="We'll take care your pet"/>  
-                    </TextBlock>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Rectangle Fill="WhiteSmoke" Height="150" Margin="0,0,5,0"></Rectangle>
-                        <Rectangle Grid.Column="1" Fill="WhiteSmoke" Height="150" Margin="2.5,0"></Rectangle>
-                        <Rectangle Grid.Column="2" Fill="WhiteSmoke" Height="150" Margin="5,0,0,0"></Rectangle>
-                    </Grid>
-                    <TextBlock Style="{StaticResource TextContentStyle}">
+                            </TransitionCollection>
+                        </ItemsControl.ItemContainerTransitions>
+
+                        <!--<FlipView VerticalAlignment="Top" MaxHeight="400" Grid.Column="1"
+                              ItemsSource="{Binding HeroImages}" SelectedItem="{Binding SelectedHeroImage, Mode=TwoWay}"
+                              Style="{StaticResource HeroFlipViewStyle}" x:Name="heroImagesFlipView">
+                        <FlipView.ItemTemplate>
+                            <DataTemplate>
+                                -->
+                        <!--Using a UserControl here to make adaptive triggers work-->
+                        <!--
+                                <controls:HeroImageControl>
+                                    <interactivity:Interaction.Behaviors>
+                                        <core:EventTriggerBehavior EventName="Tapped">
+                                            <core:InvokeCommandAction
+                                            Command="{Binding DataContext.HeroImageSelectedCommand, ElementName=LayoutRoot}"
+                                            CommandParameter="{Binding}" />
+                                        </core:EventTriggerBehavior>
+                                    </interactivity:Interaction.Behaviors>
+                                </controls:HeroImageControl>
+                            </DataTemplate>
+                        </FlipView.ItemTemplate>
+                    </FlipView>-->
+                        <TextBlock Text="Category Name" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
+                        <ListView Height="150">
+                            <StackPanel Height="150" Orientation="Horizontal">
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="0,0,5,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="2.5,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
+                            </StackPanel>
+                        </ListView>
+
+                        <TextBlock Text="Category Name" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
+                        <ListView>
+                            <StackPanel Height="150" Orientation="Horizontal">
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="0,0,5,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="2.5,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
+                            </StackPanel>
+                        </ListView>
+
+                        <TextBlock Text="Category Name" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
+                        <ScrollViewer HorizontalScrollMode="Enabled">
+                            <StackPanel Height="150" Orientation="Horizontal">
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="0,0,5,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="2.5,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <TextBlock Text="Category Name" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
+                        <ScrollViewer HorizontalScrollMode="Enabled">
+                            <StackPanel Height="150" Orientation="Horizontal">
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="0,0,5,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="2.5,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
+                                <Rectangle Fill="WhiteSmoke" Width="150" Margin="5,0,0,0"></Rectangle>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <TextBlock Style="{StaticResource TextContentStyle}">
             	        <Run Text="Having bussy day? Long trip?"/>
             	        <LineBreak/>
                         <Run Text="You don't have time for pet? Your pet is sickness?"/>
                         <LineBreak/>
             	        <Run Text="We'll take care your pet"/>
-                    </TextBlock>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Rectangle Fill="WhiteSmoke" Height="150" Margin="0,0,5,0"></Rectangle>
-                        <Rectangle Grid.Column="1" Fill="WhiteSmoke" Height="150" Margin="2.5,0"></Rectangle>
-                        <Rectangle Grid.Column="2" Fill="WhiteSmoke" Height="150" Margin="5,0,0,0"></Rectangle>
-                    </Grid>
-                    <TextBlock Style="{StaticResource TextContentStyle}">
-            	        <Run Text="Having bussy day? Long trip?"/>
-            	        <LineBreak/>
-                        <Run Text="You don't have time for pet? Your pet is sickness?"/>
-                        <LineBreak/>
-            	        <Run Text="We'll take care your pet"/>
-                    </TextBlock>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Rectangle Fill="WhiteSmoke" Height="150" Margin="0,0,5,0"></Rectangle>
-                        <Rectangle Grid.Column="1" Fill="WhiteSmoke" Height="150" Margin="2.5,0"></Rectangle>
-                        <Rectangle Grid.Column="2" Fill="WhiteSmoke" Height="150" Margin="5,0,0,0"></Rectangle>
-                    </Grid>
-                </ItemsControl>
-            </RelativePanel>
-        </ScrollViewer>
+                        </TextBlock>
+                    </ItemsControl>
+                </RelativePanel>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </Page>

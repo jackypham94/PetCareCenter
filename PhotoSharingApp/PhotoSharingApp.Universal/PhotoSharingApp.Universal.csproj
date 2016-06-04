@@ -190,6 +190,10 @@
     <Compile Include="Extensions\CategoryExtensions.cs" />
     <Compile Include="Extensions\CategoryPreviewExtensions.cs" />
     <Compile Include="Extensions\PhotoListExtensions.cs" />
+    <Compile Include="Models\AccesoryItem.cs" />
+    <Compile Include="Models\ReturnAccessory.cs" />
+    <Compile Include="Models\ReturnAccessoryCategory.cs" />
+    <Compile Include="Models\ReturnAccessoryCombination.cs" />
     <Compile Include="NavigationBar\HistoryNavigationBarMenuItem.cs" />
     <Compile Include="NavigationBar\MainPageNavigationBarMenuItem.cs" />
     <Compile Include="NavigationBar\AboutNavigationBarMenuItem.cs" />
@@ -360,6 +364,9 @@
     <Compile Include="Views\CategoriesPage.xaml.cs">
       <DependentUpon>CategoriesPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CheckOutPage.xaml.cs">
+      <DependentUpon>CheckOutPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CreateCategoryDialog.xaml.cs">
       <DependentUpon>CreateCategoryDialog.xaml</DependentUpon>
     </Compile>
@@ -382,6 +389,12 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MessageDialogService.cs" />
+    <Compile Include="Views\MyPetPage.xaml.cs">
+      <DependentUpon>MyPetPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PetInfoPage.xaml.cs">
+      <DependentUpon>PetInfoPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PhotoDetailsPage.xaml.cs">
       <DependentUpon>PhotoDetailsPage.xaml</DependentUpon>
     </Compile>
@@ -393,6 +406,9 @@
     </Compile>
     <Compile Include="Views\RegisterPage.xaml.cs">
       <DependentUpon>RegisterPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchPage.xaml.cs">
+      <DependentUpon>SearchPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SelectedRegion.cs" />
     <Compile Include="Views\SettingsPage.xaml.cs">
@@ -504,6 +520,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\CheckOutPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CreateCategoryDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -532,6 +552,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MyPetPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PetInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ProfilePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -541,6 +569,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\RegisterPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SearchPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
