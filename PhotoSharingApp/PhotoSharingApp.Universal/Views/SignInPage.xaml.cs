@@ -22,6 +22,10 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
+using System;
+using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -31,6 +35,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using PhotoSharingApp.Universal.Facades;
+using PhotoSharingApp.Universal.Models;
 
 namespace PhotoSharingApp.Universal.Views
 {
@@ -85,12 +90,38 @@ namespace PhotoSharingApp.Universal.Views
         /// </summary>
         public SignInViewModel ViewModel { get; }
 
-        private void LoginButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void LoginButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             //_navigationFacade.NavigateToMainPage();
             //this.Frame.Navigate(typeof(MainPage));
-            ErrorProviderTextBlock.Text = "Incorrect username or password!";
-            ErrorProviderTextBlock.Visibility = Visibility.Visible;
+            string username = UsernameTextBox.Text;
+            string password = PassWordPasswordBox.Password;
+            ReturnUser user = new ReturnUser();
+            user.Password = password;
+            user.Username = username;
+
+            //request POSt to api
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://192.168.11.26:62252/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // New code:
+                HttpResponseMessage response = await client.PostAsJsonAsync("api/Users/info", user);
+                if (response.IsSuccessStatusCode)
+                {
+                    UserInfo info = await response.Content.ReadAsAsync<UserInfo>();
+                    // To do: Login to home page
+                    int i = 0;
+                }
+                else
+                {
+                    ErrorProviderTextBlock.Text = "Incorrect username or password!";
+                    ErrorProviderTextBlock.Visibility = Visibility.Visible;
+                }
+            }
+            
 
         }
 
