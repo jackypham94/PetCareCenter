@@ -152,7 +152,8 @@ namespace PhotoSharingApp.Universal.Views
                     HttpResponseMessage response = await client.PutAsJsonAsync("api/Users/", newUser);
                     if (response.IsSuccessStatusCode)
                     {
-                        this.Frame.Navigate(typeof(SignInPage));
+                        var isRegistered = true;
+                        this.Frame.Navigate(typeof(SignInPage), isRegistered);
                     }
                     else
                     {
@@ -171,7 +172,7 @@ namespace PhotoSharingApp.Universal.Views
             bool check = true;
 
             //check name
-            if (user.Name.Length == 0 || user.Name.Equals(NameTextBox.Text.Trim()))
+            if (user.Name.Length == 0)
             {
                 ErrorNameTextBlock.Text = "Please enter your name!";
                 ErrorNameTextBlock.Visibility = Visibility.Visible;
@@ -179,7 +180,7 @@ namespace PhotoSharingApp.Universal.Views
             }
 
             //check username
-            if (user.Username.Length == 0 || user.Username.Equals(UsernameTextBox.Text.Trim()))
+            if (user.Username.Length == 0)
             {
                 ErrorUsernameTextBlock.Text = "Please enter your username!";
                 ErrorUsernameTextBlock.Visibility = Visibility.Visible;
@@ -187,7 +188,7 @@ namespace PhotoSharingApp.Universal.Views
             }
 
             //check password
-            if (user.Password.Length == 0 || user.Password.Equals(PassWordPasswordBox.Password.Trim()))
+            if (user.Password.Length == 0)
             {
                 ErrorPasswordTextBlock.Text = "Please enter your password!";
                 ErrorPasswordTextBlock.Visibility = Visibility.Visible;
@@ -216,7 +217,7 @@ namespace PhotoSharingApp.Universal.Views
             //check email
             myRegex = new Regex(@"^\w+@\w+[.]\w+$");
             m = myRegex.Match(user.Email);
-            if (user.Email.Length == 0  || user.Email.Equals(EmailTextBox.Text.Trim()))
+            if (user.Email.Length == 0)
             {
                 ErrorEmailTextBlock.Text = "Please enter your email!";
                 ErrorEmailTextBlock.Visibility = Visibility.Visible;
@@ -233,7 +234,7 @@ namespace PhotoSharingApp.Universal.Views
             }
             
             //check address
-            if (user.Address.Length == 0 || user.Address.Equals(AddressTextBox.Text.Trim()))
+            if (user.Address.Length == 0)
             {
                 ErrorAddressTextBlock.Text = "Please enter your address!";
                 ErrorAddressTextBlock.Visibility = Visibility.Visible;

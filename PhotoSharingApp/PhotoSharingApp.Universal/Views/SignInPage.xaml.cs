@@ -28,6 +28,7 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Windows.ApplicationModel.Resources;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Microsoft.Practices.ServiceLocation;
@@ -35,6 +36,7 @@ using PhotoSharingApp.Universal.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 
@@ -117,7 +119,7 @@ namespace PhotoSharingApp.Universal.Views
                     // To do: Login to home page
                     //_navigationFacade.NavigateToMainPage();
                     //_navigationFacade.RemoveBackStackFrames(1);
-                    this.Frame.Navigate(typeof (MainPage));
+                    this.Frame.Navigate(typeof(MainPage));
                 }
                 else
                 {
@@ -125,7 +127,7 @@ namespace PhotoSharingApp.Universal.Views
                     ErrorProviderTextBlock.Visibility = Visibility.Visible;
                 }
             }
-            
+
 
         }
 
@@ -160,6 +162,16 @@ namespace PhotoSharingApp.Universal.Views
                 FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
                 // Make sure to set the Handled to true, otherwise the RoutedEvent might fire twice
                 e.Handled = true;
+            }
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            bool isRegstered = e.Parameter != null && (bool)e.Parameter;
+            if (isRegstered)
+            {
+                Frame.BackStack.RemoveAt(Frame.BackStackDepth - 1);
+                Frame.BackStack.RemoveAt(Frame.BackStackDepth - 1);
             }
         }
     }
