@@ -152,7 +152,8 @@ namespace PhotoSharingApp.Universal.Views
                     HttpResponseMessage response = await client.PutAsJsonAsync("api/Users/", newUser);
                     if (response.IsSuccessStatusCode)
                     {
-                        this.Frame.Navigate(typeof(SignInPage));
+                        var isRegistered = true;
+                        this.Frame.Navigate(typeof(SignInPage), isRegistered);
                     }
                     else
                     {
@@ -193,6 +194,8 @@ namespace PhotoSharingApp.Universal.Views
                 ErrorPasswordTextBlock.Visibility = Visibility.Visible;
                 check = false;
             }
+
+            
 
             //check password confirm
             if (ConfirmPassWordPasswordBox.Password.Trim().Length == 0)

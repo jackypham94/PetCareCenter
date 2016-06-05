@@ -23,11 +23,14 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Microsoft.Practices.ServiceLocation;
@@ -35,6 +38,9 @@ using PhotoSharingApp.Universal.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 
@@ -113,11 +119,20 @@ namespace PhotoSharingApp.Universal.Views
                 HttpResponseMessage response = await client.PostAsJsonAsync("api/Users/info", user);
                 if (response.IsSuccessStatusCode)
                 {
-                    UserInfo info = await response.Content.ReadAsAsync<UserInfo>();
+                    //UserInfo info = await response.Content.ReadAsAsync<UserInfo>();
+
+                    await SerelizeDataToJson(user, "user");
+
+                    //JsonSerializer serializer = new JsonSerializer();
+                    //serializer.Converters.Add(new JavaScriptDateTimeConverter());
+                    //serializer.NullValueHandling = NullValueHandling.Ignore;
+
+                    //TextWriter sw = new StreamWriter(@"C:\Users\minhlpnse61602\Desktop\user.txt");
+                    //JsonWriter writer = new JsonTextWriter(sw);
+                    //serializer.Serialize(writer, user);
+
                     // To do: Login to home page
-                    //_navigationFacade.NavigateToMainPage();
-                    //_navigationFacade.RemoveBackStackFrames(1);
-                    this.Frame.Navigate(typeof (MainPage));
+                    this.Frame.Navigate(typeof(MainPage));
                 }
                 else
                 {
@@ -125,7 +140,7 @@ namespace PhotoSharingApp.Universal.Views
                     ErrorProviderTextBlock.Visibility = Visibility.Visible;
                 }
             }
-            
+
 
         }
 
@@ -162,5 +177,38 @@ namespace PhotoSharingApp.Universal.Views
                 e.Handled = true;
             }
         }
-    }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            bool isRegstered = e.Parameter != null && (bool)e.Parameter;
+            if (isRegstered)
+            {
+                Frame.BackStack.RemoveAt(Frame.BackStackDepth - 1);
+                Frame.BackStack.RemoveAt(Frame.BackStackDepth - 1);
+            }
+        }
+
+
+        public static async Task<string> SerelizeDataToJson(ReturnUser user, string filename)
+        {
+            try
+            {
+                var folder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                var file = await folder.CreateFileAsync(filename + ".json", Windows.Storage.CreationCollisionOption.ReplaceExisting);
+                var data = await file.OpenStreamForWriteAsync();
+
+                using (StreamWriter r = new StreamWriter(data))
+                {
+                    var serelizedfile = JsonConvert.SerializeObject(user);
+                    r.Write(serelizedfile);
+
+                }
+                return filename;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+}
 }
