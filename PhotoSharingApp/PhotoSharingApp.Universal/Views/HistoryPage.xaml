@@ -27,11 +27,13 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        
         <controls:PageHeader>
             <controls:PageHeader.HeaderContent>
                 <TextBlock Text="HISTORY" Style="{ThemeResource PageTitleTextBlockStyle}" />
             </controls:PageHeader.HeaderContent>
         </controls:PageHeader>
+        
         <ScrollViewer Grid.Row="1">
             <RelativePanel>
                 <ItemsControl RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
@@ -44,39 +46,63 @@
 
                     <StackPanel RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
                         <Grid>
-                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <Rectangle Fill="WhiteSmoke" Height="70"></Rectangle>
                             <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
                         </Grid>
                         <Grid Margin="0,5,0,0">
-                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <Rectangle Fill="WhiteSmoke" Height="70"></Rectangle>
                             <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
                         </Grid>
                         <Grid Margin="0,5,0,0">
-                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <Rectangle Fill="WhiteSmoke" Height="70"></Rectangle>
                             <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
                         </Grid>
                         <Grid Margin="0,5,0,0">
-                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <Rectangle Fill="WhiteSmoke" Height="70"></Rectangle>
                             <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
                         </Grid>
                         <Grid Margin="0,5,0,0">
-                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <Rectangle Fill="WhiteSmoke" Height="70"></Rectangle>
                             <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
                         </Grid>
                         <Grid Margin="0,5,0,0">
-                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <Rectangle Fill="WhiteSmoke" Height="70"></Rectangle>
                             <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
                         </Grid>
                         <Grid Margin="0,5,0,0">
-                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <Rectangle Fill="WhiteSmoke" Height="70"></Rectangle>
                             <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
                         </Grid>
                         <Grid Margin="0,5,0,0">
-                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <Rectangle Fill="WhiteSmoke" Height="70"></Rectangle>
                             <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
                         </Grid>
                         <Grid Margin="0,5,0,0">
-                            <Rectangle Fill="WhiteSmoke" Height="100"></Rectangle>
+                            <Rectangle Fill="WhiteSmoke" Height="70"></Rectangle>
+                            <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
+                        </Grid>
+                        <Grid Margin="0,5,0,0">
+                            <Rectangle Fill="WhiteSmoke" Height="70"></Rectangle>
+                            <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
+                        </Grid>
+                        <Grid Margin="0,5,0,0">
+                            <Rectangle Fill="WhiteSmoke" Height="70"></Rectangle>
+                            <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
+                        </Grid>
+                        <Grid Margin="0,5,0,0">
+                            <Rectangle Fill="WhiteSmoke" Height="70"></Rectangle>
+                            <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
+                        </Grid>
+                        <Grid Margin="0,5,0,0">
+                            <Rectangle Fill="WhiteSmoke" Height="70"></Rectangle>
+                            <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
+                        </Grid>
+                        <Grid Margin="0,5,0,0">
+                            <Rectangle Fill="WhiteSmoke" Height="70"></Rectangle>
+                            <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
+                        </Grid>
+                        <Grid Margin="0,5,0,0">
+                            <Rectangle Fill="WhiteSmoke" Height="70"></Rectangle>
                             <TextBlock Text="HISTORY ITEM" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"/>
                         </Grid>
                     </StackPanel>

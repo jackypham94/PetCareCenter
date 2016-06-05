@@ -67,39 +67,8 @@
                 <TextBlock Text="SHOPPING" Style="{ThemeResource PageTitleTextBlockStyle}" />
             </controls:PageHeader.HeaderContent>
         </controls:PageHeader>
+        
         <Grid  Grid.Row="1">
-            <!--<StackPanel>
-                <FlipView Height="300" ItemsSource="{Binding AccessoryCombinations}">
-                    <FlipView.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Category.CategoryName}"></TextBlock>
-                        </DataTemplate>
-                    </FlipView.ItemTemplate>
-                </FlipView>
-                
-                <ListBox x:Name="Category1ListView">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Height="110" Margin="6">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}" Width="110" Height="110">
-                                    <Image Source="{Binding Image}" Stretch="UniformToFill"/>
-                                </Border>
-                                <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
-                                    <TextBlock Text="{Binding Id}" TextWrapping="NoWrap"/>
-                                    <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"/>
-                                    <TextBlock Text="{Binding StockQuantity }" MaxHeight="60"/>
-                                </StackPanel>
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <ComboBox x:Name="TestComboBox" ItemTemplate="{StaticResource CategoryDataTempalte}"></ComboBox>
-            </StackPanel>-->
-
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition />

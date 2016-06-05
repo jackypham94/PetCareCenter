@@ -24,18 +24,17 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private readonly MainPageViewModel _viewModel;
+        private MainPageViewModel _viewModel;
         public MainPage()
         {
             this.InitializeComponent();
-            _viewModel = ServiceLocator.Current.GetInstance<MainPageViewModel>();
-            DataContext = _viewModel;
             InitializeItem();
-
         }
 
         private void InitializeItem()
         {
+            _viewModel = ServiceLocator.Current.GetInstance<MainPageViewModel>();
+            DataContext = _viewModel;
             if (_viewModel.AccessoryCombinations == null)
             {
                 NoConnectionGrid.Visibility = Visibility.Visible;
@@ -44,15 +43,6 @@ namespace PhotoSharingApp.Universal.Views
             {
                 NoConnectionGrid.Visibility = Visibility.Collapsed;
                 CategoryListView.ItemsSource = _viewModel.AccessoryCombinations;
-                //Category1TextBlock.Text = _viewModel.AccessoryCombinations[0].Category.CategoryName;
-                //Category1ListView.ItemsSource = _viewModel.AccessoryCombinations[0].ListOfAccessory;
-
-                //Category2TextBlock.Text = _viewModel.AccessoryCombinations[1].Category.CategoryName;
-                //Category2ListView.ItemsSource = _viewModel.AccessoryCombinations[1].ListOfAccessory;
-
-                //Category3TextBlock.Text = _viewModel.AccessoryCombinations[2].Category.CategoryName;
-                //Category3ListView.ItemsSource = _viewModel.AccessoryCombinations[2].ListOfAccessory;
-
             }
         }
 
