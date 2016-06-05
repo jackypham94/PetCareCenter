@@ -235,42 +235,42 @@
     <value>Unexpected error</value>
   </data>
   <data name="WelcomePage_Instruction1_Content" xml:space="preserve">
-    <value>{0}  sample text sample text sample text sample text sample text sample text sample text sample text.</value>
+    <value>Having bussy day? Long trip? You don't have time for pet? Your pet is sickness? {0} will take care of your pet.</value>
   </data>
   <data name="WelcomePage_Instruction1_Title" xml:space="preserve">
-    <value>Sample</value>
+    <value>We'll take care of your pet</value>
   </data>
   <data name="WelcomePage_Instruction2_Content" xml:space="preserve">
-    <value>Sample text sample text sample text sample text sample text sample text sample text sample text.</value>
+    <value>This app will help your to track your pet' status.</value>
   </data>
   <data name="WelcomePage_Instruction2_Title" xml:space="preserve">
-    <value>Sample</value>
+    <value>Keep track of your pet</value>
   </data>
   <data name="WelcomePage_Instruction3_Content" xml:space="preserve">
-    <value>Sample text sample text sample text sample text sample text sample text sample text sample text.</value>
+    <value>You can buy food for your pet easily with this app.</value>
   </data>
   <data name="WelcomePage_Instruction3_Title" xml:space="preserve">
-    <value>Sample</value>
+    <value>Provide food</value>
   </data>
   <data name="WelcomePage_Instruction4_Content" xml:space="preserve">
-    <value>Sample text sample text sample text sample text sample text sample text sample text sample text.</value>
+    <value>With one simple touch, your pet will have beautiful accessories.</value>
   </data>
   <data name="WelcomePage_Instruction4_Title" xml:space="preserve">
-    <value>Sample</value>
+    <value>Provide accessories</value>
   </data>
   <data name="WelcomePage_Instruction5_Content" xml:space="preserve">
-    <value>Sample text sample text sample text sample text sample text sample text sample text sample text.</value>
+    <value>They will well-treated during the time they stay with us.</value>
   </data>
   <data name="WelcomePage_Instruction5_Title" xml:space="preserve">
-    <value>Sample</value>
+    <value>Don't worry about your pet</value>
   </data>
   <data name="WelcomePage_Instruction6_Content" xml:space="preserve">
-    <value>Sample text sample text sample text sample text sample text sample text sample text sample text.</value>
+    <value>Let start now.</value>
   </data>
   <data name="WelcomePage_Instruction6_Title" xml:space="preserve">
     <value>Ready?</value>
   </data>
   <data name="ServerURL" xml:space="preserve">
-    <value>http://10.126.0.104:62252</value>
+    <value>http://192.168.11.30:62252</value>
   </data>
 </root>

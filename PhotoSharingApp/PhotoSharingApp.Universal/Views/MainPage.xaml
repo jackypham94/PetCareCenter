@@ -134,13 +134,7 @@
                         </ListView>
 
 
-                        <TextBlock Style="{StaticResource TextContentStyle}" Margin="0,10,0,0">
-            	        <Run Text="Having bussy day? Long trip?"/>
-            	        <LineBreak/>
-                        <Run Text="You don't have time for pet? Your pet is sickness?"/>
-                        <LineBreak/>
-            	        <Run Text="We'll take care your pet"/>
-                        </TextBlock>
+                        <TextBlock Style="{StaticResource TextContentStyle}" Margin="0,10,0,0" Text="Having bussy day? Long trip?&#xD;&#xA;You don't have time for pet? Your pet is sickness?&#xD;&#xA;We'll take care of your pet."/>
                     </ItemsControl>
                 </RelativePanel>
             </ScrollViewer>
