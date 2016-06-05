@@ -34,8 +34,8 @@
             <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
             <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Enabled" />
             <Setter Property="ScrollViewer.VerticalScrollMode" Value="Disabled" />
-            <Setter Property="ScrollViewer.ZoomMode" Value="Disabled" />
-            <Setter Property="SelectionMode" Value="None" />
+            <!--<Setter Property="ScrollViewer.ZoomMode" Value="Disabled" />-->
+            <!--<Setter Property="SelectionMode" Value="None" />-->
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
@@ -107,28 +107,30 @@
                                 <TextBlock VerticalAlignment="Center" Style="{StaticResource TextContentStyle}" Text="IMAGE 4"/>
                             </FlipView.Items>
                         </FlipView>
-                        <ListView x:Name="CategoryListView" Margin="0,10,0,0" SelectionMode="None">
+
+                        <ListView x:Name="CategoryListView" Margin="0,10,0,0">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Margin="0,10,0,0">
-                                        <Grid MinWidth="720">
+                                    <ItemsControl Margin="0,10,0,0">
+                                        <Grid>
                                             <TextBlock x:Name="Category1TextBlock" Text="{Binding Category.CategoryName}" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
-                                            <TextBlock Text="View All" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}"></TextBlock>
+                                            <TextBlock x:Name="ViewAllTextBlock" Text="View All" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}" Tapped="ViewAllTextBlock_Tapped"></TextBlock>
                                         </Grid>
-                                        <ListView x:Name="Category1ListView" ItemsSource="{Binding ListOfAccessory}" Style="{StaticResource VerticalListView}">
+                                        <ListView x:Name="AccessoryItemListView" ItemsSource="{Binding ListOfAccessory}" Style="{StaticResource VerticalListView}"
+                                                  SelectionChanged="AcessoryListView_SelectionChanged">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel>
                                                         <Image Height="150" Width="150" Source="{Binding ImagePath}" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                        <StackPanel VerticalAlignment="Top" Margin="10,0,0,0">
+                                                        <StackPanel VerticalAlignment="Top" Margin="10,0,0,10">
                                                             <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"/>
-                                                            <Button Content="Add to cart"></Button>
+                                                            <!--<Button Content="Add to cart"></Button>-->
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
                                         </ListView>
-                                    </StackPanel>
+                                    </ItemsControl>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
