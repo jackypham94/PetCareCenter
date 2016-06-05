@@ -124,7 +124,7 @@ namespace PhotoSharingApp.Universal.Views
                 {
                     //UserInfo info = await response.Content.ReadAsAsync<UserInfo>();
 
-
+                    //encode password
                     user.Password = Base64Encode(user.Password);
 
                     await SerelizeDataToJson(user, "user");
