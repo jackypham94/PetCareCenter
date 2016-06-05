@@ -171,7 +171,7 @@ namespace PhotoSharingApp.Universal.Views
             bool check = true;
 
             //check name
-            if (user.Name.Length == 0)
+            if (user.Name.Length == 0 || user.Name.Equals(NameTextBox.Text.Trim()))
             {
                 ErrorNameTextBlock.Text = "Please enter your name!";
                 ErrorNameTextBlock.Visibility = Visibility.Visible;
@@ -179,7 +179,7 @@ namespace PhotoSharingApp.Universal.Views
             }
 
             //check username
-            if (user.Username.Length == 0)
+            if (user.Username.Length == 0 || user.Username.Equals(UsernameTextBox.Text.Trim()))
             {
                 ErrorUsernameTextBlock.Text = "Please enter your username!";
                 ErrorUsernameTextBlock.Visibility = Visibility.Visible;
@@ -187,12 +187,14 @@ namespace PhotoSharingApp.Universal.Views
             }
 
             //check password
-            if (user.Password.Length == 0)
+            if (user.Password.Length == 0 || user.Password.Equals(PassWordPasswordBox.Password.Trim()))
             {
                 ErrorPasswordTextBlock.Text = "Please enter your password!";
                 ErrorPasswordTextBlock.Visibility = Visibility.Visible;
                 check = false;
             }
+
+            
 
             //check password confirm
             if (ConfirmPassWordPasswordBox.Password.Trim().Length == 0)
@@ -214,7 +216,7 @@ namespace PhotoSharingApp.Universal.Views
             //check email
             myRegex = new Regex(@"^\w+@\w+[.]\w+$");
             m = myRegex.Match(user.Email);
-            if (user.Email.Length == 0)
+            if (user.Email.Length == 0  || user.Email.Equals(EmailTextBox.Text.Trim()))
             {
                 ErrorEmailTextBlock.Text = "Please enter your email!";
                 ErrorEmailTextBlock.Visibility = Visibility.Visible;
@@ -231,7 +233,7 @@ namespace PhotoSharingApp.Universal.Views
             }
             
             //check address
-            if (user.Address.Length == 0)
+            if (user.Address.Length == 0 || user.Address.Equals(AddressTextBox.Text.Trim()))
             {
                 ErrorAddressTextBlock.Text = "Please enter your address!";
                 ErrorAddressTextBlock.Visibility = Visibility.Visible;

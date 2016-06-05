@@ -44,14 +44,14 @@
                     <Grid Margin="0,5,0,0">
                         <Path x:Name="PasswordPath" Data="M7,14A2,2 0 0,1 5,12A2,2 0 0,1 7,10A2,2 0 0,1 9,12A2,2 0 0,1 7,14M12.65,10C11.83,7.67 9.61,6 7,6A6,6 0 0,0 1,12A6,6 0 0,0 7,18C9.61,18 11.83,16.33 12.65,14H17V18H21V14H23V10H12.65Z"
                               Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
-                        <PasswordBox x:Name="PassWordPasswordBox" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" Password="password" GotFocus="PassWordPasswordBox_GotFocus" />
+                        <PasswordBox x:Name="PassWordPasswordBox" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" Password="tfhonvg" GotFocus="PassWordPasswordBox_GotFocus" />
                     </Grid>
                     <TextBlock Text="Confirm Password" Margin="0,5,0,0"></TextBlock>
                     <TextBlock x:Name="ErrorConfirmPasswordTextBlock" Foreground="Red" Visibility="Collapsed"></TextBlock>
                     <Grid Margin="0,5,0,0">
                         <Path x:Name="ConfirmPasswordPath" Data="M7,14A2,2 0 0,1 5,12A2,2 0 0,1 7,10A2,2 0 0,1 9,12A2,2 0 0,1 7,14M12.65,10C11.83,7.67 9.61,6 7,6A6,6 0 0,0 1,12A6,6 0 0,0 7,18C9.61,18 11.83,16.33 12.65,14H17V18H21V14H23V10H12.65Z"
                               Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
-                        <PasswordBox x:Name="ConfirmPassWordPasswordBox" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" Password="password" GotFocus="ConfirmPassWordPasswordBox_GotFocus" />
+                        <PasswordBox x:Name="ConfirmPassWordPasswordBox" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" Password="tfhonvg" GotFocus="ConfirmPassWordPasswordBox_GotFocus" />
                     </Grid>
                     <TextBlock Text="Email" Margin="0,5,0,0"></TextBlock>
                     <TextBlock x:Name="ErrorEmailTextBlock" Foreground="Red" Visibility="Collapsed"></TextBlock>
