@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
+using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -142,7 +143,8 @@ namespace PhotoSharingApp.Universal.Views
                 //request POST to api
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://192.168.11.26:62252/");
+                    var resourceLoader = ResourceLoader.GetForCurrentView();
+                    client.BaseAddress = new Uri(resourceLoader.GetString("ServerURL"));
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -150,7 +152,7 @@ namespace PhotoSharingApp.Universal.Views
                     HttpResponseMessage response = await client.PutAsJsonAsync("api/Users/", newUser);
                     if (response.IsSuccessStatusCode)
                     {
-                        int i = 0;
+                        this.Frame.Navigate(typeof(SignInPage));
                     }
                     else
                     {

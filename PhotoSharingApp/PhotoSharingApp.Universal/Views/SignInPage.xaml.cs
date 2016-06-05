@@ -26,6 +26,7 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using Windows.ApplicationModel.Resources;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -103,7 +104,8 @@ namespace PhotoSharingApp.Universal.Views
             //request POST to api
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://192.168.11.26:62252/");
+                var resourceLoader = ResourceLoader.GetForCurrentView();
+                client.BaseAddress = new Uri(resourceLoader.GetString("ServerURL"));
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
