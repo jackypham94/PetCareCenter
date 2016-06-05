@@ -27,8 +27,10 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
+using Windows.Security.Cryptography;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
@@ -43,6 +45,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
+using Windows.Storage.Streams;
 
 namespace PhotoSharingApp.Universal.Views
 {
@@ -121,6 +124,9 @@ namespace PhotoSharingApp.Universal.Views
                 {
                     //UserInfo info = await response.Content.ReadAsAsync<UserInfo>();
 
+
+                    user.Password = Base64Encode(user.Password);
+
                     await SerelizeDataToJson(user, "user");
 
                     //JsonSerializer serializer = new JsonSerializer();
@@ -142,6 +148,18 @@ namespace PhotoSharingApp.Universal.Views
             }
 
 
+        }
+
+        public static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+
+        public static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
         private void UsernameTextBox_GotFocus(object sender, Windows.UI.Xaml.RoutedEventArgs e)
