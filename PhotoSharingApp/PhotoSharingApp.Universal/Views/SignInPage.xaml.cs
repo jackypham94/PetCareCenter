@@ -126,7 +126,7 @@ namespace PhotoSharingApp.Universal.Views
 
                     //encode password
                     user.Password = Base64Encode(user.Password);
-
+                    //write to file "user.json"
                     await SerelizeDataToJson(user, "user");
 
                     //JsonSerializer serializer = new JsonSerializer();
