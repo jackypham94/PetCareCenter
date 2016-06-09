@@ -13,14 +13,6 @@
     x:Name="pageRoot"
     mc:Ignorable="d">
     <Page.Resources>
-        <DataTemplate x:Key="CategoryDataTempalte">
-            <TextBlock Text="{Binding Category.CategoryName}" Margin="30,0,0,0"/>
-        </DataTemplate>
-        <DataTemplate x:Key="AssessoryDataTemplate">
-            <Grid Width="50" Height="50" Background="WhiteSmoke">
-                <TextBlock Text="{Binding Name}"></TextBlock>
-            </Grid>
-        </DataTemplate>
         <Style TargetType="TextBlock" x:Key="TextContentStyle">
             <!--<Setter Property="Margin" Value="15,24,0,12" />-->
             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -29,28 +21,118 @@
             <Setter Property="FontWeight" Value="Light" />
             <Setter Property="MaxWidth" Value="500" />
         </Style>
-        <Style TargetType="ListView" x:Key="VerticalListView">
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
-            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Enabled" />
-            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Disabled" />
-            <!--<Setter Property="ScrollViewer.ZoomMode" Value="Disabled" />-->
-            <!--<Setter Property="SelectionMode" Value="None" />-->
-            <Setter Property="ItemsPanel">
+        <DataTemplate x:Key="CategoryListItemTemplate">
+            <Grid Margin="0,0,0,6">
+                <Grid.Transitions>
+                    <TransitionCollection>
+                        <AddDeleteThemeTransition/>
+                    </TransitionCollection>
+                </Grid.Transitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <controls:MyControl />
+
+                    <TextBlock Foreground="{StaticResource AppAccentForegroundColorBrush}" FontSize="16"
+                               Grid.Column="1" Margin="6,0,0,0" VerticalAlignment="Center" Text="{Binding Category.CategoryName}" TextWrapping="NoWrap"
+                               Style="{ThemeResource SubheaderTextBlockStyle}" />
+
+                    <Button Grid.Column="2"
+                            Style="{ThemeResource TextBlockButtonStyle}"
+                            Command="{Binding CategorySelectedCommand, ElementName=pageRoot}"
+                            CommandParameter="{Binding}">
+                        <TextBlock 
+                               Foreground="{StaticResource AppAccentForegroundColorBrush}" FontSize="16"
+                               Text="Show all"
+                               Style="{ThemeResource SubheaderTextBlockStyle}" />
+                    </Button>
+                </Grid>
+
+                <ScrollViewer HorizontalScrollMode="Disabled"
+                              HorizontalScrollBarVisibility="Hidden"
+                              VerticalScrollMode="Disabled"
+                              VerticalScrollBarVisibility="Hidden"
+                              Grid.Row="1"
+                              Margin="0,6,0,0">
+                    <ItemsControl ItemsSource="{Binding ListOfAccessory}" IsTabStop="False">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Background="White" Padding="0" 
+                                        Margin="0,0,8,4">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Image Width="120"
+                                           Height="120" Margin="0" Source="{Binding ImagePath}" />
+                                        <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                            <TextBlock Text="Price: "></TextBlock>
+                                            <TextBlock Text="{Binding Price}"></TextBlock>
+                                            <TextBlock Text=" $"></TextBlock>
+                                        </StackPanel>
+                                    </Grid>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </DataTemplate>
+        <Style x:Key="ListViewItemContainerStyle" TargetType="ListViewItem">
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+            <Setter Property="IsHoldingEnabled" Value="True" />
+            <Setter Property="Padding" Value="12,0,12,0" />
+            <Setter Property="Margin" Value="0,12,0,0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}" />
+            <Setter Property="MinHeight" Value="{ThemeResource ListViewItemMinHeight}" />
+            <Setter Property="Template">
                 <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <StackPanel VerticalAlignment="Top" Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <ListViewItemPresenter CheckBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                                               ContentMargin="{TemplateBinding Padding}" CheckMode="Inline"
+                                               ContentTransitions="{TemplateBinding ContentTransitions}"
+                                               CheckBoxBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                                               DragForeground="{ThemeResource ListViewItemDragForegroundThemeBrush}"
+                                               DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}"
+                                               DragBackground="{ThemeResource ListViewItemDragBackgroundThemeBrush}"
+                                               DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}"
+                                               FocusBorderBrush="{ThemeResource SystemControlForegroundAltHighBrush}"
+                                               FocusSecondaryBorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}"
+                                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                               PointerOverForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}"
+                                               PressedBackground="Transparent"
+                                               PlaceholderBackground="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}"
+                                               PointerOverBackground="Transparent"
+                                               ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}"
+                                               SelectedPressedBackground="{ThemeResource SystemControlHighlightListAccentHighBrush}"
+                                               SelectionCheckMarkVisualEnabled="True"
+                                               SelectedForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}"
+                                               SelectedPointerOverBackground="{ThemeResource SystemControlHighlightListAccentMediumBrush}"
+                                               SelectedBackground="{ThemeResource SystemControlHighlightListAccentLowBrush}"
+                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </ControlTemplate>
                 </Setter.Value>
             </Setter>
-
-            <!--<Setter Property="ItemContainerStyle">
-                <Setter.Value>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="Height" Value="400" />
-                    </Style>
-                </Setter.Value>
-            </Setter>-->
         </Style>
     </Page.Resources>
 
@@ -97,46 +179,300 @@
                                 <Span>Please try again later</Span>
                             </TextBlock>
                         </Grid>
-                        <FlipView VerticalAlignment="Top" MaxHeight="200" Grid.Column="1"
-                              ItemsSource="{Binding HeroImages}" SelectedItem="{Binding SelectedHeroImage, Mode=TwoWay}"
-                              Style="{StaticResource HeroFlipViewStyle}">
-                            <FlipView.Items>
-                                <TextBlock VerticalAlignment="Center" Style="{StaticResource TextContentStyle}" Text="IMAGE 1"/>
-                                <TextBlock VerticalAlignment="Center" Style="{StaticResource TextContentStyle}" Text="IMAGE 2"/>
-                                <TextBlock VerticalAlignment="Center" Style="{StaticResource TextContentStyle}" Text="IMAGE 3"/>
-                                <TextBlock VerticalAlignment="Center" Style="{StaticResource TextContentStyle}" Text="IMAGE 4"/>
-                            </FlipView.Items>
-                        </FlipView>
-
-                        <ListView x:Name="CategoryListView" Margin="0,10,0,0">
-                            <ListView.ItemTemplate>
+                        <FlipView VerticalAlignment="Top" MaxHeight="200"
+                              Style="{StaticResource HeroFlipViewStyle}" x:Name="ImagesFlipView">
+                            <FlipView.ItemTemplate>
                                 <DataTemplate>
-                                    <ItemsControl Margin="0,10,0,0">
-                                        <Grid>
-                                            <TextBlock x:Name="Category1TextBlock" Text="{Binding Category.CategoryName}" HorizontalAlignment="Left" Style="{StaticResource TextContentStyle}"/>
-                                            <TextBlock x:Name="ViewAllTextBlock" Text="View All" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextContentStyle}" Tapped="ViewAllTextBlock_Tapped"></TextBlock>
-                                        </Grid>
-                                        <ListView x:Name="AccessoryItemListView" ItemsSource="{Binding ListOfAccessory}" Style="{StaticResource VerticalListView}"
-                                                  SelectionChanged="AcessoryListView_SelectionChanged">
-                                            <ListView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel>
-                                                        <Image Height="150" Width="150" Source="{Binding ImagePath}" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                        <StackPanel VerticalAlignment="Top" Margin="10,0,0,10">
-                                                            <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"/>
-                                                            <!--<Button Content="Add to cart"></Button>-->
-                                                        </StackPanel>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ListView.ItemTemplate>
-                                        </ListView>
-                                    </ItemsControl>
+                                    <!--Using a UserControl here to make adaptive triggers work-->
+                                    <Image Margin="0" Source="{Binding ImagePath}" />
                                 </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                            </FlipView.ItemTemplate>
+                        </FlipView>
+                        <!--<ListView x:Name="CategoryListView"
+                                  ItemsSource="{Binding AccessoryCombinations}"
+                                  IsItemClickEnabled="True" SelectionMode="None"
+                                  Margin="12,0"
+                                  ItemTemplate="{StaticResource CategoryListItemTemplate}"
+                                  ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
+                                  RelativePanel.AlignLeftWithPanel="True"
+                                  RelativePanel.AlignRightWithPanel="True"
+                                  IsTabStop="False" />-->
+                        <Grid Margin="12,12,12,0">
+                            <Grid.Transitions>
+                                <TransitionCollection>
+                                    <AddDeleteThemeTransition/>
+                                </TransitionCollection>
+                            </Grid.Transitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <controls:MyControl />
 
+                                <TextBlock Foreground="{StaticResource AppAccentForegroundColorBrush}" FontSize="16"
+                               Grid.Column="1" Margin="6,0,0,0" VerticalAlignment="Center" x:Name="Category1TextBlock" Text="Category" TextWrapping="NoWrap"
+                               Style="{ThemeResource SubheaderTextBlockStyle}" />
 
-                        <TextBlock Style="{StaticResource TextContentStyle}" Margin="0,10,0,0" Text="Having bussy day? Long trip?&#xD;&#xA;You don't have time for pet? Your pet is sickness?&#xD;&#xA;We'll take care of your pet."/>
+                                <Button x:Name="ShowCategory1Button" Grid.Column="2"
+                                    Style="{ThemeResource TextBlockButtonStyle}" Click="ShowCategory1Button_Click">
+                                    <TextBlock 
+                                        Foreground="{StaticResource AppAccentForegroundColorBrush}" FontSize="16"
+                                        Text="Show all"
+                                        Style="{ThemeResource SubheaderTextBlockStyle}" />
+                                </Button>
+                            </Grid>
+
+                            <ScrollViewer HorizontalScrollMode="Disabled"
+                              HorizontalScrollBarVisibility="Hidden"
+                              VerticalScrollMode="Disabled"
+                              VerticalScrollBarVisibility="Hidden"
+                              Grid.Row="1"
+                              Margin="0,6,0,0">
+                                <ItemsControl x:Name="Category1ItemsControl" IsTabStop="False">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Background="White" Padding="0" 
+                                        Margin="0,0,8,4">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Image Width="120"
+                                           Height="120" Margin="0" Source="{Binding ImagePath}" />
+                                                    <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                                        <TextBlock Text="Price: "></TextBlock>
+                                                        <TextBlock Text="{Binding Price}"></TextBlock>
+                                                        <TextBlock Text=" $"></TextBlock>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+
+                        <Grid Margin="12,12,12,0">
+                            <Grid.Transitions>
+                                <TransitionCollection>
+                                    <AddDeleteThemeTransition/>
+                                </TransitionCollection>
+                            </Grid.Transitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <controls:MyControl />
+
+                                <TextBlock Foreground="{StaticResource AppAccentForegroundColorBrush}" FontSize="16"
+                               Grid.Column="1" Margin="6,0,0,0" VerticalAlignment="Center" x:Name="Category2TextBlock" Text="Category" TextWrapping="NoWrap"
+                               Style="{ThemeResource SubheaderTextBlockStyle}" />
+
+                                <Button x:Name="ShowCategory2Button" Grid.Column="2"
+                                    Style="{ThemeResource TextBlockButtonStyle}" Click="ShowCategory2Button_Click">
+                                    <TextBlock 
+                                        Foreground="{StaticResource AppAccentForegroundColorBrush}" FontSize="16"
+                                        Text="Show all"
+                                        Style="{ThemeResource SubheaderTextBlockStyle}" />
+                                </Button>
+                            </Grid>
+
+                            <ScrollViewer HorizontalScrollMode="Disabled"
+                              HorizontalScrollBarVisibility="Hidden"
+                              VerticalScrollMode="Disabled"
+                              VerticalScrollBarVisibility="Hidden"
+                              Grid.Row="1"
+                              Margin="0,6,0,0">
+                                <ItemsControl x:Name="Category2ItemsControl" IsTabStop="False">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Background="White" Padding="0" 
+                                        Margin="0,0,8,4">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Image Width="120"
+                                           Height="120" Margin="0" Source="{Binding ImagePath}" />
+                                                    <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                                        <TextBlock Text="Price: "></TextBlock>
+                                                        <TextBlock Text="{Binding Price}"></TextBlock>
+                                                        <TextBlock Text=" $"></TextBlock>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+
+                        <Grid Margin="12,12,12,0">
+                            <Grid.Transitions>
+                                <TransitionCollection>
+                                    <AddDeleteThemeTransition/>
+                                </TransitionCollection>
+                            </Grid.Transitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <controls:MyControl />
+
+                                <TextBlock Foreground="{StaticResource AppAccentForegroundColorBrush}" FontSize="16"
+                               Grid.Column="1" Margin="6,0,0,0" VerticalAlignment="Center" x:Name="Category3TextBlock" Text="Category" TextWrapping="NoWrap"
+                               Style="{ThemeResource SubheaderTextBlockStyle}" />
+
+                                <Button x:Name="ShowCategory3Button" Grid.Column="2"
+                                    Style="{ThemeResource TextBlockButtonStyle}" Click="ShowCategory3Button_Click">
+                                    <TextBlock 
+                                        Foreground="{StaticResource AppAccentForegroundColorBrush}" FontSize="16"
+                                        Text="Show all"
+                                        Style="{ThemeResource SubheaderTextBlockStyle}" />
+                                </Button>
+                            </Grid>
+
+                            <ScrollViewer HorizontalScrollMode="Disabled"
+                              HorizontalScrollBarVisibility="Hidden"
+                              VerticalScrollMode="Disabled"
+                              VerticalScrollBarVisibility="Hidden"
+                              Grid.Row="1"
+                              Margin="0,6,0,0">
+                                <ItemsControl x:Name="Category3ItemsControl" IsTabStop="False">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Background="White" Padding="0" 
+                                        Margin="0,0,8,4">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Image Width="120"
+                                           Height="120" Margin="0" Source="{Binding ImagePath}" />
+                                                    <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                                        <TextBlock Text="Price: "></TextBlock>
+                                                        <TextBlock Text="{Binding Price}"></TextBlock>
+                                                        <TextBlock Text=" $"></TextBlock>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+
+                        <!--<Grid Margin="12,12,12,0">
+                            <Grid.Transitions>
+                                <TransitionCollection>
+                                    <AddDeleteThemeTransition/>
+                                </TransitionCollection>
+                            </Grid.Transitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <controls:MyControl />
+
+                                <TextBlock Foreground="{StaticResource AppAccentForegroundColorBrush}" FontSize="16"
+                               Grid.Column="1" Margin="6,0,0,0" VerticalAlignment="Center" x:Name="Category4TextBlock" Text="Category" TextWrapping="NoWrap"
+                               Style="{ThemeResource SubheaderTextBlockStyle}" />
+
+                                <Button x:Name="ShowCategory4Button" Grid.Column="2"
+                                    Style="{ThemeResource TextBlockButtonStyle}" Click="ShowCategory4Button_Click">
+                                    <TextBlock 
+                                        Foreground="{StaticResource AppAccentForegroundColorBrush}" FontSize="16"
+                                        Text="Show all"
+                                        Style="{ThemeResource SubheaderTextBlockStyle}" />
+                                </Button>
+                            </Grid>
+
+                            <ScrollViewer HorizontalScrollMode="Disabled"
+                              HorizontalScrollBarVisibility="Hidden"
+                              VerticalScrollMode="Disabled"
+                              VerticalScrollBarVisibility="Hidden"
+                              Grid.Row="1"
+                              Margin="0,6,0,0">
+                                <ItemsControl x:Name="Category4ItemsControl" IsTabStop="False">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Background="White" Padding="0" 
+                                        Margin="0,0,8,4">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Image Width="120"
+                                           Height="120" Margin="0" Source="{Binding ImagePath}" />
+                                                    <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                                        <TextBlock Text="Price: "></TextBlock>
+                                                        <TextBlock Text="{Binding Price}"></TextBlock>
+                                                        <TextBlock Text=" $"></TextBlock>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>-->
+
+                        <Grid Margin="0,12,0,0">
+                            <Rectangle Fill="WhiteSmoke"></Rectangle>
+                            <TextBlock Style="{StaticResource TextContentStyle}" Margin="0,10" Text="Having bussy day? Long trip?&#xD;&#xA;You don't have time for pet? Your pet is sickness?&#xD;&#xA;We'll take care of your pet."/>
+                        </Grid>
                     </ItemsControl>
                 </RelativePanel>
             </ScrollViewer>
