@@ -30,10 +30,12 @@ namespace PhotoSharingApp.Universal.Views
     public sealed partial class MainPage : Page
     {
         private List<ReturnAccessoryCombination> AccessoryCombinations { get;  set; }
+        //private MainPageViewModel _viewModel;
         public MainPage()
         {
             this.InitializeComponent();
             InitializeItem();
+
         }
 
         private void InitializeItem()
@@ -54,7 +56,15 @@ namespace PhotoSharingApp.Universal.Views
             else 
             {
                 NoConnectionGrid.Visibility = Visibility.Collapsed;
-                CategoryListView.ItemsSource = AccessoryCombinations;
+                Category1ItemsControl.ItemsSource = AccessoryCombinations[0].ListOfAccessory;
+                Category1TextBlock.Text = AccessoryCombinations[0].Category.CategoryName;
+                Category2ItemsControl.ItemsSource = AccessoryCombinations[1].ListOfAccessory;
+                Category2TextBlock.Text = AccessoryCombinations[1].Category.CategoryName;
+                Category3ItemsControl.ItemsSource = AccessoryCombinations[2].ListOfAccessory;
+                Category3TextBlock.Text = AccessoryCombinations[2].Category.CategoryName;
+                //Category4ItemsControl.ItemsSource = AccessoryCombinations[3].ListOfAccessory;
+                //Category4TextBlock.Text = AccessoryCombinations[3].Category.CategoryName;
+                ImagesFlipView.ItemsSource = AccessoryCombinations[0].ListOfAccessory;
             }
         }
         public async Task InitializeCategoryItems()
@@ -83,12 +93,6 @@ namespace PhotoSharingApp.Universal.Views
         //    await _viewModel.LoadState();
         //}
 
-        private void ViewAllTextBlock_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            int id = AccessoryCombinations[CategoryListView.SelectedIndex].Category.Id;
-            Frame.Navigate(typeof(Categories), id);
-        }
-
 
         private async void AcessoryListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -106,5 +110,29 @@ namespace PhotoSharingApp.Universal.Views
 
             var result = await dialog.ShowAsync();
         }
+
+        private void ShowCategory1Button_Click(object sender, RoutedEventArgs e)
+        {
+            int id = AccessoryCombinations[0].Category.Id;
+            Frame.Navigate(typeof(Categories), id);
+        }
+
+        private void ShowCategory2Button_Click(object sender, RoutedEventArgs e)
+        {
+            int id = AccessoryCombinations[1].Category.Id;
+            Frame.Navigate(typeof(Categories), id);
+        }
+
+        private void ShowCategory3Button_Click(object sender, RoutedEventArgs e)
+        {
+            int id = AccessoryCombinations[2].Category.Id;
+            Frame.Navigate(typeof(Categories), id);
+        }
+
+        //private void ShowCategory4Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    int id = AccessoryCombinations[3].Category.Id;
+        //    Frame.Navigate(typeof(Categories), id);
+        //}
     }
 }

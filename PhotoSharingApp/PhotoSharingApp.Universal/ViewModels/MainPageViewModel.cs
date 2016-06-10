@@ -52,6 +52,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             _navigationFacade = navigationFacade;
             NavigateToTargetPageCommand = new RelayCommand<InstructionItem>(OnNavigateToTargetPage);
+            CategorySelectedCommand = new RelayCommand<CategoryPreview>(OnCategorySelected);
 
             try
             {
@@ -62,6 +63,16 @@ namespace PhotoSharingApp.Universal.ViewModels
                 //throw;
             }
         }
+
+        /// <summary>
+        /// Gets the category selected command.
+        /// </summary>
+        public RelayCommand<CategoryPreview> CategorySelectedCommand { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the selected category.
+        /// </summary>
+        public CategoryPreview SelectedCategoryPreview { get; set; }
 
         /// <summary>
         /// The instructional items.
@@ -107,6 +118,12 @@ namespace PhotoSharingApp.Universal.ViewModels
                 }
             }
 
+        }
+
+        private void OnCategorySelected(CategoryPreview categoryPreview)
+        {
+            SelectedCategoryPreview = categoryPreview;
+            _navigationFacade.NavigateToSignInPage();
         }
 
         /// <summary>
