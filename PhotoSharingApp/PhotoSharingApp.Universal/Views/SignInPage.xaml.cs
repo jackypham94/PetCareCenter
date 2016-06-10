@@ -46,6 +46,7 @@ using Newtonsoft.Json.Converters;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 using Windows.Storage.Streams;
+using Windows.UI.Popups;
 
 namespace PhotoSharingApp.Universal.Views
 {
@@ -109,42 +110,17 @@ namespace PhotoSharingApp.Universal.Views
             ReturnUser user = new ReturnUser();
             user.Password = password;
             user.Username = username;
-
-            //request POST to api
-            using (var client = new HttpClient())
+            try
             {
-                var resourceLoader = ResourceLoader.GetForCurrentView();
-                client.BaseAddress = new Uri(resourceLoader.GetString("ServerURL"));
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                RequestToApi(user).Wait();
+            }
+            catch (AggregateException)
+            {
+                var dialog = new MessageDialog("Can not connect to server!", "Message");
+                //dialog.Commands.Add(new UICommand("Yes") { Id = 0 });
+                //dialog.Commands.Add(new UICommand("No") { Id = 1 });
 
-                // New code:
-                HttpResponseMessage response = await client.PostAsJsonAsync("api/Users/info", user);
-                if (response.IsSuccessStatusCode)
-                {
-                    //UserInfo info = await response.Content.ReadAsAsync<UserInfo>();
-
-                    //encode password
-                    user.Password = Base64Encode(user.Password);
-                    //write to file "user.json"
-                    await SerelizeDataToJson(user, "user");
-
-                    //JsonSerializer serializer = new JsonSerializer();
-                    //serializer.Converters.Add(new JavaScriptDateTimeConverter());
-                    //serializer.NullValueHandling = NullValueHandling.Ignore;
-
-                    //TextWriter sw = new StreamWriter(@"C:\Users\minhlpnse61602\Desktop\user.txt");
-                    //JsonWriter writer = new JsonTextWriter(sw);
-                    //serializer.Serialize(writer, user);
-
-                    // To do: Login to home page
-                    this.Frame.Navigate(typeof(MainPage));
-                }
-                else
-                {
-                    ErrorProviderTextBlock.Text = "Incorrect username or password!";
-                    ErrorProviderTextBlock.Visibility = Visibility.Visible;
-                }
+                await dialog.ShowAsync();
             }
 
 
@@ -228,5 +204,37 @@ namespace PhotoSharingApp.Universal.Views
                 throw e;
             }
         }
-}
+
+        public async Task RequestToApi(ReturnUser user)
+        {
+            //request POST to api
+            using (var client = new HttpClient())
+            {
+                var resourceLoader = ResourceLoader.GetForCurrentView();
+                client.BaseAddress = new Uri(resourceLoader.GetString("ServerURL"));
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // New code:
+                HttpResponseMessage response = await client.PostAsJsonAsync("api/Users/info", user).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    //UserInfo info = await response.Content.ReadAsAsync<UserInfo>();
+
+                    //encode password
+                    user.Password = Base64Encode(user.Password);
+                    //write to file "user.json"
+                    await SerelizeDataToJson(user, "user");
+
+                    // To do: Login to home page
+                    this.Frame.Navigate(typeof(MainPage));
+                }
+                else
+                {
+                    ErrorProviderTextBlock.Text = "Incorrect username or password!";
+                    ErrorProviderTextBlock.Visibility = Visibility.Visible;
+                }
+            }
+        }
+    }
 }

@@ -238,7 +238,7 @@
     <value>Having bussy day? Long trip? You don't have time for pet? Your pet is sickness? {0} will take care of your pet.</value>
   </data>
   <data name="WelcomePage_Instruction1_Title" xml:space="preserve">
-    <value>We'll take care of your pet</value>
+    <value>Take care service</value>
   </data>
   <data name="WelcomePage_Instruction2_Content" xml:space="preserve">
     <value>This app will help your to track your pet' status.</value>
@@ -262,7 +262,7 @@
     <value>They will well-treated during the time they stay with us.</value>
   </data>
   <data name="WelcomePage_Instruction5_Title" xml:space="preserve">
-    <value>Don't worry about your pet</value>
+    <value>Don't worry</value>
   </data>
   <data name="WelcomePage_Instruction6_Content" xml:space="preserve">
     <value>Let start now.</value>

@@ -2,8 +2,10 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -140,28 +142,19 @@ namespace PhotoSharingApp.Universal.Views
 
             if (check)
             {
-                //request POST to api
-                using (var client = new HttpClient())
+                try
                 {
-                    var resourceLoader = ResourceLoader.GetForCurrentView();
-                    client.BaseAddress = new Uri(resourceLoader.GetString("ServerURL"));
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    // New code:
-                    HttpResponseMessage response = await client.PutAsJsonAsync("api/Users/", newUser);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var isRegistered = true;
-                        this.Frame.Navigate(typeof(SignInPage), isRegistered);
-                    }
-                    else
-                    {
-                        ErrorProviderTextBlock.Text = "Username is already existed!";
-                        ErrorProviderTextBlock.Visibility = Visibility.Visible;
-                    }
-                    //ErrorProviderTextBlock.Text = "This function is developing!";
+                    RequestToApi(newUser).Wait();
                 }
+                catch (AggregateException)
+                {
+                    var dialog = new MessageDialog("Can*not connect to server!", "Message");
+                    //dialog.Commands.Add(new UICommand("Yes") { Id = 0 });
+                    //dialog.Commands.Add(new UICommand("No") { Id = 1 });
+
+                    await dialog.ShowAsync();
+                }
+                
             }
         }
 
@@ -288,5 +281,30 @@ namespace PhotoSharingApp.Universal.Views
         //{
         //    SetTextBlockVisibilityCollapsed();
         //}
+        
+        public async Task RequestToApi(CreateNewUser newUser)
+        {
+            //request POST to api
+            using (var client = new HttpClient())
+            {
+                var resourceLoader = ResourceLoader.GetForCurrentView();
+                client.BaseAddress = new Uri(resourceLoader.GetString("ServerURL"));
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // New code:
+                HttpResponseMessage response = await client.PutAsJsonAsync("api/Users/", newUser).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    var isRegistered = true;
+                    this.Frame.Navigate(typeof(SignInPage), isRegistered);
+                }
+                else
+                {
+                    ErrorProviderTextBlock.Text = "Username is already existed!";
+                    ErrorProviderTextBlock.Visibility = Visibility.Visible;
+                }
+            }
+        }
     }
 }
