@@ -127,7 +127,7 @@ namespace PhotoSharingApp.Universal.Views
             //SetTextBlockVisibilityCollapsed();
         }
 
-        private async void RegisterButton_Click(object sender, RoutedEventArgs e)
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
             CreateNewUser newUser = new CreateNewUser();
             newUser.Name = NameTextBox.Text.Trim();
@@ -240,15 +240,6 @@ namespace PhotoSharingApp.Universal.Views
                     check = false;
                 }
             }
-
-            //check gender
-            //if (-1 == user.Gender)
-            //{
-            //    ErrorGenderTextBlock.Text = "Please choose your gender!";
-            //    ErrorGenderTextBlock.Visibility = Visibility.Visible;
-            //    check = false;
-            //}
-
             return check;
         }
 
@@ -264,11 +255,6 @@ namespace PhotoSharingApp.Universal.Views
             //ErrorGenderTextBlock.Visibility = Visibility.Collapsed;
             ErrorProviderTextBlock.Visibility = Visibility.Collapsed;
         }
-
-        //private void GenderList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    SetTextBlockVisibilityCollapsed();
-        //}
 
         public async void RequestToApi(CreateNewUser newUser)
         {
@@ -298,9 +284,6 @@ namespace PhotoSharingApp.Universal.Views
                 catch (HttpRequestException)
                 {
                     var dialog = new MessageDialog("Can not connect to server!", "Message");
-                    //dialog.Commands.Add(new UICommand("Yes") { Id = 0 });
-                    //dialog.Commands.Add(new UICommand("No") { Id = 1 });
-
                     await dialog.ShowAsync();
                 }
 

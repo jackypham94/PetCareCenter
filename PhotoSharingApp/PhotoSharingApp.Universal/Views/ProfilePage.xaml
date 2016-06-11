@@ -1,17 +1,14 @@
 ﻿<Page
-    x:Class="PhotoSharingApp.Universal.Views.RegisterPage"
+    x:Class="PhotoSharingApp.Universal.Views.ProfilePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:PhotoSharingApp.Universal.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:design="using:PhotoSharingApp.Universal.ViewModels.Design"
-    xmlns:valueConverters="using:PhotoSharingApp.Universal.ValueConverters"
-    mc:Ignorable="d"
-    x:Name="pageRoot">
+    mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="layoutRoot">
-        <ScrollViewer x:Name="RegisterScrollViewer" VerticalScrollMode="Enabled" KeyDown="RegisterScrollViewer_KeyDown">
+        <ScrollViewer x:Name="RegisterScrollViewer" VerticalScrollMode="Enabled" KeyDown="ProfileScrollViewer_KeyDown">
             <RelativePanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <ItemsControl Width="300">
                     <ItemsControl.ItemContainerTransitions>
@@ -23,56 +20,46 @@
                     <Path Data="M18,16H6V15.1C6,13.1 10,12 12,12C14,12 18,13.1 18,15.1M12,5.3C13.5,5.3 14.7,6.5 14.7,8C14.7,9.5 13.5,10.7 12,10.7C10.5,10.7 9.3,9.5 9.3,8C9.3,6.5 10.5,5.3 12,5.3M19,2H5C3.89,2 3,2.89 3,4V18A2,2 0 0,0 5,20H9L12,23L15,20H19A2,2 0 0,0 21,18V4C21,2.89 20.1,2 19,2Z"
                               Fill="Teal" Margin="10,3,6,5" Stretch="Uniform" Width="70" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.ZIndex="1"/>
 
-                    <TextBlock x:Name="DemoBlock" Foreground="Teal" FontSize="20" Text="Register" HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="DemoBlock" Foreground="Teal" FontSize="20" Text="Profile" HorizontalAlignment="Left"/>
                     <TextBlock x:Name="ErrorProviderTextBlock" Foreground="Red" Visibility="Collapsed"></TextBlock>
                     <TextBlock Text="Your name" Margin="0,5,0,0"></TextBlock>
                     <TextBlock x:Name="ErrorNameTextBlock" Foreground="Red" Visibility="Collapsed"></TextBlock>
                     <Grid Margin="0,5,0,0">
                         <Path x:Name="NamePath" Data="M2,3H22C23.05,3 24,3.95 24,5V19C24,20.05 23.05,21 22,21H2C0.95,21 0,20.05 0,19V5C0,3.95 0.95,3 2,3M14,6V7H22V6H14M14,8V9H21.5L22,9V8H14M14,10V11H21V10H14M8,13.91C6,13.91 2,15 2,17V18H14V17C14,15 10,13.91 8,13.91M8,6A3,3 0 0,0 5,9A3,3 0 0,0 8,12A3,3 0 0,0 11,9A3,3 0 0,0 8,6Z"
                               Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
-                        <TextBox x:Name="NameTextBox" PlaceholderText="Your Name" InputScope="Default" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" GotFocus="NameTextBox_GotFocus"/>
+                        <TextBox x:Name="NameTextBox" InputScope="Default" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" GotFocus="NameTextBox_GotFocus"/>
                     </Grid>
                     <TextBlock Text="Username" Margin="0,5,0,0"></TextBlock>
                     <TextBlock x:Name="ErrorUsernameTextBlock" Foreground="Red" Visibility="Collapsed"></TextBlock>
                     <Grid Margin="0,5,0,0">
                         <Path x:Name="UsernamePath" Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
                               Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
-                        <TextBox x:Name="UsernameTextBox" PlaceholderText="username" InputScope="Default" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" GotFocus="UsernameTextBox_GotFocus"/>
+                        <TextBox x:Name="UsernameTextBox" InputScope="Default" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" GotFocus="UsernameTextBox_GotFocus"/>
                     </Grid>
-                    <TextBlock Text="Password" Margin="0,5,0,0"></TextBlock>
-                    <TextBlock x:Name="ErrorPasswordTextBlock" Foreground="Red" Visibility="Collapsed"></TextBlock>
-                    <Grid Margin="0,5,0,0">
-                        <Path x:Name="PasswordPath" Data="M7,14A2,2 0 0,1 5,12A2,2 0 0,1 7,10A2,2 0 0,1 9,12A2,2 0 0,1 7,14M12.65,10C11.83,7.67 9.61,6 7,6A6,6 0 0,0 1,12A6,6 0 0,0 7,18C9.61,18 11.83,16.33 12.65,14H17V18H21V14H23V10H12.65Z"
-                              Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
-                        <PasswordBox x:Name="PassWordPasswordBox" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" PlaceholderText="●●●●●●" GotFocus="PassWordPasswordBox_GotFocus" />
-                    </Grid>
-                    <TextBlock Text="Confirm Password" Margin="0,5,0,0"></TextBlock>
-                    <TextBlock x:Name="ErrorConfirmPasswordTextBlock" Foreground="Red" Visibility="Collapsed"></TextBlock>
-                    <Grid Margin="0,5,0,0">
-                        <Path x:Name="ConfirmPasswordPath" Data="M7,14A2,2 0 0,1 5,12A2,2 0 0,1 7,10A2,2 0 0,1 9,12A2,2 0 0,1 7,14M12.65,10C11.83,7.67 9.61,6 7,6A6,6 0 0,0 1,12A6,6 0 0,0 7,18C9.61,18 11.83,16.33 12.65,14H17V18H21V14H23V10H12.65Z"
-                              Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
-                        <PasswordBox x:Name="ConfirmPassWordPasswordBox" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" PlaceholderText="●●●●●●" GotFocus="ConfirmPassWordPasswordBox_GotFocus" />
-                    </Grid>
+
+
+
+
                     <TextBlock Text="Email" Margin="0,5,0,0"></TextBlock>
                     <TextBlock x:Name="ErrorEmailTextBlock" Foreground="Red" Visibility="Collapsed"></TextBlock>
                     <Grid Margin="0,5,0,0">
                         <Path x:Name="EmailPath" Data="M15.45,11.91C15.34,9.7 13.7,8.37 11.72,8.37H11.64C9.35,8.37 8.09,10.17 8.09,12.21C8.09,14.5 9.62,15.95 11.63,15.95C13.88,15.95 15.35,14.3 15.46,12.36M11.65,6.39C13.18,6.39 14.62,7.07 15.67,8.13V8.13C15.67,7.62 16,7.24 16.5,7.24H16.61C17.35,7.24 17.5,7.94 17.5,8.16V16.06C17.46,16.58 18.04,16.84 18.37,16.5C19.64,15.21 21.15,9.81 17.58,6.69C14.25,3.77 9.78,4.25 7.4,5.89C4.88,7.63 3.26,11.5 4.83,15.11C6.54,19.06 11.44,20.24 14.35,19.06C15.83,18.47 16.5,20.46 15,21.11C12.66,22.1 6.23,22 3.22,16.79C1.19,13.27 1.29,7.08 6.68,3.87C10.81,1.42 16.24,2.1 19.5,5.5C22.95,9.1 22.75,15.8 19.4,18.41C17.89,19.59 15.64,18.44 15.66,16.71L15.64,16.15C14.59,17.2 13.18,17.81 11.65,17.81C8.63,17.81 6,15.15 6,12.13C6,9.08 8.63,6.39 11.65,6.39Z"
                               Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
-                        <TextBox x:Name="EmailTextBox" PlaceholderText="email@email.com" InputScope="EmailSmtpAddress" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" GotFocus="EmailTextBox_GotFocus"/>
+                        <TextBox x:Name="EmailTextBox" InputScope="EmailSmtpAddress" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" GotFocus="EmailTextBox_GotFocus"/>
                     </Grid>
                     <TextBlock Text="Address" Margin="0,5,0,0"></TextBlock>
                     <TextBlock x:Name="ErrorAddressTextBlock" Foreground="Red" Visibility="Collapsed"></TextBlock>
                     <Grid Margin="0,5,0,0">
                         <Path x:Name="AddressPath" Data="M12,3L2,12H5V20H19V12H22L12,3M12,7.7C14.1,7.7 15.8,9.4 15.8,11.5C15.8,14.5 12,18 12,18C12,18 8.2,14.5 8.2,11.5C8.2,9.4 9.9,7.7 12,7.7M12,10A1.5,1.5 0 0,0 10.5,11.5A1.5,1.5 0 0,0 12,13A1.5,1.5 0 0,0 13.5,11.5A1.5,1.5 0 0,0 12,10Z"
                               Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
-                        <TextBox x:Name="AddressTextBox" PlaceholderText="Address" InputScope="Default" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" GotFocus="AddressTextBox_GotFocus"/>
+                        <TextBox x:Name="AddressTextBox" InputScope="Default" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" GotFocus="AddressTextBox_GotFocus"/>
                     </Grid>
                     <TextBlock Text="Phone" Margin="0,5,0,0"></TextBlock>
                     <TextBlock x:Name="ErrorPhoneTextBlock" Foreground="Red" Visibility="Collapsed"></TextBlock>
                     <Grid Margin="0,5,0,0">
                         <Path x:Name="PhonePath" Data="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"
                               Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
-                        <TextBox x:Name="PhoneTextBox" Text="+84" InputScope="TelephoneNumber" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" GotFocus="PhoneTextBox_GotFocus"/>
+                        <TextBox x:Name="PhoneTextBox" InputScope="TelephoneNumber" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" GotFocus="PhoneTextBox_GotFocus"/>
                     </Grid>
                     <TextBlock Text="Gender" Margin="0,5,0,0"></TextBlock>
                     <Grid Margin="0,5,0,0">
@@ -83,7 +70,7 @@
                         </ComboBox>
                     </Grid>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                        <Button x:Name="RegisterButton" Content="Register" Height="35" Margin="0,0,5,0" HorizontalAlignment="Stretch" Width="145" Click="RegisterButton_Click"/>
+                        <Button x:Name="EditButton" Content="Edit" Height="35" Margin="0,0,5,0" HorizontalAlignment="Stretch" Width="145" Click="EditButton_Click"/>
                         <Button Height="35" Margin="5,0,0,0" Width="145"
                                 Content="Cancel"
                                 Command="{Binding DataContext.NavigateToTargetPageCommand, ElementName=pageRoot}"
@@ -95,5 +82,5 @@
                 </ItemsControl>
             </RelativePanel>
         </ScrollViewer>
-    </Grid>
+        </Grid>
 </Page>
