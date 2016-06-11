@@ -48,7 +48,7 @@ namespace PhotoSharingApp.Universal.ViewModels.Design
                 new InstructionItem("Ready?",
                     "Sample text sample text sample text sample text sample text sample text sample text sample text.",
                     null,
-                    typeof(CategoriesPage))
+                    typeof(MainPage))
             };
 
             SelectedInstructionItem = InstructionItems.First();

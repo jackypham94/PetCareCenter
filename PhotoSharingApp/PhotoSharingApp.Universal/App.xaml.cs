@@ -168,7 +168,8 @@ namespace PhotoSharingApp.Universal
                 }
                 else
                 {
-                    facade.NavigateToMainPage();
+                    //facade.NavigateToMainPage();
+                    facade.NavigateToCategoriesView();
                 }
             }
 

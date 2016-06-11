@@ -113,6 +113,8 @@ namespace PhotoSharingApp.Universal.Facades
         /// <param name="category">The category preview instance.</param>
         void NavigateToPhotoStream(CategoryPreview category);
 
+        void NavigateToCategoryPage(ReturnAccessoryCombination accessoryCombination);
+
         /// <summary>
         /// Navigates to the photo stream view.
         /// </summary>
@@ -125,6 +127,8 @@ namespace PhotoSharingApp.Universal.Facades
         /// <param name="categoryPreview">The category preview instance.</param>
         /// <param name="photoThumbnail">The photo thumbnail that will determine the scroll position.</param>
         void NavigateToPhotoStream(CategoryPreview categoryPreview, PhotoThumbnail photoThumbnail);
+
+        void NavigateToAccessoryDetail(ReturnAccessoryCombination accessoryCombination, ReturnAccessory accessory);
 
         /// <summary>
         /// Navigates to the signed-in user's profile view.

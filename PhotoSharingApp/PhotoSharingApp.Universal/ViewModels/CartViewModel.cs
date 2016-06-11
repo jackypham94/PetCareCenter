@@ -112,7 +112,7 @@ namespace PhotoSharingApp.Universal.ViewModels
             InstructionItems.Add(new InstructionItem(resourceLoader.GetString("WelcomePage_Instruction6_Title"),
                 resourceLoader.GetString("WelcomePage_Instruction6_Content"),
                 null,
-                typeof(CategoriesPage)));
+                typeof(MainPage)));
         }
 
         /// <summary>

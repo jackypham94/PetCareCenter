@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.Practices.ServiceLocation;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Serialization;
 using PhotoSharingApp.Universal.ViewModels;
@@ -27,45 +28,31 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Categories : Page
+    public sealed partial class CategoryPage : Page
     {
+        private int _thumbnailImageSideLength;
+        private readonly CategoryPageViewModel _viewModel;
         private ReturnAccessoryCombination Acessories { get; set; }
-        public Categories()
+        public CategoryPage()
         {
             this.InitializeComponent();
+            SizeChanged += CategoryPage_SizeChanged;
+            _viewModel = ServiceLocator.Current.GetInstance<CategoryPageViewModel>();
+            DataContext = _viewModel;
+        }
+
+        private void CategoryPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateThumbnailSize();
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter != null)
-            {
-                var args = SerializationHelper.Deserialize<ReturnAccessory>(e.Parameter as string);
-                //var args = e.Parameter.ToString();
-                int id = args.Id;
-                string name = args.Name;
-                try
-                {
-                    //InitializeAccessoriesDetails(id).Wait();
-                    var dialog = new Windows.UI.Popups.MessageDialog(
-                        "You have been clicked ID: " + id + " Name: " + name,
-                        "Lorem Ipsum");
-                    await dialog.ShowAsync();
-                }
-                catch (AggregateException)
-                {
-                }
-                if (Acessories == null)
-                {
-                    NoConnectionGrid.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    NoConnectionGrid.Visibility = Visibility.Collapsed;
-                    CategoryListView.ItemsSource = Acessories.ListOfAccessory;
-                    TitleTextBlock.Text = Acessories.Category.CategoryName.ToUpper();
-                }
-                
-            }
+            var args = SerializationHelper.Deserialize<ReturnAccessoryCombination>(e.Parameter as string);
+            InitializeAccessoriesDetails(args.Category.Id).Wait();
+            AccessoriesListView.ItemsSource = Acessories.ListOfAccessory;
+            base.OnNavigatedTo(e);
+            await _viewModel.LoadState();
         }
 
         public async Task InitializeAccessoriesDetails(int id)
@@ -87,6 +74,29 @@ namespace PhotoSharingApp.Universal.Views
                 }
             }
 
+        }
+        public int ThumbnailImageSideLength
+        {
+            get { return _thumbnailImageSideLength; }
+            set
+            {
+                if (value != _thumbnailImageSideLength)
+                {
+                    _thumbnailImageSideLength = value;
+                    //NotifyPropertyChanged();
+                }
+            }
+        }
+        private void UpdateThumbnailSize()
+        {
+            if (PageRoot.ActualWidth > 1300)
+            {
+                ThumbnailImageSideLength = 150;
+            }
+            else
+            {
+                ThumbnailImageSideLength = 100;
+            }
         }
     }
 }
