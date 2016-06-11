@@ -38,7 +38,7 @@ namespace PhotoSharingApp.Universal.Views
     /// The page that allows taking a photo or opening
     /// a photo from the device's photos library.
     /// </summary>
-    public sealed partial class CameraPage : Windows.UI.Xaml.Controls.Page
+    public sealed partial class CameraPage : Page
     {
         private CameraViewModel _viewModel;
 

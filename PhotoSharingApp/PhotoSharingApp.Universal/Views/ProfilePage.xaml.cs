@@ -1,35 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Resources;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Popups;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Newtonsoft.Json;
-using PhotoSharingApp.Universal.Models;
-using PhotoSharingApp.Universal.ViewModels;
+﻿//-----------------------------------------------------------------------------------
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+// 
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+// 
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//  ---------------------------------------------------------------------------------
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
+using System;
+using Microsoft.Practices.ServiceLocation;
+using PhotoSharingApp.Universal.Models;
+using PhotoSharingApp.Universal.Serialization;
+using PhotoSharingApp.Universal.Unity;
+using PhotoSharingApp.Universal.ViewModels;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Navigation;
 
 namespace PhotoSharingApp.Universal.Views
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// The profile page that shows all uploaded photos of a user.
     /// </summary>
-    public sealed partial class ProfilePage : Windows.UI.Xaml.Controls.Page
+    public sealed partial class ProfilePage : BasePage
     {
         private static object _lastUsedNavigationArgs;
         private const int ItemMargin = 4;
@@ -45,402 +52,100 @@ namespace PhotoSharingApp.Universal.Views
         {
             InitializeComponent();
 
-            //UpdateImageWidth();
+            UpdateImageWidth();
 
-            //SizeChanged += ProfilePage_SizeChanged;
+            SizeChanged += ProfilePage_SizeChanged;
         }
 
         /// <summary>
         /// The margin of each image control.
         /// </summary>
-        //public Thickness ImageMargin
-        //{
-        //    get { return _imageMargin; }
-        //    set
-        //    {
-        //        if (_imageMargin != value)
-        //        {
-        //            _imageMargin = value;
-        //            NotifyPropertyChanged();
-        //        }
-        //    }
-        //}
+        public Thickness ImageMargin
+        {
+            get { return _imageMargin; }
+            set
+            {
+                if (_imageMargin != value)
+                {
+                    _imageMargin = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// The width of each image control.
         /// </summary>
-        //public double ImageWidth
-        //{
-        //    get { return _imageWidth; }
-        //    set
-        //    {
-        //        if (Math.Abs(value - _imageWidth) >
-        //            AppEnvironment.FloatingComparisonTolerance)
-        //        {
-        //            _imageWidth = value;
-        //            NotifyPropertyChanged();
-        //        }
-        //    }
-        //}
-
-        //protected override async void OnNavigatedTo(NavigationEventArgs e)
-        //{
-        //    base.OnNavigatedTo(e);
-
-        //    var navigationArgs = e.Parameter;
-
-        //    // We only load data if we either navigate forwards or
-        //    // if navigation parameters have changed (e.g. showing different user on profile page).
-        //    var loadData = e.NavigationMode != NavigationMode.Back
-        //                   || _lastUsedNavigationArgs != navigationArgs;
-
-        //    _viewModel = ServiceLocator.Current.GetInstance<ProfileViewModel>(loadData);
-        //    DataContext = _viewModel;
-
-        //    if (loadData)
-        //    {
-        //        _lastUsedNavigationArgs = navigationArgs;
-
-        //        if (navigationArgs != null)
-        //        {
-        //            var profilePageNavigationArgs =
-        //                SerializationHelper.Deserialize<ProfileViewModelArgs>(navigationArgs as string);
-
-        //            await _viewModel.LoadState(profilePageNavigationArgs);
-        //        }
-        //        else
-        //        {
-        //            await _viewModel.LoadState();
-        //        }
-        //    }
-        //}
-
-        //private void ProfilePage_SizeChanged(object sender, SizeChangedEventArgs e)
-        //{
-        //    UpdateImageWidth();
-        //}
-
-        //private void UpdateImageWidth()
-        //{
-        //    if (pageRoot.ActualWidth < 720)
-        //    {
-        //        ImageWidth = pageRoot.ActualWidth;
-        //        ImageMargin = new Thickness(0, 0, 0, 4);
-        //    }
-        //    else
-        //    {
-        //        // Calculating how many items per row we get with preferred with + image margin
-        //        var itemsPerRow = (int) (pageRoot.ActualWidth/(PreferredImageWidth + ItemMargin));
-
-        //        // Calculating rest and distribute among items
-        //        var rest = (int) (pageRoot.ActualWidth%(PreferredImageWidth + ItemMargin));
-        //        var additionalWidthPerItem = rest/itemsPerRow;
-
-        //        ImageWidth = PreferredImageWidth + additionalWidthPerItem;
-        //        ImageMargin = new Thickness(0, 0, ItemMargin, ItemMargin);
-        //    }
-        //}
-
-        private void EditButton_Click(object sender, RoutedEventArgs e)
+        public double ImageWidth
         {
-            CreateNewUser newUser = new CreateNewUser();
-            newUser.Name = NameTextBox.Text.Trim();
-            newUser.Username = UsernameTextBox.Text.Trim();
-            //newUser.Password = PassWordPasswordBox.Password.Trim();
-            newUser.Email = EmailTextBox.Text.Trim();
-            newUser.Address = AddressTextBox.Text.Trim();
-            newUser.Phone = PhoneTextBox.Text.Trim();
-            newUser.Gender = GenderList.SelectedIndex;
-
-            bool check = CheckInfo(newUser);
-
-            if (check)
+            get { return _imageWidth; }
+            set
             {
-                RequestPutToApi(newUser);
-            }
-        }
-
-        public async void RequestPutToApi(CreateNewUser newUser)
-        {
-            //request POST to api
-            using (var client = new HttpClient())
-            {
-                var resourceLoader = ResourceLoader.GetForCurrentView();
-                client.BaseAddress = new Uri(resourceLoader.GetString("ServerURL"));
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                // New code:
-                try
+                if (Math.Abs(value - _imageWidth) >
+                    AppEnvironment.FloatingComparisonTolerance)
                 {
-                    HttpResponseMessage response = await client.PutAsJsonAsync("api/Users/", newUser);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        //var isRegistered = true;
-                        Frame.Navigate(typeof(ProfilePage));
-                    }
-                    else
-                    {
-                        ErrorProviderTextBlock.Text = "Username is already existed!";
-                        ErrorProviderTextBlock.Visibility = Visibility.Visible;
-                    }
-                }
-                catch (HttpRequestException)
-                {
-                    var dialog = new MessageDialog("Can not connect to server!", "Message");
-                    //dialog.Commands.Add(new UICommand("Yes") { Id = 0 });
-                    //dialog.Commands.Add(new UICommand("No") { Id = 1 });
-
-                    await dialog.ShowAsync();
+                    _imageWidth = value;
+                    NotifyPropertyChanged();
                 }
             }
         }
 
-        public async void RequestPostToApi(ReturnUser user)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            //request POST to api
-            using (var client = new HttpClient())
+            base.OnNavigatedTo(e);
+
+            var navigationArgs = e.Parameter;
+
+            // We only load data if we either navigate forwards or
+            // if navigation parameters have changed (e.g. showing different user on profile page).
+            var loadData = e.NavigationMode != NavigationMode.Back
+                           || _lastUsedNavigationArgs != navigationArgs;
+
+            _viewModel = ServiceLocator.Current.GetInstance<ProfileViewModel>(loadData);
+            DataContext = _viewModel;
+
+            if (loadData)
             {
-                var resourceLoader = ResourceLoader.GetForCurrentView();
-                client.BaseAddress = new Uri(resourceLoader.GetString("ServerURL"));
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                _lastUsedNavigationArgs = navigationArgs;
 
-                // New code:
-
-                try
+                if (navigationArgs != null)
                 {
-                    HttpResponseMessage response = await client.PostAsJsonAsync("api/Users/info", user);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        UserInfo info = await response.Content.ReadAsAsync<UserInfo>();
-                        NameTextBox.Text = info.Name;
-                        UsernameTextBox.Text = info.Username;
-                        EmailTextBox.Text = info.Email;
-                        PhoneTextBox.Text = info.Phone;
-                        AddressTextBox.Text = info.Address;
-                        GenderList.SelectedIndex = (int)info.Gender;
+                    var profilePageNavigationArgs =
+                        SerializationHelper.Deserialize<ProfileViewModelArgs>(navigationArgs as string);
 
-                        // To do: Login to home page
-                        //this.Frame.Navigate(typeof (MainPage));
-                    }
-                    else
-                    {
-                        ErrorProviderTextBlock.Text = "Please login to edit your profile";
-                        ErrorProviderTextBlock.Visibility = Visibility.Visible;
-                    }
+                    await _viewModel.LoadState(profilePageNavigationArgs);
                 }
-                catch (HttpRequestException)
+                else
                 {
-                    var dialog = new MessageDialog("Can not connect to server!", "Message");
-                    await dialog.ShowAsync();
+                    await _viewModel.LoadState();
                 }
             }
         }
 
-        public async void InitialData()
+        private void ProfilePage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            ReturnUser user = new ReturnUser();
-            await DeserelizeDataFromJson("user", user);
-            Base64Decode(user.Password);
-            RequestPostToApi(user);
+            UpdateImageWidth();
         }
 
-        public static string Base64Decode(string base64EncodedData)
+        private void UpdateImageWidth()
         {
-            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
-            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
-        }
-
-        public static async Task<ReturnUser> DeserelizeDataFromJson(string fileName, ReturnUser person)
-        {
-            try
+            if (pageRoot.ActualWidth < 720)
             {
-                var Folder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                var file = await Folder.GetFileAsync(fileName + ".json");
-                var data = await file.OpenReadAsync();
-
-                using (StreamReader r = new StreamReader(data.AsStream()))
-                {
-                    string text = r.ReadToEnd();
-                    person = JsonConvert.DeserializeObject<ReturnUser>(text);
-                }
-                return person;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-
-        private bool CheckInfo(CreateNewUser user)
-        {
-            Regex myRegex = null;
-            Match m = null;
-            bool check = true;
-
-            //check name
-            if (user.Name.Length == 0)
-            {
-                ErrorNameTextBlock.Text = "Please enter your name!";
-                ErrorNameTextBlock.Visibility = Visibility.Visible;
-                check = false;
-            }
-
-            //check username
-            if (user.Username.Length == 0)
-            {
-                ErrorUsernameTextBlock.Text = "Please enter your username!";
-                ErrorUsernameTextBlock.Visibility = Visibility.Visible;
-                check = false;
-            }
-
-            //check password
-            //if (user.Password.Length == 0)
-            //{
-            //    ErrorPasswordTextBlock.Text = "Please enter your password!";
-            //    ErrorPasswordTextBlock.Visibility = Visibility.Visible;
-            //    check = false;
-            //}
-
-
-
-            ////check password confirm
-            //if (ConfirmPassWordPasswordBox.Password.Trim().Length == 0)
-            //{
-            //    ErrorConfirmPasswordTextBlock.Text = "Please confirm your password!";
-            //    ErrorConfirmPasswordTextBlock.Visibility = Visibility.Visible;
-            //    check = false;
-            //}
-            //else
-            //{
-            //    if (!ConfirmPassWordPasswordBox.Password.Trim().Equals(user.Password))
-            //    {
-            //        ErrorConfirmPasswordTextBlock.Text = "Password not match!";
-            //        ErrorConfirmPasswordTextBlock.Visibility = Visibility.Visible;
-            //        check = false;
-            //    }
-            //}
-
-            //check email
-            myRegex = new Regex(@"^\w+@\w+[.]\w+$");
-            m = myRegex.Match(user.Email);
-            if (user.Email.Length == 0)
-            {
-                ErrorEmailTextBlock.Text = "Please enter your email!";
-                ErrorEmailTextBlock.Visibility = Visibility.Visible;
-                check = false;
+                ImageWidth = pageRoot.ActualWidth;
+                ImageMargin = new Thickness(0, 0, 0, 4);
             }
             else
             {
-                if (!m.Success)
-                {
-                    ErrorEmailTextBlock.Text = "Wrong email format!";
-                    ErrorEmailTextBlock.Visibility = Visibility.Visible;
-                    check = false;
-                }
+                // Calculating how many items per row we get with preferred with + image margin
+                var itemsPerRow = (int) (pageRoot.ActualWidth/(PreferredImageWidth + ItemMargin));
+
+                // Calculating rest and distribute among items
+                var rest = (int) (pageRoot.ActualWidth%(PreferredImageWidth + ItemMargin));
+                var additionalWidthPerItem = rest/itemsPerRow;
+
+                ImageWidth = PreferredImageWidth + additionalWidthPerItem;
+                ImageMargin = new Thickness(0, 0, ItemMargin, ItemMargin);
             }
-
-            //check address
-            if (user.Address.Length == 0)
-            {
-                ErrorAddressTextBlock.Text = "Please enter your address!";
-                ErrorAddressTextBlock.Visibility = Visibility.Visible;
-                check = false;
-            }
-
-            //check phone
-            myRegex =
-                new Regex(
-                    @"\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$");
-            m = myRegex.Match(user.Phone);
-            if (user.Phone.Length == 0)
-            {
-                ErrorPhoneTextBlock.Text = "Please enter your phone number!";
-                ErrorPhoneTextBlock.Visibility = Visibility.Visible;
-                check = false;
-            }
-            else
-            {
-                if (!m.Success)
-                {
-                    ErrorPhoneTextBlock.Text = "Wrong phone number format!\nPlease input phone number with area code.";
-                    ErrorPhoneTextBlock.Visibility = Visibility.Visible;
-                    check = false;
-                }
-            }
-
-            //check gender
-            //if (-1 == user.Gender)
-            //{
-            //    ErrorGenderTextBlock.Text = "Please choose your gender!";
-            //    ErrorGenderTextBlock.Visibility = Visibility.Visible;
-            //    check = false;
-            //}
-
-            return check;
-        }
-
-        private void ProfileScrollViewer_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
-        {
-            if (e.Key == Windows.System.VirtualKey.Enter)
-            {
-                //if (FocusManager.GetFocusedElement() == NameTextBox) // Change the inputTextBox to your TextBox name
-                //{
-                //    FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
-                //    FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
-                //}
-                //else
-                //{
-                //    FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
-                //}
-
-                FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
-                // Make sure to set the Handled to true, otherwise the RoutedEvent might fire twice
-                e.Handled = true;
-            }
-        }
-
-        private void NameTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            NameTextBox.SelectAll();
-            ErrorNameTextBlock.Visibility = Visibility.Collapsed;
-        }
-
-        private void UsernameTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            UsernameTextBox.SelectAll();
-            ErrorUsernameTextBlock.Visibility = Visibility.Collapsed;
-            ErrorProviderTextBlock.Visibility = Visibility.Collapsed;
-        }
-
-        //private void PassWordPasswordBox_GotFocus(object sender, RoutedEventArgs e)
-        //{
-        //    PassWordPasswordBox.SelectAll();
-        //    ErrorPasswordTextBlock.Visibility = Visibility.Collapsed;
-        //}
-
-        //private void ConfirmPassWordPasswordBox_GotFocus(object sender, RoutedEventArgs e)
-        //{
-        //    ConfirmPassWordPasswordBox.SelectAll();
-        //    ErrorConfirmPasswordTextBlock.Visibility = Visibility.Collapsed;
-        //}
-
-        private void EmailTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            EmailTextBox.SelectAll();
-            ErrorEmailTextBlock.Visibility = Visibility.Collapsed;
-        }
-
-        private void AddressTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            AddressTextBox.SelectAll();
-            ErrorAddressTextBlock.Visibility = Visibility.Collapsed;
-        }
-
-        private void PhoneTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            ErrorPhoneTextBlock.Visibility = Visibility.Collapsed;
         }
     }
 }

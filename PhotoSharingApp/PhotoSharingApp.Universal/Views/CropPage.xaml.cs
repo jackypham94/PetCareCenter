@@ -34,7 +34,7 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// The page that allows cropping a photo.
     /// </summary>
-    public sealed partial class CropPage : Windows.UI.Xaml.Controls.Page
+    public sealed partial class CropPage : Page
     {
         private readonly CropViewModel _viewModel;
 

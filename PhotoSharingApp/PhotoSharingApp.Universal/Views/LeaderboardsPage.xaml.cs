@@ -32,7 +32,7 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// The leaderboards page.
     /// </summary>
-    public sealed partial class LeaderboardsPage : Page
+    public sealed partial class LeaderboardsPage : BasePage
     {
         private LeaderboardViewModel _viewModel;
 

@@ -31,7 +31,7 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// A base UI page.
     /// </summary>
-    public class Page : Windows.UI.Xaml.Controls.Page, INotifyPropertyChanged
+    public class BasePage : Page, INotifyPropertyChanged
     {
         /// <summary>
         /// Notifies that the property has changed.

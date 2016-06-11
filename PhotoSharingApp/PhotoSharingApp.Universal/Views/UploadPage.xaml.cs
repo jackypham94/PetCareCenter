@@ -35,7 +35,7 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// The page that allows the user to upload a photo with a description.
     /// </summary>
-    public sealed partial class UploadPage : Windows.UI.Xaml.Controls.Page
+    public sealed partial class UploadPage : Page
     {
         private object _navigatedToArgs;
         private readonly UploadViewModel _viewModel;

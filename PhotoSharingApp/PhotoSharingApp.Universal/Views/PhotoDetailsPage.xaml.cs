@@ -34,7 +34,7 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// The page that shows details for a selected photo.
     /// </summary>
-    public sealed partial class PhotoDetailsPage : Windows.UI.Xaml.Controls.Page
+    public sealed partial class PhotoDetailsPage : Page
     {
         private PhotoDetailsViewModel _viewModel;
 
