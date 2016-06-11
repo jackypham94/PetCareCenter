@@ -20,7 +20,7 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MyPetPage : Page
+    public sealed partial class MyPetPage : Windows.UI.Xaml.Controls.Page
     {
         public MyPetPage()
         {

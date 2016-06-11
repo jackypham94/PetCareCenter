@@ -24,7 +24,7 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class RegisterPage : Page
+    public sealed partial class RegisterPage : Windows.UI.Xaml.Controls.Page
     {
         public RegisterPage()
         {
@@ -127,7 +127,7 @@ namespace PhotoSharingApp.Universal.Views
             //SetTextBlockVisibilityCollapsed();
         }
 
-        private async void RegisterButton_Click(object sender, RoutedEventArgs e)
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
             CreateNewUser newUser = new CreateNewUser();
             newUser.Name = NameTextBox.Text.Trim();

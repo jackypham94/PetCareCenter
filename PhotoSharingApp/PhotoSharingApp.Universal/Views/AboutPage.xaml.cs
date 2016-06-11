@@ -32,7 +32,7 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// The about page.
     /// </summary>
-    public sealed partial class AboutPage : Page
+    public sealed partial class AboutPage : Windows.UI.Xaml.Controls.Page
     {
         private readonly AboutViewModel _viewModel;
 

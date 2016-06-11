@@ -32,7 +32,7 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// The page that contains debug configuration settings.
     /// </summary>
-    public sealed partial class DebugPage : Page
+    public sealed partial class DebugPage : Windows.UI.Xaml.Controls.Page
     {
         private readonly DebugViewModel _viewModel;
 

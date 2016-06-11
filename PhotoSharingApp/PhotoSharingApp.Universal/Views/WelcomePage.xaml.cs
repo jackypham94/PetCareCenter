@@ -32,7 +32,7 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// The Welcome page.
     /// </summary>
-    public sealed partial class WelcomePage : Page
+    public sealed partial class WelcomePage : Windows.UI.Xaml.Controls.Page
     {
         private readonly WelcomeViewModel _viewModel;
 

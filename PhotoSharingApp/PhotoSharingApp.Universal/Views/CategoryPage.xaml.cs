@@ -28,7 +28,7 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class CategoryPage : Page
+    public sealed partial class CategoryPage : Windows.UI.Xaml.Controls.Page
     {
         private int _thumbnailImageSideLength;
         private readonly CategoryPageViewModel _viewModel;

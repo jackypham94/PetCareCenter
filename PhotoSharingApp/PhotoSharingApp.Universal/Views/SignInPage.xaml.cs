@@ -53,7 +53,7 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// The page that allows the user to sign in.
     /// </summary>
-    public sealed partial class SignInPage : Page
+    public sealed partial class SignInPage : Windows.UI.Xaml.Controls.Page
     {
         public SignInPage()
         {

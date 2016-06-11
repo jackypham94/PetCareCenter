@@ -46,7 +46,7 @@ namespace PhotoSharingApp.Universal.Views
     /// The "chrome" layer of the app that provides top-level navigation with
     /// proper keyboarding navigation.
     /// </summary>
-    public sealed partial class AppShell : Page
+    public sealed partial class AppShell : Windows.UI.Xaml.Controls.Page
     {
         public static AppShell Current;
         private Tuple<Type, object> _lastSourcePageEventArgs;
@@ -221,9 +221,9 @@ namespace PhotoSharingApp.Universal.Views
         private void OnNavigatedToPage(object sender, NavigationEventArgs e)
         {
             // After a successful navigation set keyboard focus to the loaded page
-            if (e.Content is Page)
+            if (e.Content is Windows.UI.Xaml.Controls.Page)
             {
-                var control = (Page)e.Content;
+                var control = (Windows.UI.Xaml.Controls.Page)e.Content;
                 control.Loaded += Page_Loaded;
             }
 
@@ -240,8 +240,8 @@ namespace PhotoSharingApp.Universal.Views
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            ((Page)sender).Focus(FocusState.Programmatic);
-            ((Page)sender).Loaded -= Page_Loaded;
+            ((Windows.UI.Xaml.Controls.Page)sender).Focus(FocusState.Programmatic);
+            ((Windows.UI.Xaml.Controls.Page)sender).Loaded -= Page_Loaded;
         }
 
         private void SystemNavigationManager_BackRequested(object sender, BackRequestedEventArgs e)

@@ -35,7 +35,7 @@ namespace PhotoSharingApp.Universal.Views
     /// The categories page that displays the most recent categories
     /// with photo thumbnails.
     /// </summary>
-    public sealed partial class MainPage : BasePage
+    public sealed partial class MainPage : Page
     {
         private int _thumbnailImageSideLength;
         private MainPageViewModel _viewModel;

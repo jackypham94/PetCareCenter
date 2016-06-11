@@ -36,7 +36,7 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// The photo stream page.
     /// </summary>
-    public sealed partial class StreamPage : BasePage
+    public sealed partial class StreamPage : Page
     {
         private const double MaxPictureWidth = 700;
         private bool _firstTimeLoadingFinished;

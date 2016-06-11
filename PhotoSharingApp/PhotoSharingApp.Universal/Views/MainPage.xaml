@@ -1,4 +1,4 @@
-﻿<local:BasePage
+﻿<local:Page
     x:Class="PhotoSharingApp.Universal.Views.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -322,4 +322,4 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     </Grid>
-</local:BasePage>
+</local:Page>
