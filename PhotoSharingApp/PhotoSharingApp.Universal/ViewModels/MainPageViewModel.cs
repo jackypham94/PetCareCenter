@@ -411,9 +411,9 @@ namespace PhotoSharingApp.Universal.ViewModels
             _navigationFacade.NavigateToProfileView(user);
         }
 
-        /// <summary>
-        /// Starts the hero image slide show.
-        /// </summary>
+        // <summary>
+        // Starts the hero image slide show.
+        // </summary>
         //public void StartHeroImageSlideShow()
         //{
         //    // Only start slideshow if we were able to get
@@ -425,9 +425,9 @@ namespace PhotoSharingApp.Universal.ViewModels
         //    }
         //}
 
-        /// <summary>
-        /// Starts a timer which cycles through hero images.
-        /// </summary>
+        // <summary>
+        // Starts a timer which cycles through hero images.
+        // </summary>
         //private void StartHeroImageSlideshowTimer()
         //{
         //    _heroImageScrollTimer.Start();

@@ -365,9 +365,6 @@
     <Compile Include="Views\CartPage.xaml.cs">
       <DependentUpon>CartPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Categories.xaml.cs">
-      <DependentUpon>Categories.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\CategoriesChooserDialog.xaml.cs">
       <DependentUpon>CategoriesChooserDialog.xaml</DependentUpon>
     </Compile>
@@ -523,10 +520,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CartPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Categories.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
