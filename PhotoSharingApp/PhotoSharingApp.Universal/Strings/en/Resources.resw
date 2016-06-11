@@ -259,7 +259,7 @@
     <value>Provide accessories</value>
   </data>
   <data name="WelcomePage_Instruction5_Content" xml:space="preserve">
-    <value>They will well-treated during the time they stay with us.</value>
+    <value>They will be well-treated during the time they stay with us.</value>
   </data>
   <data name="WelcomePage_Instruction5_Title" xml:space="preserve">
     <value>Don't worry</value>
@@ -271,7 +271,7 @@
     <value>Ready?</value>
   </data>
   <data name="ServerURL" xml:space="preserve">
-    <value>http://192.168.0.105:62252</value>
+    <value>http://192.168.11.10:62252</value>
     <comment>http://10.82.131.113:62252</comment>
   </data>
 </root>

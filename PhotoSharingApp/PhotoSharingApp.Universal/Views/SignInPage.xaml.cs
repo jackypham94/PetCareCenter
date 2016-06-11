@@ -110,20 +110,8 @@ namespace PhotoSharingApp.Universal.Views
             ReturnUser user = new ReturnUser();
             user.Password = password;
             user.Username = username;
-            try
-            {
-                RequestToApi(user).Wait();
-            }
-            catch (AggregateException)
-            {
-                var dialog = new MessageDialog("Can not connect to server!", "Message");
-                //dialog.Commands.Add(new UICommand("Yes") { Id = 0 });
-                //dialog.Commands.Add(new UICommand("No") { Id = 1 });
 
-                await dialog.ShowAsync();
-            }
-
-
+            RequestToApi(user);
         }
 
         public static string Base64Encode(string plainText)
@@ -205,7 +193,7 @@ namespace PhotoSharingApp.Universal.Views
             }
         }
 
-        public async Task RequestToApi(ReturnUser user)
+        public async void RequestToApi(ReturnUser user)
         {
             //request POST to api
             using (var client = new HttpClient())
@@ -216,24 +204,37 @@ namespace PhotoSharingApp.Universal.Views
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 // New code:
-                HttpResponseMessage response = await client.PostAsJsonAsync("api/Users/info", user).ConfigureAwait(false);
-                if (response.IsSuccessStatusCode)
+                
+                try
                 {
-                    //UserInfo info = await response.Content.ReadAsAsync<UserInfo>();
+                    HttpResponseMessage response = await client.PostAsJsonAsync("api/Users/info", user);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        //UserInfo info = await response.Content.ReadAsAsync<UserInfo>();
 
-                    //encode password
-                    user.Password = Base64Encode(user.Password);
-                    //write to file "user.json"
-                    await SerelizeDataToJson(user, "user");
+                        //encode password
+                        user.Password = Base64Encode(user.Password);
+                        //write to file "user.json"
+                        await SerelizeDataToJson(user, "user");
 
-                    // To do: Login to home page
-                    this.Frame.Navigate(typeof(MainPage));
+                        // To do: Login to home page
+                        this.Frame.Navigate(typeof(MainPage));
+                    }
+                    else
+                    {
+                        ErrorProviderTextBlock.Text = "Incorrect username or password!";
+                        ErrorProviderTextBlock.Visibility = Visibility.Visible;
+                    }
                 }
-                else
+                catch (HttpRequestException)
                 {
-                    ErrorProviderTextBlock.Text = "Incorrect username or password!";
-                    ErrorProviderTextBlock.Visibility = Visibility.Visible;
+                    var dialog = new MessageDialog("Can not connect to server!", "Message");
+                    //dialog.Commands.Add(new UICommand("Yes") { Id = 0 });
+                    //dialog.Commands.Add(new UICommand("No") { Id = 1 });
+
+                    await dialog.ShowAsync();
                 }
+                
             }
         }
     }

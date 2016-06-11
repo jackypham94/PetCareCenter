@@ -142,19 +142,7 @@ namespace PhotoSharingApp.Universal.Views
 
             if (check)
             {
-                try
-                {
-                    RequestToApi(newUser).Wait();
-                }
-                catch (AggregateException)
-                {
-                    var dialog = new MessageDialog("Can*not connect to server!", "Message");
-                    //dialog.Commands.Add(new UICommand("Yes") { Id = 0 });
-                    //dialog.Commands.Add(new UICommand("No") { Id = 1 });
-
-                    await dialog.ShowAsync();
-                }
-                
+                RequestToApi(newUser);
             }
         }
 
@@ -282,7 +270,7 @@ namespace PhotoSharingApp.Universal.Views
         //    SetTextBlockVisibilityCollapsed();
         //}
         
-        public async Task RequestToApi(CreateNewUser newUser)
+        public async void RequestToApi(CreateNewUser newUser)
         {
             //request POST to api
             using (var client = new HttpClient())
@@ -293,17 +281,29 @@ namespace PhotoSharingApp.Universal.Views
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 // New code:
-                HttpResponseMessage response = await client.PutAsJsonAsync("api/Users/", newUser).ConfigureAwait(false);
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    var isRegistered = true;
-                    this.Frame.Navigate(typeof(SignInPage), isRegistered);
+                    HttpResponseMessage response = await client.PutAsJsonAsync("api/Users/", newUser);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isRegistered = true;
+                        this.Frame.Navigate(typeof(SignInPage), isRegistered);
+                    }
+                    else
+                    {
+                        ErrorProviderTextBlock.Text = "Username is already existed!";
+                        ErrorProviderTextBlock.Visibility = Visibility.Visible;
+                    }
                 }
-                else
+                catch (HttpRequestException)
                 {
-                    ErrorProviderTextBlock.Text = "Username is already existed!";
-                    ErrorProviderTextBlock.Visibility = Visibility.Visible;
+                    var dialog = new MessageDialog("Can not connect to server!", "Message");
+                    //dialog.Commands.Add(new UICommand("Yes") { Id = 0 });
+                    //dialog.Commands.Add(new UICommand("No") { Id = 1 });
+
+                    await dialog.ShowAsync();
                 }
+                
             }
         }
     }
