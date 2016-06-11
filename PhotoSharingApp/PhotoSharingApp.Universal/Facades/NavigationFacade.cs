@@ -128,7 +128,7 @@ namespace PhotoSharingApp.Universal.Facades
             }
         }
 
-        
+
 
         /// <summary>
         /// Checks if the specified type is a photo upload related page.
