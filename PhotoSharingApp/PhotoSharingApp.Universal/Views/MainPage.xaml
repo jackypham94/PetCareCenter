@@ -157,7 +157,7 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
+
         <controls:PageHeader>
             <controls:PageHeader.HeaderContent>
                 <TextBlock Text="SHOPPING" Style="{ThemeResource PageTitleTextBlockStyle}" />
@@ -233,7 +233,7 @@
                                              CommandParameter="{Binding SelectedHeroImage}" />
                     </Viewbox>-->
 
-                    <Grid Background="{StaticResource AppAccentBackgroundColorBrush}"
+                    <!--<Grid Background="{StaticResource AppAccentBackgroundColorBrush}"
                           Padding="38" Grid.ColumnSpan="2" Grid.Column="0"
                           Visibility="{Binding IsStatusContainerVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
@@ -243,7 +243,7 @@
                                        Visibility="{Binding IsEmptyDataMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                                        FontWeight="Light" TextWrapping="WrapWholeWords" />
                         </StackPanel>
-                    </Grid>
+                    </Grid>-->
                 </Grid>
 
                 <GridView x:Name="HeroImagesStateIndicator" ItemsSource="{Binding HeroImages}"
