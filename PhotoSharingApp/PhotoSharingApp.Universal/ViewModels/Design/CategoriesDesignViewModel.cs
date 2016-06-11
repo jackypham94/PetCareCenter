@@ -37,10 +37,10 @@ namespace PhotoSharingApp.Universal.ViewModels.Design
     {
         public CategoriesDesignViewModel()
         {
-            var photoDummyService = new PetCareDummyService();
-            HeroImages = new ObservableCollection<Photo>(photoDummyService.PhotoStreams.First().Photos.Take(5));
-            SelectedHeroImage = HeroImages.FirstOrDefault();
-            TopCategories = new List<CategoryPreview>(photoDummyService.TopCategories);
+            //var photoDummyService = new PetCareDummyService();
+            //HeroImages = new ObservableCollection<Photo>(photoDummyService.PhotoStreams.First().Photos.Take(5));
+            //SelectedHeroImage = HeroImages.FirstOrDefault();
+            //TopCategories = new List<CategoryPreview>(photoDummyService.TopCategories);
         }
 
         public ObservableCollection<Photo> HeroImages { get; set; }

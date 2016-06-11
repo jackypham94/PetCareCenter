@@ -23,39 +23,27 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using PhotoSharingApp.Universal.Commands;
+using PhotoSharingApp.Universal.Facades;
+using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Views;
-using Windows.UI.Xaml.Controls;
+using Windows.ApplicationModel.Resources;
 
-namespace PhotoSharingApp.Universal.NavigationBar
+namespace PhotoSharingApp.Universal.ViewModels
 {
     /// <summary>
-    /// Navigation bar menu item that navigates to the
-    /// <see cref="CategoriesPage" />.
+    /// ViewModel for Welcome screen.
     /// </summary>
-    public class CategoriesNavigationBarMenuItem : NavigationBarMenuItemBase, INavigationBarMenuItem
+    public class CategoryPageViewModel : ViewModelBase
     {
-        /// <summary>
-        /// Gets the type of the destination page.
-        /// </summary>
-        public Type DestPage
+       
+        public CategoryPageViewModel()
         {
-            get { return typeof(CategoriesPage); }
+            
         }
 
-        /// <summary>
-        /// Gets the title displayed in the navigation bar.
-        /// </summary>
-        public string Label
-        {
-            get { return "Home"; }
-        }
-
-        /// <summary>
-        /// Gets the symbol that is displayed in the navigation bar.
-        /// </summary>
-        public override Symbol Symbol
-        {
-            get { return Symbol.Home; }
-        }
     }
 }

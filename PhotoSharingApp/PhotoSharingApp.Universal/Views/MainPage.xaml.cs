@@ -1,138 +1,139 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Resources;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Microsoft.Practices.ServiceLocation;
-using PhotoSharingApp.Universal.Models;
-using PhotoSharingApp.Universal.ViewModels;
+﻿//-----------------------------------------------------------------------------------
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+// 
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+// 
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//  ---------------------------------------------------------------------------------
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
+using Microsoft.Practices.ServiceLocation;
+using PhotoSharingApp.Universal.Unity;
+using PhotoSharingApp.Universal.ViewModels;
+using Windows.Foundation;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Navigation;
 
 namespace PhotoSharingApp.Universal.Views
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// The categories page that displays the most recent categories
+    /// with photo thumbnails.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage : BasePage
     {
-        private List<ReturnAccessoryCombination> AccessoryCombinations { get;  set; }
-        //private MainPageViewModel _viewModel;
+        private int _thumbnailImageSideLength;
+        private MainPageViewModel _viewModel;
+
+        /// <summary>
+        /// The constructor.
+        /// </summary>
         public MainPage()
         {
-            this.InitializeComponent();
-            InitializeItem();
+            InitializeComponent();
 
+            UpdateThumbnailSize();
+
+            SizeChanged += MainPage_SizeChanged;
+
+            // We want to scroll to the previously selected item,
+            // so we need to watch the Loaded event as this is the
+            // earliest time we can change the scroll position.
+            CategoriesList.Loaded += OnCategoriesListLoaded;
         }
 
-        private void InitializeItem()
+        /// <summary>
+        /// The side length of a thumbnail
+        /// </summary>
+        public int ThumbnailImageSideLength
         {
-            try
+            get { return _thumbnailImageSideLength; }
+            set
             {
-                InitializeCategoryItems().Wait();
-            }
-            catch (AggregateException)
-            {
-                
-            }
-            DataContext = AccessoryCombinations;
-            if (AccessoryCombinations == null)
-            {
-                NoConnectionGrid.Visibility = Visibility.Visible;
-            }
-            else 
-            {
-                NoConnectionGrid.Visibility = Visibility.Collapsed;
-                Category1ItemsControl.ItemsSource = AccessoryCombinations[0].ListOfAccessory;
-                Category1TextBlock.Text = AccessoryCombinations[0].Category.CategoryName;
-                Category2ItemsControl.ItemsSource = AccessoryCombinations[1].ListOfAccessory;
-                Category2TextBlock.Text = AccessoryCombinations[1].Category.CategoryName;
-                Category3ItemsControl.ItemsSource = AccessoryCombinations[2].ListOfAccessory;
-                Category3TextBlock.Text = AccessoryCombinations[2].Category.CategoryName;
-                //Category4ItemsControl.ItemsSource = AccessoryCombinations[3].ListOfAccessory;
-                //Category4TextBlock.Text = AccessoryCombinations[3].Category.CategoryName;
-                ImagesFlipView.ItemsSource = AccessoryCombinations[0].ListOfAccessory;
-            }
-        }
-        public async Task InitializeCategoryItems()
-        {
-            using (var client = new HttpClient())
-            {
-                var resourceLoader = ResourceLoader.GetForCurrentView();
-                string serverUrl = resourceLoader.GetString("ServerURL");
-                client.BaseAddress = new Uri(serverUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                // New code:
-                HttpResponseMessage response = await client.GetAsync("/api/AccessoryCategoriesDisplay").ConfigureAwait(false);
-                if (response.IsSuccessStatusCode)
+                if (value != _thumbnailImageSideLength)
                 {
-                    AccessoryCombinations = await response.Content.ReadAsAsync<List<ReturnAccessoryCombination>>();
+                    _thumbnailImageSideLength = value;
+                    NotifyPropertyChanged();
                 }
             }
-
         }
 
-        //protected override async void OnNavigatedTo(NavigationEventArgs e)
-        //{
-        //    base.OnNavigatedTo(e);
-        //    await _viewModel.LoadState();
-        //}
-
-
-        private async void AcessoryListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            var dialog = new ContentDialog()
+            UpdateThumbnailSize();
+        }
+
+        private void OnCategoriesListLoaded(object sender, RoutedEventArgs e)
+        {
+            // If there is a category selected already, we want the view to update
+            // the scroll position to show it.
+            if (_viewModel.SelectedAccessoryCategory != null)
             {
-                //Title = AccessoryCombinations[CategoryListView.SelectedIndex].ListOfAccessory[],
-                MaxWidth = this.ActualWidth // Required for Mobile!
-            };
+                // MainScrollViewer control holds both the hero images and categories,
+                // so we need to find the offset of the selected category in 
+                // the parent ScrollViewer control.
+                var container =
+                    CategoriesList.ContainerFromItem(_viewModel.SelectedAccessoryCategory) as FrameworkElement;
 
-            //AcessoryListView
-            dialog.PrimaryButtonText = "OK";
-            //dialog.IsPrimaryButtonEnabled = false;
-            //dialog.PrimaryButtonClick += delegate {
-            //};
+                if (container != null)
+                {
+                    var focusedVisualTransform = container.TransformToVisual(MainScrollViewer);
+                    var transformPoint = focusedVisualTransform.TransformPoint(new Point(0, 0));
 
-            var result = await dialog.ShowAsync();
+                    // Now adjust the scroll position.
+                    MainScrollViewer.ChangeView(null, transformPoint.Y, null, true);
+                }
+            }
         }
 
-        private void ShowCategory1Button_Click(object sender, RoutedEventArgs e)
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            int id = AccessoryCombinations[0].Category.Id;
-            Frame.Navigate(typeof(Categories), id);
+            base.OnNavigatedFrom(e);
+
+            //_viewModel.StopHeroImageSlideShow();
         }
 
-        private void ShowCategory2Button_Click(object sender, RoutedEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            int id = AccessoryCombinations[1].Category.Id;
-            Frame.Navigate(typeof(Categories), id);
+            base.OnNavigatedTo(e);
+
+            var loadData = e.NavigationMode != NavigationMode.Back;
+            _viewModel = ServiceLocator.Current.GetInstance<MainPageViewModel>(loadData);
+            DataContext = _viewModel;
+
+            if (loadData)
+            {
+                await _viewModel.LoadState();
+            }
+
+            //_viewModel.StartHeroImageSlideShow();
         }
 
-        private void ShowCategory3Button_Click(object sender, RoutedEventArgs e)
+        private void UpdateThumbnailSize()
         {
-            int id = AccessoryCombinations[2].Category.Id;
-            Frame.Navigate(typeof(Categories), id);
+            if (PageRoot.ActualWidth > 1300)
+            {
+                ThumbnailImageSideLength = 150;
+            }
+            else
+            {
+                ThumbnailImageSideLength = 100;
+            }
         }
-
-        //private void ShowCategory4Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    int id = AccessoryCombinations[3].Category.Id;
-        //    Frame.Navigate(typeof(Categories), id);
-        //}
     }
 }

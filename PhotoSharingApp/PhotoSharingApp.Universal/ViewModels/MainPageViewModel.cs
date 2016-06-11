@@ -24,35 +24,101 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using PhotoSharingApp.Universal.Commands;
+using PhotoSharingApp.Universal.ComponentModel;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
+using PhotoSharingApp.Universal.Services;
 using PhotoSharingApp.Universal.Views;
-using Windows.ApplicationModel.Resources;
+using Windows.UI.Xaml;
 
 namespace PhotoSharingApp.Universal.ViewModels
 {
     /// <summary>
-    /// ViewModel for Welcome screen.
+    /// The ViewModel for the categories view.
     /// </summary>
     public class MainPageViewModel : ViewModelBase
     {
-        private readonly INavigationFacade _navigationFacade;
-
+        /// <summary>
+        /// The number of hero images to show
+        /// </summary>
+        private const int NumberOfHeroImages = 5;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WelcomeViewModel" /> class.
+        /// The auth enforcement handler.
+        /// </summary>
+        private readonly IAuthEnforcementHandler _authEnforcementHandler;
+
+        private readonly IDialogService _dialogService;
+
+        /// <summary>
+        /// The hero iamges
+        /// </summary>
+        //private ObservableCollection<Photo> _heroImages;
+
+        /// <summary>
+        /// The timer for scrolling though hero images
+        /// </summary>
+        //private DispatcherTimer _heroImageScrollTimer;
+
+        /// <summary>
+        /// True, if ViewModel is busy
+        /// </summary>
+        private bool _isBusy;
+
+        /// <summary>
+        /// The visibility status of the empty data message.
+        /// </summary>
+        private bool _isEmptyDataMessageVisible;
+
+        /// <summary>
+        /// The visibility status of the status container.
+        /// </summary>
+        private bool _isStatusContainerVisible;
+
+        /// <summary>
+        /// True, if user is signed in. Otherwise, false.
+        /// </summary>
+        private bool _isUserSignedIn;
+
+        /// <summary>
+        /// The navigation facade
+        /// </summary>
+        private readonly INavigationFacade _navigationFacade;
+
+        /// <summary>
+        /// The photo service
+        /// </summary>
+        private readonly IPetCareService _petCareService;
+
+        /// <summary>
+        /// The current hero image
+        /// </summary>
+        private Photo _selectedHeroImage;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainPageViewModel" /> class.
         /// </summary>
         /// <param name="navigationFacade">The navigation facade.</param>
-        public MainPageViewModel(INavigationFacade navigationFacade)
+        /// <param name="petCareService">The photo service.</param>
+        /// <param name="authEnforcementHandler">The auth enforcement handler.</param>
+        /// <param name="dialogService">The dialog service</param>
+        public MainPageViewModel(INavigationFacade navigationFacade, IPetCareService petCareService,
+            IAuthEnforcementHandler authEnforcementHandler, IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
-            NavigateToTargetPageCommand = new RelayCommand<InstructionItem>(OnNavigateToTargetPage);
-            CategorySelectedCommand = new RelayCommand<CategoryPreview>(OnCategorySelected);
+            _petCareService = petCareService;
+            _authEnforcementHandler = authEnforcementHandler;
+            _dialogService = dialogService;
+
+            // Initialize collections.
+            TopImages = new ObservableCollection<ReturnAccessory>();
 
             try
             {
@@ -62,51 +128,230 @@ namespace PhotoSharingApp.Universal.ViewModels
             {
                 //throw;
             }
+
+            // Initialize commands
+            ShowAllCommand = new RelayCommand<ReturnAccessoryCombination>(OnShowAllSelected);
+            //PhotoThumbnailSelectedCommand = new RelayCommand<PhotoThumbnail>(OnPhotoThumbnailSelected);
+            PhotoThumbnailSelectedCommand = new RelayCommand<ReturnAccessory>(OnPhotoThumbnailSelected);
+            //HeroImageSelectedCommand = new RelayCommand<Photo>(OnHeroImageSelected);
+            GiveGoldCommand = new RelayCommand<Photo>(OnGiveGold);
+            UserSelectedCommand = new RelayCommand<User>(OnUserSelected);
+
+            IsUserSignedIn = AppEnvironment.Instance.CurrentUser != null;
         }
 
         /// <summary>
         /// Gets the category selected command.
         /// </summary>
-        public RelayCommand<CategoryPreview> CategorySelectedCommand { get; private set; }
+        public RelayCommand<ReturnAccessoryCombination> ShowAllCommand { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the favorite categories.
+        /// </summary>
+        /// <value>
+        /// The favorite categories.
+        /// </value>
+        public IncrementalLoadingCollection<CategoryPreview> FavoriteCategories { get; set; }
+
+        /// <summary>
+        /// Gets give gold command.
+        /// </summary>
+        public RelayCommand<Photo> GiveGoldCommand { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the hero images.
+        /// </summary>
+        public ObservableCollection<ReturnAccessory> TopImages { get; set; }
+
+        /// <summary>
+        /// Gets the hero image selected command.
+        /// </summary>
+        //public RelayCommand<Photo> HeroImageSelectedCommand { get; private set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is busy.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is busy; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set
+            {
+                if (value != _isBusy)
+                {
+                    _isBusy = value;
+                    NotifyPropertyChanged(nameof(IsBusy));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the visibility of the status message that no
+        /// data is available.
+        /// </summary>
+        public bool IsEmptyDataMessageVisible
+        {
+            get { return _isEmptyDataMessageVisible; }
+            set
+            {
+                if (value != _isEmptyDataMessageVisible)
+                {
+                    _isEmptyDataMessageVisible = value;
+                    NotifyPropertyChanged(nameof(IsEmptyDataMessageVisible));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the visibility of the status container.
+        /// </summary>
+        public bool IsStatusContainerVisible
+        {
+            get { return _isStatusContainerVisible; }
+            set
+            {
+                if (value != _isStatusContainerVisible)
+                {
+                    _isStatusContainerVisible = value;
+                    NotifyPropertyChanged(nameof(IsStatusContainerVisible));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indication whether the user is signed in.
+        /// </summary>
+        public bool IsUserSignedIn
+        {
+            get { return _isUserSignedIn; }
+            set
+            {
+                if (value != _isUserSignedIn)
+                {
+                    _isUserSignedIn = value;
+                    NotifyPropertyChanged(nameof(IsUserSignedIn));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the new categories.
+        /// </summary>
+        /// <value>
+        /// The new categories.
+        /// </value>
+        public IncrementalLoadingCollection<CategoryPreview> NewCategories { get; set; }
+
+        public RelayCommand<ReturnAccessory> PhotoThumbnailSelectedCommand { get; private set; }
 
         /// <summary>
         /// Gets or sets the selected category.
         /// </summary>
-        public CategoryPreview SelectedCategoryPreview { get; set; }
+        //public CategoryPreview SelectedCategoryPreview { get; set; }
+
+        public ReturnAccessoryCombination SelectedAccessoryCategory { get; set; }
 
         /// <summary>
-        /// The instructional items.
+        /// Gets or sets the hero image.
         /// </summary>
+        public Photo SelectedHeroImage
+        {
+            get { return _selectedHeroImage; }
+            set
+            {
+                if (value != _selectedHeroImage)
+                {
+                    _selectedHeroImage = value;
+                    NotifyPropertyChanged(nameof(SelectedHeroImage));
+
+                    // Reset the flip timer to keep it consistent if a
+                    // user changes the photo in between automatic flips.
+                    //if (_heroImageScrollTimer != null)
+                    //{
+                    //    _heroImageScrollTimer.Stop();
+                    //    _heroImageScrollTimer.Start();
+                    //}
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the top categories.
+        /// </summary>
+        /// <value>
+        /// The top categories.
+        /// </value>
+        public ObservableCollection<ReturnAccessoryCombination> TopCategories { get; set; } =
+            new ObservableCollection<ReturnAccessoryCombination>();
+
+        /// <summary>
+        /// Gets the user selected command.
+        /// </summary>
+        public RelayCommand<User> UserSelectedCommand { get; private set; }
+
+        /// <summary>
+        /// Loads the state.
+        /// </summary>
+        public override async Task LoadState()
+        {
+            await base.LoadState();
+
+            IsBusy = true;
+            IsStatusContainerVisible = true;
+
+            try
+            {
+                TopCategories.Clear();
+
+                // Load hero images
+                //var heroImages = await _petCareService.GetHeroImages(NumberOfHeroImages);
+                TopImages.Clear();
+                //heroImages.ForEach(h => HeroImages.Add(h));
+
+
+                // Load categories
+                InitializeCategoryItems().Wait();
+                var categories =
+                    AccessoryCombinations;
+
+                IsEmptyDataMessageVisible = !categories.Any();
+                IsStatusContainerVisible = !categories.Any();
+
+                for (int i = 0; i < 4; i++)
+                {
+                    TopImages.Add(categories[0].ListOfAccessory[i]);
+                }
+
+                foreach (var c in categories)
+                {
+                    TopCategories.Add(c);
+
+                    // For UI animation purposes, we wait a little until the next
+                    // element is inserted.
+                    await Task.Delay(200);
+                }
+            }
+            catch (ServiceException)
+            {
+                await _dialogService.ShowGenericServiceErrorNotification();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
         public List<ReturnAccessoryCombination> AccessoryCombinations { get; private set; }
-
-        /// <summary>
-        /// Gets the navigate to target page command.
-        /// </summary>
-        public RelayCommand<InstructionItem> NavigateToTargetPageCommand { get; }
-
-        /// <summary>
-        /// Gets or sets the current instructional item.
-        /// </summary>
-        //public InstructionItem SelectedInstructionItem
-        //{
-        //    get { return _selectedInstructionItem; }
-        //    set
-        //    {
-        //        if (value != _selectedInstructionItem)
-        //        {
-        //            _selectedInstructionItem = value;
-        //            NotifyPropertyChanged(nameof(SelectedInstructionItem));
-        //        }
-        //    }
-        //}
 
         public async Task InitializeCategoryItems()
         {
             using (var client = new HttpClient())
             {
                 var resourceLoader = ResourceLoader.GetForCurrentView();
-                string serverURL = resourceLoader.GetString("ServerURL");
-                client.BaseAddress = new Uri(serverURL);
+                string serverUrl = resourceLoader.GetString("ServerURL");
+                client.BaseAddress = new Uri(serverUrl);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -114,32 +359,94 @@ namespace PhotoSharingApp.Universal.ViewModels
                 HttpResponseMessage response = await client.GetAsync("/api/AccessoryCategoriesDisplay").ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
-                    AccessoryCombinations = await  response.Content.ReadAsAsync< List<ReturnAccessoryCombination>>();
+                    AccessoryCombinations = await response.Content.ReadAsAsync<List<ReturnAccessoryCombination>>();
                 }
             }
-
         }
 
-        private void OnCategorySelected(CategoryPreview categoryPreview)
+        private void OnShowAllSelected(ReturnAccessoryCombination accessoryCombination)
         {
-            SelectedCategoryPreview = categoryPreview;
-            _navigationFacade.NavigateToSignInPage();
+            SelectedAccessoryCategory = accessoryCombination;
+            _navigationFacade.NavigateToCategoryPage(accessoryCombination);
+            //SelectedCategoryPreview = categoryPreview;
+            //_navigationFacade.NavigateToPhotoStream(categoryPreview);
+        }
+
+        private async void OnGiveGold(Photo photo)
+        {
+            try
+            {
+                await _authEnforcementHandler.CheckUserAuthentication();
+                await _navigationFacade.ShowGiveGoldDialog(photo);
+            }
+            catch (SignInRequiredException)
+            {
+                // Swallow exception. User canceled the Sign-in dialog.
+            }
+            catch (ServiceException)
+            {
+                await _dialogService.ShowGenericServiceErrorNotification();
+            }
+        }
+
+        private void OnHeroImageSelected(Photo photo)
+        {
+            _navigationFacade.NavigateToPhotoDetailsView(photo);
+        }
+
+        private void OnPhotoThumbnailSelected(ReturnAccessory accessory)
+        {
+            var categoryPreview = TopCategories.SingleOrDefault(c => c.ListOfAccessory.Contains(accessory));
+
+            if (categoryPreview != null)
+            {
+                //_navigationFacade.NavigateToPhotoStream(categoryPreview, accessory);
+                _navigationFacade.NavigateToAccessoryDetail(categoryPreview, accessory);
+                //_navigationFacade.NavigateToRegisterPage();
+            }
+        }
+
+        private void OnUserSelected(User user)
+        {
+            _navigationFacade.NavigateToProfileView(user);
         }
 
         /// <summary>
-        /// Loads the state.
+        /// Starts the hero image slide show.
         /// </summary>
-        //public override async Task LoadState()
+        //public void StartHeroImageSlideShow()
         //{
-        //    await base.LoadState();
-
-        //    SelectedInstructionItem = null;
-        //    SelectedInstructionItem = InstructionItems.FirstOrDefault();
+        //    // Only start slideshow if we were able to get
+        //    // any hero images
+        //    if (TopImages != null && TopImages.Any())
+        //    {
+        //        _heroImageScrollTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(7) };
+        //        StartHeroImageSlideshowTimer();
+        //    }
         //}
 
-        private void OnNavigateToTargetPage(InstructionItem instructionItem)
-        {
-            _navigationFacade.NavigateToMainPage();
-        }
+        /// <summary>
+        /// Starts a timer which cycles through hero images.
+        /// </summary>
+        //private void StartHeroImageSlideshowTimer()
+        //{
+        //    _heroImageScrollTimer.Start();
+
+        //    _heroImageScrollTimer.Tick += (s, e) =>
+        //    {
+        //        var selectedIndex = TopImages.IndexOf(SelectedHeroImage);
+        //        selectedIndex = (selectedIndex + 1) % TopImages.Count;
+
+        //        SelectedHeroImage = TopImages[selectedIndex];
+        //    };
+        //}
+
+        ///// <summary>
+        ///// Stops hero image slide show.
+        ///// </summary>
+        //public void StopHeroImageSlideShow()
+        //{
+        //    _heroImageScrollTimer?.Stop();
+        //}
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -15,8 +16,10 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using PhotoSharingApp.Universal.Models;
+using PhotoSharingApp.Universal.Serialization;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -28,18 +31,48 @@ namespace PhotoSharingApp.Universal.Views
     public sealed partial class AccessoryPage : Page
     {
         private ReturnAccessory Acessories { get; set; }
-
         public AccessoryPage()
         {
             this.InitializeComponent();
         }
 
-        public AccessoryPage(int ID)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            InitializeAccessoriesDetails(ID).Wait();
+            if (e.Parameter != null)
+            {
+                var args = SerializationHelper.Deserialize<ReturnAccessory>(e.Parameter as string);
+                try
+                {
+                    InitializeAccessoriesDetails(args.Id).Wait();
+                    var dialog = new Windows.UI.Popups.MessageDialog(
+                        "You have been clicked ID: " + args.Id + " Name: " + args.Name,
+                        "Lorem Ipsum");
+                    Image.Source = new BitmapImage(new Uri(Acessories.ImagePath));
+                    NameTextBlock.Text = Acessories.Name;
+                    SizeTextBlock.Text = Acessories.Size;
+                    ColorTextBlock.Text = Acessories.Color;
+                    StockQuantityTextBlock.Text = Acessories.StockQuantity.ToString();
+                    PriceTextBlock.Text = Acessories.Price.ToString(CultureInfo.InvariantCulture);
+                    await dialog.ShowAsync();
+                }
+                catch (AggregateException)
+                {
+                }
+                if (Acessories == null)
+                {
+                    //NoConnectionGrid.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    //NoConnectionGrid.Visibility = Visibility.Collapsed;
+                    //CategoryListView.ItemsSource = Acessories.ListOfAccessory;
+                    //TitleTextBlock.Text = Acessories.Category.CategoryName.ToUpper();
+                }
 
+            }
         }
-        public async Task InitializeAccessoriesDetails(int ID)
+
+        public async Task InitializeAccessoriesDetails(int id)
         {
             using (var client = new HttpClient())
             {
@@ -50,7 +83,7 @@ namespace PhotoSharingApp.Universal.Views
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 // New code:
-                String apiUrl = "/api/Accessories/" + ID;
+                String apiUrl = "/api/Accessories/" + id;
                 HttpResponseMessage response = await client.GetAsync(apiUrl).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {

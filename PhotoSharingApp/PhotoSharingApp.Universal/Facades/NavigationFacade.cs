@@ -219,7 +219,7 @@ namespace PhotoSharingApp.Universal.Facades
         /// </summary>
         public void NavigateToCategoriesView()
         {
-            Navigate(typeof(CategoriesViewModel));
+            Navigate(typeof(MainPageViewModel));
         }
 
         /// <summary>
@@ -286,6 +286,11 @@ namespace PhotoSharingApp.Universal.Facades
             Navigate(typeof(StreamViewModel), new StreamViewModelArgs(category));
         }
 
+        public void NavigateToCategoryPage(ReturnAccessoryCombination accessoryCombination)
+        {
+            Navigate(typeof(CategoryPageViewModel), accessoryCombination);
+        }
+
         /// <summary>
         /// Navigates to the photo stream view.
         /// </summary>
@@ -305,6 +310,11 @@ namespace PhotoSharingApp.Universal.Facades
         public void NavigateToPhotoStream(CategoryPreview categoryPreview, PhotoThumbnail photoThumbnail)
         {
             Navigate(typeof(StreamViewModel), new StreamViewModelThumbnailArgs(categoryPreview, photoThumbnail));
+        }
+
+        public void NavigateToAccessoryDetail(ReturnAccessoryCombination accessoryCombination, ReturnAccessory accessory)
+        {
+            Navigate(typeof(AccessoryDetailViewModel), accessory);
         }
 
         /// <summary>

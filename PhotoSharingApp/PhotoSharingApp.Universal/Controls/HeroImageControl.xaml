@@ -39,7 +39,7 @@
 
     <Grid x:Name="layoutRoot">
         <ProgressRing x:Name="progressIndicator" />
-        <Image Source="{Binding ImageUrl}" Stretch="UniformToFill" VerticalAlignment="Center" x:Name="heroImage" />
+        <Image Source="{Binding ImagePath}" Stretch="UniformToFill" VerticalAlignment="Center" x:Name="heroImage" />
         <Grid>
             <Grid.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -60,13 +60,13 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Border Padding="1" Margin="0,0,9.5,0">
+            <!--<Border Padding="1" Margin="0,0,9.5,0">
                 <controls:UserProfilePictureControl
                     x:Name="profilePictureControl"
                     Width="100"
                     Height="100"
                     Source="{Binding User.ProfilePictureUrl}" />
-            </Border>
+            </Border>-->
 
             <Grid Grid.Column="1" VerticalAlignment="Center">
                 <Grid.RowDefinitions>
@@ -75,12 +75,14 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="1">
-                    <TextBlock x:Name="caption" Text="{Binding Caption}" FontWeight="Thin" FontSize="30"
+                    <TextBlock x:Name="caption" Text="{Binding Name}" FontWeight="Thin" FontSize="30"
                                Foreground="White" TextTrimming="WordEllipsis" />
                 </StackPanel>
 
+                <!--<TextBlock Foreground="White" Margin="0" Grid.Row="0"
+                           Text="{Binding Price, Converter={StaticResource RelativeTimeConverter}}" />-->
                 <TextBlock Foreground="White" Margin="0" Grid.Row="0"
-                           Text="{Binding CreatedAt, Converter={StaticResource RelativeTimeConverter}}" />
+                           Text="{Binding Price}" />
             </Grid>
         </Grid>
         <VisualStateManager.VisualStateGroups>
