@@ -86,7 +86,7 @@ namespace PhotoSharingApp.Universal.Views
             newPet.Name = NameTextBox.Text.Trim();
             newPet.Age = int.Parse(AgeTextBox.Text.Trim());
             newPet.Gender = GenderComboBox.SelectedIndex;
-            newPet.Status = StatusComboBox.SelectedValue.ToString();
+            if (StatusComboBox.SelectedItem != null) newPet.Status = StatusComboBox.SelectedItem.ToString();
             newPet.PetCategory = PetCategory[CategoriesComboBox.SelectedIndex];
 
             bool check = checkPet(newPet);
@@ -99,7 +99,7 @@ namespace PhotoSharingApp.Universal.Views
                     {
                         NoConnectionGrid.Visibility = Visibility.Collapsed;
                         newPet.user = User;
-                        RequestToApi(newPet);
+                        RequestToApi(newPet).Wait();
                     }
                     else
                     {
@@ -157,7 +157,7 @@ namespace PhotoSharingApp.Universal.Views
             return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
-        public async void RequestToApi(ReturnPet newPet)
+        public async Task RequestToApi(ReturnPet newPet)
         {
             using (var client = new HttpClient())
             {
@@ -168,7 +168,7 @@ namespace PhotoSharingApp.Universal.Views
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.Timeout = TimeSpan.FromMilliseconds(2000);
 
-                HttpResponseMessage response = await client.PostAsJsonAsync("/api/Pets/add", newPet).ConfigureAwait(false);
+                HttpResponseMessage response = await client.PutAsJsonAsync("/api/Pets/add", newPet).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     Frame.Navigate(typeof (MyPetPage));
