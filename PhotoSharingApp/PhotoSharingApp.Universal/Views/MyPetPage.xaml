@@ -34,7 +34,7 @@
 
             <ScrollViewer Grid.Row="1">
                 <RelativePanel>
-                    <ItemsControl Width="300" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                    <ItemsControl RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
                         <ItemsControl.ItemContainerTransitions>
                             <TransitionCollection>
                                 <EntranceThemeTransition IsStaggeringEnabled="True"
@@ -54,12 +54,11 @@
                                 <Span>Please try again later</Span>
                             </TextBlock>
                         </Grid>
-                        <Button Background="White" Padding="0" 
-                                        Margin="0,0,8,4" >
+                        <Button x:Name="AddNewPetButton" Background="White" Padding="0" Margin="0,0,8,4" Click="AddNewPetButton_Click" >
                             <Button.BorderBrush>
                                 <SolidColorBrush Color="Teal" Opacity="0.1"/>
                             </Button.BorderBrush>
-                            <Grid Margin="10">
+                            <Grid Margin="15">
                                 <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
                                   Fill="Teal" Stretch="Uniform" Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
                             </Grid>
@@ -75,8 +74,8 @@
                                         <Image Margin="0" Source="{Binding ImagePath}" />
                                         <ItemsControl Grid.Column="1">
                                             <TextBlock Margin="5,10,5,0" Text="{Binding Name}"/>
-                                            <TextBlock Margin="5,10,5,0" Text="{Binding StockQuantity}"/>
-                                            <TextBlock Margin="5,10,5,0" Text="{Binding Price}"/>
+                                            <TextBlock Margin="5,10,5,0" Text="{Binding Status}"/>
+                                            <TextBlock Margin="5,10,5,0" Text="{Binding Age}"/>
                                         </ItemsControl>
                                     </Grid>
                                 </DataTemplate>

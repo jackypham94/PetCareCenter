@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Newtonsoft.Json;
 using PhotoSharingApp.Universal.Models;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -27,7 +28,8 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class MyPetPage : Page
     {
-        private List<ReturnPetCategory> PetCategory { get; set; }
+        private List<ReturnPet> ListPet { get; set; }
+        private static ReturnUser User { get; set; }
         public MyPetPage()
         {
             this.InitializeComponent();
@@ -42,10 +44,15 @@ namespace PhotoSharingApp.Universal.Views
         {
             try
             {
-                GetListCategory().Wait();
-                //CategoriesComboBox.ItemsSource = PetCategory;
-                //CategoriesComboBox.SelectedIndex = 0;
-                NoConnectionGrid.Visibility = Visibility.Collapsed;
+                DeserelizeDataFromJson("user");
+                if (User != null)
+                {
+                    InitPetList(User).Wait();
+                    ListPetListView.ItemsSource = ListPet;
+                    //CategoriesComboBox.ItemsSource = PetCategory;
+                    //CategoriesComboBox.SelectedIndex = 0;
+                    NoConnectionGrid.Visibility = Visibility.Collapsed;
+                }
             }
             catch (Exception ex)
             {
@@ -57,7 +64,7 @@ namespace PhotoSharingApp.Universal.Views
             }
         }
 
-        public async Task GetListCategory()
+        public async Task InitPetList(ReturnUser user)
         {
             using (var client = new HttpClient())
             {
@@ -68,13 +75,33 @@ namespace PhotoSharingApp.Universal.Views
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.Timeout = TimeSpan.FromMilliseconds(2000);
 
-                String apiUrl = "/api/PetCategories";
-                HttpResponseMessage response = await client.GetAsync(apiUrl).ConfigureAwait(false);
+                HttpResponseMessage response = await client.PostAsJsonAsync("/api/Pets", user).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
-                    PetCategory = await response.Content.ReadAsAsync<List<ReturnPetCategory>>();
+                    ListPet = await response.Content.ReadAsAsync<List<ReturnPet>>();
                 }
             }
+        }
+        public void DeserelizeDataFromJson(string fileName)
+        {
+            User = new ReturnUser();
+            var folder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            var filePath = folder.Path + @"\" + fileName + ".json";
+            using (StreamReader file = File.OpenText(filePath))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                User = (ReturnUser)serializer.Deserialize(file, typeof(ReturnUser));
+                User.Password = Base64Decode(User.Password);
+            }
+        }
+        public static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+        }
+        private void AddNewPetButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(AddPetPage));
         }
     }
 }
