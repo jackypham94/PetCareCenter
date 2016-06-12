@@ -64,7 +64,7 @@
                                   Fill="Teal" Stretch="Uniform" Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
                             </Grid>
                         </Button>
-                        <ListView x:Name="ListPetListView" Margin="0,10,0,0" SelectionChanged="AccessoryListView_SelectionChanged">
+                        <ListView x:Name="ListPetListView" Margin="0,10,0,0">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Height="100" Margin="0,10,0,0">
