@@ -128,6 +128,12 @@ namespace PhotoSharingApp.Universal.Views
                 MainScrollViewer.Visibility = Visibility.Collapsed;
             }
 
+            bool isSignIn = e.Parameter != null && (bool)e.Parameter;
+            if (isSignIn)
+            {
+                Frame.BackStack.RemoveAt(Frame.BackStackDepth - 1);
+            }
+
             //_viewModel.StartHeroImageSlideShow();
         }
 
@@ -141,11 +147,6 @@ namespace PhotoSharingApp.Universal.Views
             {
                 ThumbnailImageSideLength = 100;
             }
-        }
-
-        private void TestButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof (ProfilePage));
         }
     }
 }

@@ -228,13 +228,18 @@ namespace PhotoSharingApp.Universal.Views
                         ErrorProviderTextBlock.Visibility = Visibility.Visible;
                     }
                 }
-                catch (HttpRequestException)
+                catch (Exception ex)
                 {
-                    var dialog = new MessageDialog("Can not connect to server!", "Message");
-                    //dialog.Commands.Add(new UICommand("Yes") { Id = 0 });
-                    //dialog.Commands.Add(new UICommand("No") { Id = 1 });
-
-                    await dialog.ShowAsync();
+                    if (ex is TimeoutException || ex is AggregateException)
+                    {
+                        var dialog = new MessageDialog("Cannot connect to server!", "Message");
+                        await dialog.ShowAsync();
+                    }
+                    else
+                    {
+                        var dialog = new MessageDialog("Something happen in our end! Please try again later.", "Message");
+                        await dialog.ShowAsync();
+                    }
                 }
 
             }

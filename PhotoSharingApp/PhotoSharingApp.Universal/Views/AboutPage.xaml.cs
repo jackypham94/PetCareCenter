@@ -22,6 +22,7 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
+using System;
 using Microsoft.Practices.ServiceLocation;
 using PhotoSharingApp.Universal.ViewModels;
 using Windows.UI.Xaml.Controls;
@@ -49,6 +50,21 @@ namespace PhotoSharingApp.Universal.Views
             base.OnNavigatedTo(e);
 
             await _viewModel.LoadState();
+        }
+
+        private async void NgocHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        {
+            await Windows.System.Launcher.LaunchUriAsync(new Uri("https://www.facebook.com/jackypham94"));
+        }
+
+        private async void BaoHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        {
+            await Windows.System.Launcher.LaunchUriAsync(new Uri("https://www.facebook.com/profile.php?id=100003045032894"));
+        }
+
+        private async void MinhHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        {
+            await Windows.System.Launcher.LaunchUriAsync(new Uri("https://www.facebook.com/minhlam95"));
         }
     }
 }

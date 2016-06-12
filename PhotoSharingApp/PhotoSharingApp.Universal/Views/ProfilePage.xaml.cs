@@ -67,6 +67,10 @@ namespace PhotoSharingApp.Universal.Views
                 {
                     newUser.NewPassword = NewPassWordPasswordBox.Password.Trim();
                 }
+                else
+                {
+                    newUser.NewPassword = user.Password;
+                }
 
                 bool check = CheckInfo(newUser);
 
@@ -147,8 +151,7 @@ namespace PhotoSharingApp.Universal.Views
                         PhoneTextBox.Text = info.Phone;
                         AddressTextBox.Text = info.Address;
                         GenderList.SelectedIndex = (int)info.Gender;
-                        PassWordPasswordBox.Password = user.Password;
-                        PassWordPasswordBox.IsEnabled = false;
+                        //PassWordPasswordBox.Password = user.Password;
                     }
                     else
                     {
@@ -156,10 +159,18 @@ namespace PhotoSharingApp.Universal.Views
                         ErrorProviderTextBlock.Visibility = Visibility.Visible;
                     }
                 }
-                catch (HttpRequestException)
+                catch (Exception ex)
                 {
-                    var dialog = new MessageDialog("Can not connect to server!", "Message");
-                    await dialog.ShowAsync();
+                    if (ex is TimeoutException || ex is AggregateException)
+                    {
+                        var dialog = new MessageDialog("Cannot connect to server!", "Message");
+                        await dialog.ShowAsync();
+                    }
+                    else
+                    {
+                        var dialog = new MessageDialog("Something happen in our end! Please try again later.", "Message");
+                        await dialog.ShowAsync();
+                    }
                 }
             }
         }
@@ -251,11 +262,35 @@ namespace PhotoSharingApp.Universal.Views
                 check = false;
             }
 
+            //check password
+            if (ConfirmPassWordPasswordBox.Password.Trim().Length != 0 && NewPassWordPasswordBox.Password.Trim().Length != 0 && PassWordPasswordBox.Password.Trim().Length == 0)
+            {
+                ErrorPasswordTextBlock.Text = "Please enter your current password!";
+                ErrorPasswordTextBlock.Visibility = Visibility.Visible;
+                check = false;
+            }
+            if (PassWordPasswordBox.Password.Trim().Length == 0)
+            {
+                ErrorPasswordTextBlock.Text = "Please enter your current password!";
+                ErrorPasswordTextBlock.Visibility = Visibility.Visible;
+                check = false;
+            }
+            else
+            {
+                if (!PassWordPasswordBox.Password.Trim().Equals(user.Password))
+                {
+                    ErrorPasswordTextBlock.Text = "This is not your current password!";
+                    ErrorPasswordTextBlock.Visibility = Visibility.Visible;
+                    check = false;
+                }
+            }
+            
+
             //check new password
             if ((ConfirmPassWordPasswordBox.Password.Trim().Length != 0 && NewPassWordPasswordBox.Password.Trim().Length == 0))
             {
                 ErrorNewPasswordTextBlock.Text = "Please enter your new password!";
-                ErrorPasswordTextBlock.Visibility = Visibility.Visible;
+                ErrorNewPasswordTextBlock.Visibility = Visibility.Visible;
                 check = false;
             }
 

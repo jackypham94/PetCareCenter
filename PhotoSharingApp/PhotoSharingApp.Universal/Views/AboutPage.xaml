@@ -138,13 +138,14 @@
                 <Pivot Grid.Row="0">
                     <PivotItem Header="ABOUT">
                         <TextBlock>
-                    When headers are in 'Dynamic' mode, hovering a mouse over the pivot headers will show mouse flippers for easy tab switching
+                            <Run>This application is created by SWD team.</Run><LineBreak/>
+                            <Run>You can easily manage your pet and choose beautiful accessory with this app.</Run>
                         </TextBlock>
                     </PivotItem>
 
                     <PivotItem Header="SUPPORT">
                         <TextBlock>
-                    <Run>Pivot now supports the following keyboard behaviors</Run><LineBreak/>
+                    <Run>Version 5.1.20</Run><LineBreak/>
                     <Run> * While the HeaderPanel is focused:</Run><LineBreak/>
                     <Run> * * Left, Right, Ctrl+PgUp, Ctrl+PgDown: Changes the currently selected PivotItem</Run><LineBreak/>
                     <Run> * * Down: Sets focus in the content area</Run><LineBreak/>
@@ -155,20 +156,22 @@
 
                     <PivotItem Header="OUR TEAM">
                         <StackPanel>
-                            <TextBlock>To provide a great experience from mobile to desktop, Pivot now supports two header styles, Dynamic Headers and Static Headers.<LineBreak/></TextBlock>
-                            <TextBlock Style="{StaticResource SubheaderTextBlockStyle}">Dynamic Headers</TextBlock>
+                            <TextBlock Style="{StaticResource SubheaderTextBlockStyle}">Team members</TextBlock>
                             <TextBlock>
-                        <Run>With a focus on mobile and small screen, dynamic headers automatically revolve in the header area with the currently selected PivotItem always the first item.</Run><LineBreak/>
-                        <Run>Dynamic headers are automatically enabled when the combined width of your PivotItem.Header elements exceeds the width availabe to the Pivot control.</Run><LineBreak/>
+                                <Run>Pham Van Ngoc  </Run><LineBreak/>
+                                <Run>Do Quoc Bao  </Run><LineBreak/>
+                                <Run>Lam Pham Nhat Minh  </Run><LineBreak/>
                             </TextBlock>
-                            <Image Source="/Assets/DynamicHeader.png" Width="350" Stretch="Uniform" HorizontalAlignment="Left" />
 
-                            <TextBlock Style="{StaticResource SubheaderTextBlockStyle}">Static Headers</TextBlock>
-                            <TextBlock>
-                        <Run>Targeting devices with larger displays, static headers keep a fixed position in the header area, regardless of which item is currently selected.</Run><LineBreak/>
-                        <Run>Static headers are automatically enabled when the combined width of your PivotItem.Header elements fits within the width available to the Pivot control</Run><LineBreak/>
+                            <TextBlock Style="{StaticResource SubheaderTextBlockStyle}">Please contact us</TextBlock>
+                            <TextBlock>           
+                                <Hyperlink x:Name="NgocHyperlink" Click="NgocHyperlink_Click">Pham Van Ngoc</Hyperlink>
+                                <Run>0902943509</Run><LineBreak/>
+                                <Hyperlink x:Name="BaoHyperlink" Click="BaoHyperlink_Click">Do Quoc Bao</Hyperlink>
+                                <Run>01225440470</Run><LineBreak/>
+                                <Hyperlink x:Name="MinhHyperlink" Click="MinhHyperlink_Click">Lam Pham Nhat Minh</Hyperlink>
+                                <Run>0904094687</Run><LineBreak/>
                             </TextBlock>
-                            <Image Source="/Assets/StaticHeader.png" Width="350" Stretch="Uniform" HorizontalAlignment="Left" />
                         </StackPanel>
                     </PivotItem>
 
