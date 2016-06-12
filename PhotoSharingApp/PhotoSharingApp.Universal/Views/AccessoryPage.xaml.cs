@@ -33,6 +33,7 @@ namespace PhotoSharingApp.Universal.Views
     public sealed partial class AccessoryPage : Page
     {
         private ReturnAccessory Acessories { get; set; }
+        private static ReturnUser User { get; set; }
         public AccessoryPage()
         {
             this.InitializeComponent();
@@ -46,29 +47,20 @@ namespace PhotoSharingApp.Universal.Views
                 try
                 {
                     InitializeAccessoriesDetails(args.Id).Wait();
-                    
+
                     Image.Source = new BitmapImage(new Uri(Acessories.ImagePath));
                     NameTextBlock.Text = Acessories.Name;
                     SizeTextBlock.Text = Acessories.Size;
                     ColorTextBlock.Text = Acessories.Color;
                     StockQuantityTextBlock.Text = Acessories.StockQuantity.ToString();
                     PriceTextBlock.Text = Acessories.Price.ToString(CultureInfo.InvariantCulture);
-                    
+                    NoConnectionGrid.Visibility = Visibility.Collapsed;
+
                 }
                 catch (AggregateException)
                 {
+                    NoConnectionGrid.Visibility = Visibility.Visible;
                 }
-                if (Acessories == null)
-                {
-                    //NoConnectionGrid.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    //NoConnectionGrid.Visibility = Visibility.Collapsed;
-                    //CategoryListView.ItemsSource = Acessories.ListOfAccessory;
-                    //TitleTextBlock.Text = Acessories.Category.CategoryName.ToUpper();
-                }
-
             }
         }
 
@@ -95,12 +87,11 @@ namespace PhotoSharingApp.Universal.Views
 
         private void AddToCartButton_Click(object sender, RoutedEventArgs e)
         {
-            DeserelizeDataFromJson("user").Wait();
+            DeserelizeDataFromJson("user");
             int quantity = Int32.Parse(QuantityTextBox.Text.Trim());
             AddToCart(User, Acessories, quantity);
         }
 
-        private static ReturnUser User { get; set; }
 
         private async void AddToCart(ReturnUser user, ReturnAccessory accessory, int quantity)
         {
@@ -122,7 +113,7 @@ namespace PhotoSharingApp.Universal.Views
 
                 try
                 {
-                    HttpResponseMessage response = await client.PostAsJsonAsync("api/UserBuyingDetail/Add", cart);
+                    HttpResponseMessage response = await client.PutAsJsonAsync("api/UserBuyingDetail/Add", cart);
                     if (response.IsSuccessStatusCode)
                     {
                         var dialog = new MessageDialog(
@@ -130,7 +121,7 @@ namespace PhotoSharingApp.Universal.Views
                         "Congratulation");
                         await dialog.ShowAsync();
                     }
-                    
+
                 }
                 catch (HttpRequestException)
                 {
@@ -141,25 +132,16 @@ namespace PhotoSharingApp.Universal.Views
             }
         }
 
-        public static async Task DeserelizeDataFromJson(string fileName)
+        public void DeserelizeDataFromJson(string fileName)
         {
-            try
+            User = new ReturnUser();
+            var folder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            var filePath = folder.Path + @"\" + fileName + ".json";
+            using (StreamReader file = File.OpenText(filePath))
             {
-                User = new ReturnUser();
-                var folder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                var file = await folder.GetFileAsync(fileName + ".json");
-                var data = await file.OpenReadAsync();
-
-                using (StreamReader r = new StreamReader(data.AsStream()))
-                {
-                    string text = r.ReadToEnd();
-                    User = JsonConvert.DeserializeObject<ReturnUser>(text);
-                    User.Password = Base64Decode(User.Password);
-                }
-            }
-            catch (Exception)
-            {
-                //throw e;
+                JsonSerializer serializer = new JsonSerializer();
+                User = (ReturnUser)serializer.Deserialize(file, typeof(ReturnUser));
+                User.Password = Base64Decode(User.Password);
             }
         }
 

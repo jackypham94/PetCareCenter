@@ -84,14 +84,32 @@
 
         <ScrollViewer Grid.Row="2" x:Name="mainScrollViewer" IsTabStop="False">
 
-            <ListView RelativePanel.Below="heroImagesStateIndicator"
+            <!--<ListView RelativePanel.Below="heroImagesStateIndicator"
                           IsItemClickEnabled="True" SelectionMode="None"
                           Margin="12,0"
                           ItemTemplate="{StaticResource CategoryListItemTemplate}"
                           ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
                           x:Name="AccessoriesListView" RelativePanel.AlignLeftWithPanel="True"
                           RelativePanel.AlignRightWithPanel="True"
-                          IsTabStop="False" />
+                          IsTabStop="False" />-->
+            <ListView x:Name="AccessoryListView" Margin="0,10,0,0" SelectionChanged="AccessoryListView_SelectionChanged">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Height="100" Margin="0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Margin="0" Source="{Binding ImagePath}" />
+                            <ItemsControl Grid.Column="1">
+                                <TextBlock Margin="5,10,5,0" Text="{Binding Name}"/>
+                                <TextBlock Margin="5,10,5,0" Text="{Binding StockQuantity}"/>
+                                <TextBlock Margin="5,10,5,0" Text="{Binding Price}"/>
+                            </ItemsControl>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
         </ScrollViewer>
 

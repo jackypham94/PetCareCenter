@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.Practices.ServiceLocation;
+using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Serialization;
 using PhotoSharingApp.Universal.ViewModels;
@@ -30,9 +31,10 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class CategoryPage : Page
     {
+        private INavigationFacade _navigationFacade = new NavigationFacade();
         private int _thumbnailImageSideLength;
         private readonly CategoryPageViewModel _viewModel;
-        private ReturnAccessoryCombination Acessories { get; set; }
+        private ReturnAccessoryCombination Acessory { get; set; }
         public CategoryPage()
         {
             this.InitializeComponent();
@@ -50,8 +52,8 @@ namespace PhotoSharingApp.Universal.Views
         {
             var args = SerializationHelper.Deserialize<ReturnAccessoryCombination>(e.Parameter as string);
             InitializeAccessoriesDetails(args.Category.Id).Wait();
-            AccessoriesListView.ItemsSource = Acessories.ListOfAccessory;
-            HeaderTextBlock.Text = Acessories.Category.CategoryName.ToUpper();
+            AccessoryListView.ItemsSource = Acessory.ListOfAccessory;
+            HeaderTextBlock.Text = Acessory.Category.CategoryName.ToUpper();
             base.OnNavigatedTo(e);
             await _viewModel.LoadState();
         }
@@ -71,7 +73,7 @@ namespace PhotoSharingApp.Universal.Views
                 HttpResponseMessage response = await client.GetAsync(apiUrl).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
-                    Acessories = await response.Content.ReadAsAsync<ReturnAccessoryCombination>();
+                    Acessory = await response.Content.ReadAsAsync<ReturnAccessoryCombination>();
                 }
             }
 
@@ -98,6 +100,11 @@ namespace PhotoSharingApp.Universal.Views
             {
                 ThumbnailImageSideLength = 100;
             }
+        }
+
+        private void AccessoryListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _navigationFacade.NavigateToAccessoryDetail(Acessory.ListOfAccessory[AccessoryListView.SelectedIndex]);
         }
     }
 }
