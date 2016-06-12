@@ -360,6 +360,9 @@
     <Compile Include="Views\AccessoryPage.xaml.cs">
       <DependentUpon>AccessoryPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\AddPetPage.xaml.cs">
+      <DependentUpon>AddPetPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AnimationHelper.cs" />
     <Compile Include="Views\AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
@@ -517,6 +520,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AccessoryPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddPetPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

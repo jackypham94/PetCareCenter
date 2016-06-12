@@ -25,10 +25,10 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MyPetPage : Page
+    public sealed partial class AddPetPage : Page
     {
         private List<ReturnPetCategory> PetCategory { get; set; }
-        public MyPetPage()
+        public AddPetPage()
         {
             this.InitializeComponent();
         }

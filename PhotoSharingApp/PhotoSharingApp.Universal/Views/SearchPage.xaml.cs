@@ -34,7 +34,6 @@ namespace PhotoSharingApp.Universal.Views
         public SearchPage()
         {
             this.InitializeComponent();
-            NoConnectionGrid.Visibility = Visibility.Collapsed;
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)

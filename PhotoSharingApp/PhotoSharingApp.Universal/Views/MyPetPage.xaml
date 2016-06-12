@@ -54,64 +54,34 @@
                                 <Span>Please try again later</Span>
                             </TextBlock>
                         </Grid>
-                        <TextBlock Foreground="Teal" FontSize="20" Text="Register New Pet" HorizontalAlignment="Left"/>
-                        <TextBlock x:Name="ErrorProviderTextBlock" Foreground="Red" Visibility="Collapsed"></TextBlock>
-                        <TextBlock Text="Pet name" Margin="0,5,0,0"></TextBlock>
-                        <TextBlock x:Name="ErrorNameTextBlock" Foreground="Red" Visibility="Collapsed"></TextBlock>
-                        <Grid Margin="0,5,0,0">
-                            <Path x:Name="NamePath" Data="M2,3H22C23.05,3 24,3.95 24,5V19C24,20.05 23.05,21 22,21H2C0.95,21 0,20.05 0,19V5C0,3.95 0.95,3 2,3M14,6V7H22V6H14M14,8V9H21.5L22,9V8H14M14,10V11H21V10H14M8,13.91C6,13.91 2,15 2,17V18H14V17C14,15 10,13.91 8,13.91M8,6A3,3 0 0,0 5,9A3,3 0 0,0 8,12A3,3 0 0,0 11,9A3,3 0 0,0 8,6Z"
-                              Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
-                            <TextBox x:Name="NameTextBox" PlaceholderText="Pet Name" InputScope="Default" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" />
-                        </Grid>
-                        <TextBlock Text="Age" Margin="0,5,0,0"></TextBlock>
-                        <TextBlock x:Name="ErrorAgeTextBlock" Foreground="Red" Visibility="Collapsed"></TextBlock>
-                        <Grid Margin="0,5,0,0">
-                            <Path x:Name="UsernamePath" Data="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M19,19H15V21H19A2,2 0 0,0 21,19V15H19M19,3H15V5H19V9H21V5A2,2 0 0,0 19,3M5,5H9V3H5A2,2 0 0,0 3,5V9H5M5,15H3V19A2,2 0 0,0 5,21H9V19H5V15Z"
-                              Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
-                            <TextBox x:Name="AgeTextBox" PlaceholderText="Age" InputScope="Number" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" />
-                        </Grid>
-                        <TextBlock Text="Gender" Margin="0,5,0,0"></TextBlock>
-                        <Grid Margin="0,5,0,0">
-                            <ComboBox x:Name="GenderComboBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectedIndex="0">
-                                <ComboBoxItem>Male</ComboBoxItem>
-                                <ComboBoxItem>Female</ComboBoxItem>
-                                <ComboBoxItem>Other</ComboBoxItem>
-                            </ComboBox>
-                        </Grid>
-                        <TextBlock Text="Status" Margin="0,5,0,0"></TextBlock>
-                        <Grid Margin="0,5,0,0">
-                            <ComboBox x:Name="StatusComboBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectedIndex="0">
-                                <ComboBoxItem>Normal</ComboBoxItem>
-                                <ComboBoxItem>Sick</ComboBoxItem>
-                                <ComboBoxItem>Other</ComboBoxItem>
-                            </ComboBox>
-                        </Grid>
-
-                        <TextBlock Text="Image" Margin="0,5,0,0"></TextBlock>
-                        <TextBlock x:Name="ErrorImagePathTextBlock" Foreground="Red" Visibility="Collapsed"></TextBlock>
-                        <Grid Margin="0,5,0,0">
-                            <ItemsControl>
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <VirtualizingStackPanel Orientation="Horizontal" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <Grid>
-                                    <Path x:Name="PasswordPath" Data="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z"
-                                        Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
-                                    <TextBox x:Name="PassWordPasswordBox" IsReadOnly="True" Foreground="Gray" BorderBrush="Gray" VerticalContentAlignment="Center" Padding="30,3,6,5" PlaceholderText="Image File" />
-                                </Grid>
-                                <Button Content="Browse" Margin="10,0,0,0"></Button>
-                            </ItemsControl>
-                        </Grid>
-                        <TextBlock Text="Category" Margin="0,5,0,0"></TextBlock>
-                        <Grid Margin="0,5,0,0">
-                            <ComboBox x:Name="CategoriesComboBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectedIndex="0">
-                                <ComboBoxItem>Corgi</ComboBoxItem>
-                                <ComboBoxItem>Sick</ComboBoxItem>
-                                <ComboBoxItem>Other</ComboBoxItem>
-                            </ComboBox>
-                        </Grid>
+                        <Button Background="White" Padding="0" 
+                                        Margin="0,0,8,4" >
+                            <Button.BorderBrush>
+                                <SolidColorBrush Color="Teal" Opacity="0.1"/>
+                            </Button.BorderBrush>
+                            <Grid Margin="10">
+                                <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                                  Fill="Teal" Stretch="Uniform" Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
+                            </Grid>
+                        </Button>
+                        <ListView x:Name="ListPetListView" Margin="0,10,0,0" SelectionChanged="AccessoryListView_SelectionChanged">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Height="100" Margin="0,10,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Margin="0" Source="{Binding ImagePath}" />
+                                        <ItemsControl Grid.Column="1">
+                                            <TextBlock Margin="5,10,5,0" Text="{Binding Name}"/>
+                                            <TextBlock Margin="5,10,5,0" Text="{Binding StockQuantity}"/>
+                                            <TextBlock Margin="5,10,5,0" Text="{Binding Price}"/>
+                                        </ItemsControl>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </ItemsControl>
                 </RelativePanel>
             </ScrollViewer>
