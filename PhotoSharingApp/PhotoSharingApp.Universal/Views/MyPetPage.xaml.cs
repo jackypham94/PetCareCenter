@@ -43,8 +43,8 @@ namespace PhotoSharingApp.Universal.Views
             try
             {
                 GetListCategory().Wait();
-                CategoriesComboBox.ItemsSource = PetCategory;
-                CategoriesComboBox.SelectedIndex = 0;
+                //CategoriesComboBox.ItemsSource = PetCategory;
+                //CategoriesComboBox.SelectedIndex = 0;
                 NoConnectionGrid.Visibility = Visibility.Collapsed;
             }
             catch (Exception ex)
