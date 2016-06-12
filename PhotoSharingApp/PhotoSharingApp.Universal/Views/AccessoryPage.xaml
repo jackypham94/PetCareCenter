@@ -17,7 +17,7 @@
 
         <controls:PageHeader>
             <controls:PageHeader.HeaderContent>
-                <TextBlock Text="SEARCH" Style="{ThemeResource PageTitleTextBlockStyle}" />
+                <TextBlock Text="ACCESSORY" Style="{ThemeResource PageTitleTextBlockStyle}" />
             </controls:PageHeader.HeaderContent>
         </controls:PageHeader>
         <Grid  Grid.Row="1">
@@ -57,7 +57,7 @@
                         <TextBlock x:Name="PriceTextBlock" Margin="10,5,10,0"></TextBlock>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <TextBlock Text="Quantity" VerticalAlignment="Center"></TextBlock>
-                            <TextBox x:Name="QuantityTextBox" InputScope="Number" Width="50" Margin="10,0,0,0"></TextBox>
+                            <TextBox x:Name="QuantityTextBox" Text="1" InputScope="Number" Width="50" Margin="10,0,0,0"></TextBox>
                             <Button x:Name="AddToCartButton" Content="Add to cart" Margin="10,0,0,0" Click="AddToCartButton_Click"></Button>
                         </StackPanel>
                     </ItemsControl>

@@ -438,42 +438,5 @@ namespace PhotoSharingApp.Universal.ViewModels
             _navigationFacade.NavigateToProfileView(user);
         }
 
-        /// <summary>
-        /// Starts the hero image slide show.
-        /// </summary>
-        //public void StartHeroImageSlideShow()
-        //{
-        //    // Only start slideshow if we were able to get
-        //    // any hero images
-        //    if (TopImages != null && TopImages.Any())
-        //    {
-        //        _heroImageScrollTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(7) };
-        //        StartHeroImageSlideshowTimer();
-        //    }
-        //}
-
-        /// <summary>
-        /// Starts a timer which cycles through hero images.
-        /// </summary>
-        //private void StartHeroImageSlideshowTimer()
-        //{
-        //    _heroImageScrollTimer.Start();
-
-        //    _heroImageScrollTimer.Tick += (s, e) =>
-        //    {
-        //        var selectedIndex = TopImages.IndexOf(SelectedHeroImage);
-        //        selectedIndex = (selectedIndex + 1) % TopImages.Count;
-
-        //        SelectedHeroImage = TopImages[selectedIndex];
-        //    };
-        //}
-
-        ///// <summary>
-        ///// Stops hero image slide show.
-        ///// </summary>
-        //public void StopHeroImageSlideShow()
-        //{
-        //    _heroImageScrollTimer?.Stop();
-        //}
     }
 }
