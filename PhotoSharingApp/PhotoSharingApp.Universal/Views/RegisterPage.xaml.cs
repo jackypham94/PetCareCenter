@@ -26,6 +26,7 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class RegisterPage : Page
     {
+        private bool isRegistered = false;
         public RegisterPage()
         {
             this.InitializeComponent();
@@ -272,8 +273,8 @@ namespace PhotoSharingApp.Universal.Views
                     HttpResponseMessage response = await client.PutAsJsonAsync("api/Users/", newUser);
                     if (response.IsSuccessStatusCode)
                     {
-                        var isRegistered = true;
-                        this.Frame.Navigate(typeof(SignInPage), isRegistered);
+                        isRegistered = true;
+                        Frame.Navigate(typeof(SignInPage), isRegistered);
                     }
                     else
                     {

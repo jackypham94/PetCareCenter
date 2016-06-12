@@ -15,5 +15,6 @@ namespace PhotoSharingApp.Universal.Models
         public string Phone { get; set; }
         public string Email { get; set; }
         public int? Gender { get; set; }
+        public string NewPassword { get; set; }
     }
 }

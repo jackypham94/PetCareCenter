@@ -55,6 +55,7 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class SignInPage : Page
     {
+        private bool isSignIn = false;
         public SignInPage()
         {
             InitializeComponent();
@@ -218,7 +219,8 @@ namespace PhotoSharingApp.Universal.Views
                         await SerelizeDataToJson(user, "user");
 
                         // To do: Login to home page
-                        this.Frame.Navigate(typeof(MainPage));
+                        isSignIn = true;
+                        Frame.Navigate(typeof(MainPage), isSignIn);
                     }
                     else
                     {

@@ -45,6 +45,8 @@ namespace PhotoSharingApp.Universal.Views
         public ProfilePage()
         {
             InitializeComponent();
+
+            //initial data to view
             InitialData();
         }
 
@@ -53,14 +55,18 @@ namespace PhotoSharingApp.Universal.Views
             try
             {
                 CreateNewUser newUser = new CreateNewUser();
-                newUser.Name = NameTextBox.Text.Trim();
+                newUser.Name = user.Username;
                 newUser.Username = UsernameTextBox.Text.Trim();
-                //newUser.Password = PassWordPasswordBox.Password.Trim();
+                newUser.Password = user.Password;
                 newUser.Email = EmailTextBox.Text.Trim();
                 newUser.Address = AddressTextBox.Text.Trim();
                 newUser.Phone = PhoneTextBox.Text.Trim();
                 newUser.Gender = GenderList.SelectedIndex;
-                newUser.Password = user.Password;
+                if (ConfirmPassWordPasswordBox.Password.Trim().Length != 0 &&
+                    NewPassWordPasswordBox.Password.Trim().Length != 0)
+                {
+                    newUser.NewPassword = NewPassWordPasswordBox.Password.Trim();
+                }
 
                 bool check = CheckInfo(newUser);
 
@@ -93,12 +99,17 @@ namespace PhotoSharingApp.Universal.Views
                     HttpResponseMessage response = await client.PutAsJsonAsync("api/Users/", newUser);
                     if (response.IsSuccessStatusCode)
                     {
-                        //var isRegistered = true;
+                        user.Password = newUser.NewPassword;
+                        //encode user's new password
+                        user.Password = Base64Encode(user.Password);
+
+                        //write data to user.json file
+                        await SerelizeDataToJson(user, "user");
                         Frame.Navigate(typeof(ProfilePage));
                     }
                     else
                     {
-                        ErrorProviderTextBlock.Text = "Username is already existed!";
+                        ErrorProviderTextBlock.Text = "Something went wrong!";
                         ErrorProviderTextBlock.Visibility = Visibility.Visible;
                     }
                 }
@@ -127,18 +138,17 @@ namespace PhotoSharingApp.Universal.Views
                     HttpResponseMessage response = await client.PostAsJsonAsync("api/Users/info", user);
                     if (response.IsSuccessStatusCode)
                     {
+                        //show data to view
                         UserInfo info = await response.Content.ReadAsAsync<UserInfo>();
                         NameTextBox.Text = info.Name;
                         UsernameTextBox.Text = info.Username;
+                        UsernameTextBox.IsEnabled = false;
                         EmailTextBox.Text = info.Email;
                         PhoneTextBox.Text = info.Phone;
                         AddressTextBox.Text = info.Address;
                         GenderList.SelectedIndex = (int)info.Gender;
                         PassWordPasswordBox.Password = user.Password;
                         PassWordPasswordBox.IsEnabled = false;
-
-                        // To do: Login to home page
-                        //this.Frame.Navigate(typeof (MainPage));
                     }
                     else
                     {
@@ -156,11 +166,10 @@ namespace PhotoSharingApp.Universal.Views
 
         public async void InitialData()
         {
-            //var user = new ReturnUser();
-            user = await DeserelizeDataFromJson("user", user);
+            user = await DeserelizeDataFromJson("user", user);  //read data from user.json file
             if (user != null)
             {
-                user.Password = Base64Decode(user.Password);
+                user.Password = Base64Decode(user.Password);  //decode user's password
                 RequestPostToApi(user);
             }
             else
@@ -168,6 +177,37 @@ namespace PhotoSharingApp.Universal.Views
                 ErrorProviderTextBlock.Text = "Please login to edit your profile";
                 ErrorProviderTextBlock.Visibility = Visibility.Visible;
             }            
+        }
+
+        public static async Task<string> SerelizeDataToJson(ReturnUser user, string filename)
+        {
+            try
+            {
+                var folder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                var file =
+                    await
+                        folder.CreateFileAsync(filename + ".json",
+                            Windows.Storage.CreationCollisionOption.ReplaceExisting);
+                var data = await file.OpenStreamForWriteAsync();
+
+                using (StreamWriter r = new StreamWriter(data))
+                {
+                    var serelizedfile = JsonConvert.SerializeObject(user);
+                    r.Write(serelizedfile);
+
+                }
+                return filename;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
         }
 
         public static string Base64Decode(string base64EncodedData)
@@ -211,40 +251,32 @@ namespace PhotoSharingApp.Universal.Views
                 check = false;
             }
 
-            //check username
-            if (user.Username.Length == 0)
+            //check new password
+            if ((ConfirmPassWordPasswordBox.Password.Trim().Length != 0 && NewPassWordPasswordBox.Password.Trim().Length == 0))
             {
-                ErrorUsernameTextBlock.Text = "Please enter your username!";
-                ErrorUsernameTextBlock.Visibility = Visibility.Visible;
+                ErrorNewPasswordTextBlock.Text = "Please enter your new password!";
+                ErrorPasswordTextBlock.Visibility = Visibility.Visible;
                 check = false;
             }
 
-            //check password
-            //if (user.Password.Length == 0)
-            //{
-            //    ErrorPasswordTextBlock.Text = "Please enter your password!";
-            //    ErrorPasswordTextBlock.Visibility = Visibility.Visible;
-            //    check = false;
-            //}
 
 
-
-            ////check password confirm
-            //if (ConfirmPassWordPasswordBox.Password.Trim().Length == 0)
-            //{
-            //    ErrorConfirmPasswordTextBlock.Text = "Please confirm your password!";
-            //    ErrorConfirmPasswordTextBlock.Visibility = Visibility.Visible;
-            //    check = false;
-            //}
-            //else
-            //{
-            //    if (!ConfirmPassWordPasswordBox.Password.Trim().Equals(user.Password))
-            //    {
-            //        ErrorConfirmPasswordTextBlock.Text = "Password not match!";
-            //        ErrorConfirmPasswordTextBlock.Visibility = Visibility.Visible;
-            //        check = false;
-            //    }
-            //}
+            //check password confirm
+            if ((ConfirmPassWordPasswordBox.Password.Trim().Length == 0 && NewPassWordPasswordBox.Password.Trim().Length != 0))
+            {
+                ErrorConfirmPasswordTextBlock.Text = "Please confirm your new password!";
+                ErrorConfirmPasswordTextBlock.Visibility = Visibility.Visible;
+                check = false;
+            }
+            else
+            {
+                if (!ConfirmPassWordPasswordBox.Password.Trim().Equals(NewPassWordPasswordBox.Password.Trim()))
+                {
+                    ErrorConfirmPasswordTextBlock.Text = "Password not match!";
+                    ErrorConfirmPasswordTextBlock.Visibility = Visibility.Visible;
+                    check = false;
+                }
+            }
 
             //check email
             myRegex = new Regex(@"^\w+@\w+[.]\w+$");
