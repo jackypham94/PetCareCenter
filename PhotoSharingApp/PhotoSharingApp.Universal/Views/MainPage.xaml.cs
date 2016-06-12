@@ -115,10 +115,17 @@ namespace PhotoSharingApp.Universal.Views
             var loadData = e.NavigationMode != NavigationMode.Back;
             _viewModel = ServiceLocator.Current.GetInstance<MainPageViewModel>(loadData);
             DataContext = _viewModel;
+            NoConnectionGrid.Visibility = Visibility.Collapsed;
+            MainScrollViewer.Visibility = Visibility.Visible;
 
             if (loadData)
             {
                 await _viewModel.LoadState();
+            }
+            if (!_viewModel.IsConnect)
+            {
+                NoConnectionGrid.Visibility = Visibility.Visible;
+                MainScrollViewer.Visibility = Visibility.Collapsed;
             }
 
             //_viewModel.StartHeroImageSlideShow();

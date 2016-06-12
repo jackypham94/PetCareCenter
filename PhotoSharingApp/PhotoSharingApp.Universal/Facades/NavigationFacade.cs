@@ -317,6 +317,11 @@ namespace PhotoSharingApp.Universal.Facades
             Navigate(typeof(AccessoryDetailViewModel), accessory);
         }
 
+        public void NavigateToAccessoryDetail(ReturnAccessory accessory)
+        {
+            Navigate(typeof(AccessoryDetailViewModel), accessory);
+        }
+
         /// <summary>
         /// Navigates to the signed-in user's profile view.
         /// </summary>

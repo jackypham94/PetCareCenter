@@ -130,6 +130,8 @@ namespace PhotoSharingApp.Universal.Facades
 
         void NavigateToAccessoryDetail(ReturnAccessoryCombination accessoryCombination, ReturnAccessory accessory);
 
+        void NavigateToAccessoryDetail(ReturnAccessory accessory);
+
         /// <summary>
         /// Navigates to the signed-in user's profile view.
         /// </summary>

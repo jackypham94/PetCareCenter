@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -27,6 +28,7 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class SearchPage : Page
     {
+        private INavigationFacade _navigationFacade = new NavigationFacade();
         private List<ReturnAccessoryCombination> AccessoryCombinations { get; set; }
         private List<ReturnAccessory> Accessories { get; set; }
         public SearchPage()
@@ -96,6 +98,7 @@ namespace PhotoSharingApp.Universal.Views
                 client.BaseAddress = new Uri(serverUrl);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.Timeout = TimeSpan.FromMilliseconds(2000);
 
                 String apiUrl = "/api/AccessoryCategoriesSearch/" + name;
                 HttpResponseMessage response = await client.GetAsync(apiUrl).ConfigureAwait(false);
@@ -115,8 +118,8 @@ namespace PhotoSharingApp.Universal.Views
                 client.BaseAddress = new Uri(serverUrl);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.Timeout = TimeSpan.FromMilliseconds(2000);
 
-                // New code:
                 String apiUrl = "/api/AccessoriesSearch/" + name;
                 HttpResponseMessage response = await client.GetAsync(apiUrl).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
@@ -126,5 +129,14 @@ namespace PhotoSharingApp.Universal.Views
             }
         }
 
+        private void AccessoryListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _navigationFacade.NavigateToAccessoryDetail(Accessories[AccessoryListView.SelectedIndex]);
+        }
+
+        private void CategoryListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _navigationFacade.NavigateToCategoryPage(AccessoryCombinations[CategoryListView.SelectedIndex]);
+        }
     }
 }

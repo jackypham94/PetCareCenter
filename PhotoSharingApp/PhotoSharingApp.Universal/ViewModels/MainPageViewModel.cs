@@ -48,7 +48,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <summary>
         /// The number of hero images to show
         /// </summary>
-        private const int NumberOfHeroImages = 5;
+        public bool IsConnect { get; set; }
 
         /// <summary>
         /// The auth enforcement handler.
@@ -120,14 +120,14 @@ namespace PhotoSharingApp.Universal.ViewModels
             // Initialize collections.
             TopImages = new ObservableCollection<ReturnAccessory>();
 
-            try
-            {
-                InitializeCategoryItems().Wait();
-            }
-            catch (AggregateException)
-            {
-                //throw;
-            }
+            //try
+            //{
+            //    InitializeCategoryItems().Wait();
+            //}
+            //catch (AggregateException)
+            //{
+            //    //throw;
+            //}
 
             // Initialize commands
             ShowAllCommand = new RelayCommand<ReturnAccessoryCombination>(OnShowAllSelected);
@@ -312,26 +312,41 @@ namespace PhotoSharingApp.Universal.ViewModels
 
 
                 // Load categories
+
                 InitializeCategoryItems().Wait();
-                var categories =
-                    AccessoryCombinations;
 
-                IsEmptyDataMessageVisible = !categories.Any();
-                IsStatusContainerVisible = !categories.Any();
-
-                for (int i = 0; i < 4; i++)
+                if (AccessoryCombinations != null)
                 {
-                    TopImages.Add(categories[0].ListOfAccessory[i]);
+                    if (AccessoryCombinations.Count > 0)
+                    {
+                        var categories = AccessoryCombinations;
+
+                        IsEmptyDataMessageVisible = !categories.Any();
+                        IsStatusContainerVisible = !categories.Any();
+
+                        try
+                        {
+                            for (int i = 0; i < 4; i++)
+                            {
+                                TopImages.Add(categories[0].ListOfAccessory[i]);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            // ignored
+                        }
+
+                        foreach (var c in categories)
+                        {
+                            TopCategories.Add(c);
+
+                            // For UI animation purposes, we wait a little until the next
+                            // element is inserted.
+                            await Task.Delay(200);
+                        }
+                    }
                 }
 
-                foreach (var c in categories)
-                {
-                    TopCategories.Add(c);
-
-                    // For UI animation purposes, we wait a little until the next
-                    // element is inserted.
-                    await Task.Delay(200);
-                }
             }
             catch (ServiceException)
             {
@@ -347,19 +362,31 @@ namespace PhotoSharingApp.Universal.ViewModels
 
         public async Task InitializeCategoryItems()
         {
-            using (var client = new HttpClient())
+            try
             {
-                var resourceLoader = ResourceLoader.GetForCurrentView();
-                string serverUrl = resourceLoader.GetString("ServerURL");
-                client.BaseAddress = new Uri(serverUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                // New code:
-                HttpResponseMessage response = await client.GetAsync("/api/AccessoryCategoriesDisplay").ConfigureAwait(false);
-                if (response.IsSuccessStatusCode)
+                using (var client = new HttpClient())
                 {
-                    AccessoryCombinations = await response.Content.ReadAsAsync<List<ReturnAccessoryCombination>>();
+                    var resourceLoader = ResourceLoader.GetForCurrentView();
+                    string serverUrl = resourceLoader.GetString("ServerURL");
+                    client.BaseAddress = new Uri(serverUrl);
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.Timeout = TimeSpan.FromMilliseconds(2000);
+
+                    HttpResponseMessage response = await client.GetAsync("/api/AccessoryCategoriesDisplay").ConfigureAwait(false);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        AccessoryCombinations = await response.Content.ReadAsAsync<List<ReturnAccessoryCombination>>();
+                        IsConnect = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is TimeoutException || ex is AggregateException)
+                {
+                    IsConnect = false;
+                    //AccessoryCombinations = new List<ReturnAccessoryCombination>();
                 }
             }
         }

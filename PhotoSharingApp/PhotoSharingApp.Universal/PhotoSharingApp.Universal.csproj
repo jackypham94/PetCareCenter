@@ -191,6 +191,7 @@
     <Compile Include="Extensions\CategoryPreviewExtensions.cs" />
     <Compile Include="Extensions\PhotoListExtensions.cs" />
     <Compile Include="Models\AccesoryItem.cs" />
+    <Compile Include="Models\AddToCart.cs" />
     <Compile Include="Models\CreateNewUser.cs" />
     <Compile Include="Models\ReturnAccessory.cs" />
     <Compile Include="Models\ReturnAccessoryCategory.cs" />

@@ -78,7 +78,7 @@
 
         <controls:PageHeader>
             <controls:PageHeader.HeaderContent>
-                <TextBlock Text="CATEGORY" Style="{ThemeResource PageTitleTextBlockStyle}" />
+                <TextBlock x:Name="HeaderTextBlock" Text="CATEGORY" Style="{ThemeResource PageTitleTextBlockStyle}" />
             </controls:PageHeader.HeaderContent>
         </controls:PageHeader>
 

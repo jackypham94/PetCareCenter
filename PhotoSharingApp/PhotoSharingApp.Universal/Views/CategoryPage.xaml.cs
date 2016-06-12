@@ -51,6 +51,7 @@ namespace PhotoSharingApp.Universal.Views
             var args = SerializationHelper.Deserialize<ReturnAccessoryCombination>(e.Parameter as string);
             InitializeAccessoriesDetails(args.Category.Id).Wait();
             AccessoriesListView.ItemsSource = Acessories.ListOfAccessory;
+            HeaderTextBlock.Text = Acessories.Category.CategoryName.ToUpper();
             base.OnNavigatedTo(e);
             await _viewModel.LoadState();
         }
@@ -64,7 +65,7 @@ namespace PhotoSharingApp.Universal.Views
                 client.BaseAddress = new Uri(serverUrl);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+                client.Timeout = TimeSpan.FromMilliseconds(2000);
                 // New code:
                 String apiUrl = "/api/AccessoryCategoriesFull/" + id;
                 HttpResponseMessage response = await client.GetAsync(apiUrl).ConfigureAwait(false);

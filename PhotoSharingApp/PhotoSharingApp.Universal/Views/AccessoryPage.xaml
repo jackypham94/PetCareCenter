@@ -49,12 +49,17 @@
                                 <Span>Please try again later</Span>
                             </TextBlock>
                         </Grid>
-                        <Image x:Name="Image" MaxHeight="500"></Image>
-                        <TextBox x:Name="NameTextBlock" Margin="10,5,10,0"></TextBox>
-                        <TextBox x:Name="SizeTextBlock" Margin="10,5,10,0"></TextBox>
-                        <TextBox x:Name="ColorTextBlock" Margin="10,5,10,0"></TextBox>
-                        <TextBox x:Name="StockQuantityTextBlock" Margin="10,5,10,0"></TextBox>
-                        <TextBox x:Name="PriceTextBlock" Margin="10,5,10,0"></TextBox>
+                        <Image x:Name="Image" MaxHeight="300"></Image>
+                        <TextBlock x:Name="NameTextBlock" Margin="10,5,10,0"></TextBlock>
+                        <TextBlock x:Name="SizeTextBlock" Margin="10,5,10,0"></TextBlock>
+                        <TextBlock x:Name="ColorTextBlock" Margin="10,5,10,0"></TextBlock>
+                        <TextBlock x:Name="StockQuantityTextBlock" Margin="10,5,10,0"></TextBlock>
+                        <TextBlock x:Name="PriceTextBlock" Margin="10,5,10,0"></TextBlock>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="Quantity" VerticalAlignment="Center"></TextBlock>
+                            <TextBox x:Name="QuantityTextBox" InputScope="Number" Width="50" Margin="10,0,0,0"></TextBox>
+                            <Button x:Name="AddToCartButton" Content="Add to cart" Margin="10,0,0,0" Click="AddToCartButton_Click"></Button>
+                        </StackPanel>
                     </ItemsControl>
                 </RelativePanel>
             </ScrollViewer>

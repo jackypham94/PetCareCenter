@@ -101,7 +101,7 @@ namespace PhotoSharingApp.Universal.Views
         /// </summary>
         public SignInViewModel ViewModel { get; }
 
-        private async void LoginButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void LoginButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             //_navigationFacade.NavigateToMainPage();
             //this.Frame.Navigate(typeof(MainPage));
