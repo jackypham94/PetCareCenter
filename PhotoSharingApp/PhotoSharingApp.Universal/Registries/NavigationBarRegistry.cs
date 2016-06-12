@@ -51,6 +51,7 @@ namespace PhotoSharingApp.Universal.Registries
             //Container.RegisterTypeWithName<INavigationBarMenuItem, CategoriesNavigationBarMenuItem>();
             Container.RegisterTypeWithName<INavigationBarMenuItem, SearchNavigationBarMenuItem>();
             Container.RegisterTypeWithName<INavigationBarMenuItem, CartNavigationBarMenuItem>();
+            Container.RegisterTypeWithName<INavigationBarMenuItem, MyPetNavigationBarMenuItem>();
             Container.RegisterTypeWithName<INavigationBarMenuItem, HistoryNavigationBarMenuItem>();
             Container.RegisterTypeWithName<INavigationBarMenuItem, WelcomeNavigationBarMenuItem>();
             //Container.RegisterTypeWithName<INavigationBarMenuItem, LeaderboardNavigationBarMenuItem>();

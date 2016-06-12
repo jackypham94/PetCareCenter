@@ -27,13 +27,16 @@
     xmlns:local="using:PhotoSharingApp.Universal.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:PhotoSharingApp.Universal.Controls"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <RelativePanel HorizontalAlignment="Center" VerticalAlignment="Center">
+    <!--<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">-->
+    <!--<RelativePanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <Viewbox Height="70" x:Name="headerImage"
                      RelativePanel.AlignHorizontalCenterWithPanel="True">
-                <!--<SymbolIcon Symbol="GoToStart" />-->
+                -->
+    <!--<SymbolIcon Symbol="GoToStart" />-->
+    <!--
                 <Path Data="M12.89,3L14.85,3.4L11.11,21L9.15,20.6L12.89,3M19.59,12L16,8.41V5.58L22.42,12L16,18.41V15.58L19.59,12M1.58,12L8,5.58V8.41L4.41,12L8,15.58V18.41L1.58,12Z" 
                       Fill="Teal" />
             </Viewbox>
@@ -94,14 +97,88 @@
 
 
 
-                <!--<Button Margin="0,6,0,0" Command="{Binding CopyUserIdToClipboardCommand}"
+                -->
+    <!--<Button Margin="0,6,0,0" Command="{Binding CopyUserIdToClipboardCommand}"
                         VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
                         <SymbolIcon Symbol="Copy" Margin="0,0,6,0"></SymbolIcon>
                         <TextBlock>Copy User Id to clipboard</TextBlock>
                     </StackPanel>
                 </Button>-->
+    <!--
             </ItemsControl>
+        </RelativePanel>-->
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <controls:PageHeader>
+            <controls:PageHeader.HeaderContent>
+                <TextBlock Text="ABOUT" Style="{ThemeResource PageTitleTextBlockStyle}" />
+            </controls:PageHeader.HeaderContent>
+        </controls:PageHeader>
+        <RelativePanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Grid x:Name="RootGrid" Margin="12,0,12,12">
+                <Grid.RowDefinitions>
+                    <!--<RowDefinition Height="Auto"/>-->
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!--<StackPanel Margin="12,0,0,12">
+                    <TextBlock Text="Description:" />
+                    <TextBlock Style="{StaticResource BodyTextBlockStyle}">
+                        Pivot - Updated for Desktop
+                    </TextBlock>
+                </StackPanel>-->
+
+                <Pivot Grid.Row="0">
+                    <PivotItem Header="ABOUT">
+                        <TextBlock>
+                    When headers are in 'Dynamic' mode, hovering a mouse over the pivot headers will show mouse flippers for easy tab switching
+                        </TextBlock>
+                    </PivotItem>
+
+                    <PivotItem Header="SUPPORT">
+                        <TextBlock>
+                    <Run>Pivot now supports the following keyboard behaviors</Run><LineBreak/>
+                    <Run> * While the HeaderPanel is focused:</Run><LineBreak/>
+                    <Run> * * Left, Right, Ctrl+PgUp, Ctrl+PgDown: Changes the currently selected PivotItem</Run><LineBreak/>
+                    <Run> * * Down: Sets focus in the content area</Run><LineBreak/>
+                    <Run> * While the Content area is focused:</Run><LineBreak/>
+                    <Run> * * Ctrl+PgUp, Ctrl+PgDown: Changes the currently selected PivotItem</Run>
+                        </TextBlock>
+                    </PivotItem>
+
+                    <PivotItem Header="OUR TEAM">
+                        <StackPanel>
+                            <TextBlock>To provide a great experience from mobile to desktop, Pivot now supports two header styles, Dynamic Headers and Static Headers.<LineBreak/></TextBlock>
+                            <TextBlock Style="{StaticResource SubheaderTextBlockStyle}">Dynamic Headers</TextBlock>
+                            <TextBlock>
+                        <Run>With a focus on mobile and small screen, dynamic headers automatically revolve in the header area with the currently selected PivotItem always the first item.</Run><LineBreak/>
+                        <Run>Dynamic headers are automatically enabled when the combined width of your PivotItem.Header elements exceeds the width availabe to the Pivot control.</Run><LineBreak/>
+                            </TextBlock>
+                            <Image Source="/Assets/DynamicHeader.png" Width="350" Stretch="Uniform" HorizontalAlignment="Left" />
+
+                            <TextBlock Style="{StaticResource SubheaderTextBlockStyle}">Static Headers</TextBlock>
+                            <TextBlock>
+                        <Run>Targeting devices with larger displays, static headers keep a fixed position in the header area, regardless of which item is currently selected.</Run><LineBreak/>
+                        <Run>Static headers are automatically enabled when the combined width of your PivotItem.Header elements fits within the width available to the Pivot control</Run><LineBreak/>
+                            </TextBlock>
+                            <Image Source="/Assets/StaticHeader.png" Width="350" Stretch="Uniform" HorizontalAlignment="Left" />
+                        </StackPanel>
+                    </PivotItem>
+
+                </Pivot>
+
+                <!-- Status Block for providing messages to the user.  Use the
+            NotifyUser() method to populate the message -->
+                <Border x:Name="ErrorBorder" Background="Red" Grid.Row="2"/>
+                <TextBlock x:Name="StatusBlock" Grid.Row="2" Margin="12, 10, 12, 10" Visibility="Collapsed"/>
+            </Grid>
         </RelativePanel>
     </Grid>
 </Page>

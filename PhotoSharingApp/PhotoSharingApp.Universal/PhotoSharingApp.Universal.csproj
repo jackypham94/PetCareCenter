@@ -198,8 +198,11 @@
     <Compile Include="Models\ReturnAccessoryCategory.cs" />
     <Compile Include="Models\ReturnAccessoryCombination.cs" />
     <Compile Include="Models\ReturnBuyingDetail.cs" />
+    <Compile Include="Models\ReturnPet.cs" />
+    <Compile Include="Models\ReturnPetCategory.cs" />
     <Compile Include="Models\ReturnUser.cs" />
     <Compile Include="Models\UserInfo.cs" />
+    <Compile Include="NavigationBar\MyPetNavigationBarMenuItem.cs" />
     <Compile Include="NavigationBar\HistoryNavigationBarMenuItem.cs" />
     <Compile Include="NavigationBar\MainPageNavigationBarMenuItem.cs" />
     <Compile Include="NavigationBar\AboutNavigationBarMenuItem.cs" />
