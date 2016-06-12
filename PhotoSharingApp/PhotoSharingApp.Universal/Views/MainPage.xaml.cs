@@ -142,5 +142,10 @@ namespace PhotoSharingApp.Universal.Views
                 ThumbnailImageSideLength = 100;
             }
         }
+
+        private void TestButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof (ProfilePage));
+        }
     }
 }

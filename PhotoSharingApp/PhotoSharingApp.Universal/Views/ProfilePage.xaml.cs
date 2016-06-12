@@ -31,6 +31,14 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class ProfilePage : Page
     {
+        ReturnUser user = new ReturnUser();
+
+        public ReturnUser User
+        {
+            get { return user; }
+            set { user = value; }
+        }
+
         /// <summary>
         /// The constructor
         /// </summary>
@@ -40,23 +48,33 @@ namespace PhotoSharingApp.Universal.Views
             InitialData();
         }
 
-        private void EditButton_Click(object sender, RoutedEventArgs e)
+        private async void EditButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateNewUser newUser = new CreateNewUser();
-            newUser.Name = NameTextBox.Text.Trim();
-            newUser.Username = UsernameTextBox.Text.Trim();
-            //newUser.Password = PassWordPasswordBox.Password.Trim();
-            newUser.Email = EmailTextBox.Text.Trim();
-            newUser.Address = AddressTextBox.Text.Trim();
-            newUser.Phone = PhoneTextBox.Text.Trim();
-            newUser.Gender = GenderList.SelectedIndex;
-
-            bool check = CheckInfo(newUser);
-
-            if (check)
+            try
             {
-                RequestPutToApi(newUser);
+                CreateNewUser newUser = new CreateNewUser();
+                newUser.Name = NameTextBox.Text.Trim();
+                newUser.Username = UsernameTextBox.Text.Trim();
+                //newUser.Password = PassWordPasswordBox.Password.Trim();
+                newUser.Email = EmailTextBox.Text.Trim();
+                newUser.Address = AddressTextBox.Text.Trim();
+                newUser.Phone = PhoneTextBox.Text.Trim();
+                newUser.Gender = GenderList.SelectedIndex;
+                newUser.Password = user.Password;
+
+                bool check = CheckInfo(newUser);
+
+                if (check)
+                {
+                    RequestPutToApi(newUser);
+                }
             }
+            catch (NullReferenceException)
+            {
+                var dialog = new MessageDialog("Please login to edit your profile!", "Message");
+                await dialog.ShowAsync();
+            }
+            
         }
 
         public async void RequestPutToApi(CreateNewUser newUser)
@@ -87,9 +105,6 @@ namespace PhotoSharingApp.Universal.Views
                 catch (HttpRequestException)
                 {
                     var dialog = new MessageDialog("Can not connect to server!", "Message");
-                    //dialog.Commands.Add(new UICommand("Yes") { Id = 0 });
-                    //dialog.Commands.Add(new UICommand("No") { Id = 1 });
-
                     await dialog.ShowAsync();
                 }
             }
@@ -119,6 +134,8 @@ namespace PhotoSharingApp.Universal.Views
                         PhoneTextBox.Text = info.Phone;
                         AddressTextBox.Text = info.Address;
                         GenderList.SelectedIndex = (int)info.Gender;
+                        PassWordPasswordBox.Password = user.Password;
+                        PassWordPasswordBox.IsEnabled = false;
 
                         // To do: Login to home page
                         //this.Frame.Navigate(typeof (MainPage));
@@ -139,10 +156,18 @@ namespace PhotoSharingApp.Universal.Views
 
         public async void InitialData()
         {
-            var user = new ReturnUser();
-            await DeserelizeDataFromJson("user", user);
-            Base64Decode(user.Password);
-            RequestPostToApi(user);
+            //var user = new ReturnUser();
+            user = await DeserelizeDataFromJson("user", user);
+            if (user != null)
+            {
+                user.Password = Base64Decode(user.Password);
+                RequestPostToApi(user);
+            }
+            else
+            {
+                ErrorProviderTextBlock.Text = "Please login to edit your profile";
+                ErrorProviderTextBlock.Visibility = Visibility.Visible;
+            }            
         }
 
         public static string Base64Decode(string base64EncodedData)
@@ -268,15 +293,6 @@ namespace PhotoSharingApp.Universal.Views
                     check = false;
                 }
             }
-
-            //check gender
-            //if (-1 == user.Gender)
-            //{
-            //    ErrorGenderTextBlock.Text = "Please choose your gender!";
-            //    ErrorGenderTextBlock.Visibility = Visibility.Visible;
-            //    check = false;
-            //}
-
             return check;
         }
 
@@ -313,18 +329,6 @@ namespace PhotoSharingApp.Universal.Views
             ErrorProviderTextBlock.Visibility = Visibility.Collapsed;
         }
 
-        //private void PassWordPasswordBox_GotFocus(object sender, RoutedEventArgs e)
-        //{
-        //    PassWordPasswordBox.SelectAll();
-        //    ErrorPasswordTextBlock.Visibility = Visibility.Collapsed;
-        //}
-
-        //private void ConfirmPassWordPasswordBox_GotFocus(object sender, RoutedEventArgs e)
-        //{
-        //    ConfirmPassWordPasswordBox.SelectAll();
-        //    ErrorConfirmPasswordTextBlock.Visibility = Visibility.Collapsed;
-        //}
-
         private void EmailTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             EmailTextBox.SelectAll();
@@ -340,6 +344,29 @@ namespace PhotoSharingApp.Universal.Views
         private void PhoneTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             ErrorPhoneTextBlock.Visibility = Visibility.Collapsed;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof (MainPage));
+        }
+
+        private void PassWordPasswordBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            PassWordPasswordBox.SelectAll();
+            ErrorPasswordTextBlock.Visibility = Visibility.Collapsed;
+        }
+
+        private void NewPassWordPasswordBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            NewPassWordPasswordBox.SelectAll();
+            ErrorNewPasswordTextBlock.Visibility = Visibility.Collapsed;
+        }
+
+        private void ConfirmPassWordPasswordBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ConfirmPassWordPasswordBox.SelectAll();
+            ErrorConfirmPasswordTextBlock.Visibility = Visibility.Collapsed;
         }
     }
 }
