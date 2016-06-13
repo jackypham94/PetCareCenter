@@ -57,7 +57,8 @@ namespace PhotoSharingApp.Universal.Models
                 }
 
                 // You can not give gold when you are the owner of the picture.
-                return !User.UserId.Equals(AppEnvironment.Instance.CurrentUser.UserId);
+                //return !User.UserId.Equals(AppEnvironment.Instance.CurrentUser.UserId);
+                return true;
             }
         }
 

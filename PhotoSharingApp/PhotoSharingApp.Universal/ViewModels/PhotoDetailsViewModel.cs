@@ -185,7 +185,8 @@ namespace PhotoSharingApp.Universal.ViewModels
                 {
                     return false;
                 }
-                return string.Equals(_selectedAnnotation.From.UserId, AppEnvironment.Instance.CurrentUser.UserId);
+                //return string.Equals(_selectedAnnotation.From.UserId, AppEnvironment.Instance.CurrentUser.UserId);
+                return true;
             }
         }
 
@@ -200,7 +201,8 @@ namespace PhotoSharingApp.Universal.ViewModels
                 {
                     return false;
                 }
-                return !string.Equals(_selectedAnnotation.From.UserId, AppEnvironment.Instance.CurrentUser.UserId);
+                //return !string.Equals(_selectedAnnotation.From.UserId, AppEnvironment.Instance.CurrentUser.UserId);
+                return true;
             }
         }
 
@@ -216,7 +218,8 @@ namespace PhotoSharingApp.Universal.ViewModels
                     return false;
                 }
 
-                return string.Equals(Photo.User.UserId, AppEnvironment.Instance.CurrentUser.UserId);
+                //return string.Equals(Photo.User.UserId, AppEnvironment.Instance.CurrentUser.UserId);
+                return true;
             }
         }
 

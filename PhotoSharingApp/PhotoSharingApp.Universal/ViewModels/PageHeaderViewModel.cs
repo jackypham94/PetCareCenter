@@ -40,7 +40,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         public PageHeaderViewModel(IPetCareService petCareService)
         {
             // Get current user as UI will bind directly to it.
-            CurrentUser = AppEnvironment.Instance.CurrentUser;
+            //CurrentUser = AppEnvironment.Instance.CurrentUser;
 
             IsDummyServiceEnabled = petCareService is PetCareDummyService;
         }

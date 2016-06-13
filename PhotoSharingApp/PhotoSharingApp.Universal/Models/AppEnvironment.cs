@@ -37,7 +37,7 @@ namespace PhotoSharingApp.Universal.Models
     {
         public static readonly int DefaultMinimumCropDimension = 200;
         public static readonly double FloatingComparisonTolerance = 0.001;
-        private User _currentUser;
+        private ReturnUser _currentUser;
 
         /// <summary>
         /// Gets or sets the number of category thumbnails that are requested
@@ -48,7 +48,7 @@ namespace PhotoSharingApp.Universal.Models
         /// <summary>
         /// Stores the current user that is logged in.
         /// </summary>
-        public User CurrentUser
+        public ReturnUser CurrentUser
         {
             get { return _currentUser; }
             set
@@ -95,7 +95,7 @@ namespace PhotoSharingApp.Universal.Models
         /// <summary>
         /// Invoked when the current user has changed.
         /// </summary>
-        public event EventHandler<User> CurrentUserChanged;
+        public event EventHandler<ReturnUser> CurrentUserChanged;
 
         /// <summary>
         /// Applies the given configuration.

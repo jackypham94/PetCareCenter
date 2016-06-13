@@ -68,11 +68,11 @@ namespace PhotoSharingApp.Universal.ViewModels
             {
                 Func<Task<PagedResponse<Photo>>> f = async () =>
                 {
-                    if (IsShowingCurrentUser)
-                    {
-                        var stream = await petCareService.GetPhotosForCurrentUser(s);
-                        return stream;
-                    }
+                    //if (IsShowingCurrentUser)
+                    //{
+                    //    var stream = await petCareService.GetPhotosForCurrentUser(s);
+                    //    return stream;
+                    //}
 
                     return await petCareService.GetPhotosForUser(User, s);
                 };
@@ -98,7 +98,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <summary>
         /// Returns true, if the user is shown that is signed in. Otherwise, false.
         /// </summary>
-        public bool IsShowingCurrentUser => User == AppEnvironment.Instance.CurrentUser;
+        //public bool IsShowingCurrentUser => User == AppEnvironment.Instance.CurrentUser;
 
         /// <summary>
         /// Gets or sets whether photos are available.
@@ -207,7 +207,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             await base.LoadState();
 
-            User = AppEnvironment.Instance.CurrentUser;
+            //User = AppEnvironment.Instance.CurrentUser;
 
             if (User != null)
             {
@@ -229,11 +229,11 @@ namespace PhotoSharingApp.Universal.ViewModels
 
         private async void OnDeletePhoto(Photo photo)
         {
-            if (AppEnvironment.Instance.CurrentUser.ProfilePictureId == photo.Id)
-            {
-                await _dialogService.ShowNotification("DeleteProfilePicture_Message", "DeleteProfilePicture_Title");
-                return;
-            }
+            //if (AppEnvironment.Instance.CurrentUser.ProfilePictureId == photo.Id)
+            //{
+            //    await _dialogService.ShowNotification("DeleteProfilePicture_Message", "DeleteProfilePicture_Title");
+            //    return;
+            //}
 
             try
             {
@@ -278,7 +278,7 @@ namespace PhotoSharingApp.Universal.ViewModels
                 IsBusy = true;
                 await _petCareService.UpdateUserProfilePhoto(photo);
 
-                User = AppEnvironment.Instance.CurrentUser;
+                //User = AppEnvironment.Instance.CurrentUser;
             }
             catch (ServiceException)
             {

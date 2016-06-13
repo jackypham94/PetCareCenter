@@ -32,6 +32,6 @@ namespace PhotoSharingApp.Universal.Models
         /// <summary>
         /// Stores the current user that is logged in.
         /// </summary>
-        User CurrentUser { get; set; }
+        ReturnUser CurrentUser { get; set; }
     }
 }

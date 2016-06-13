@@ -64,7 +64,7 @@ namespace PhotoSharingApp.Universal.Services
             InitAnnotations();
             InitLeaderboardData();
 
-            AppEnvironment.Instance.CurrentUser = User;
+            //AppEnvironment.Instance.CurrentUser = User;
         }
 
         /// <summary>
@@ -382,158 +382,24 @@ namespace PhotoSharingApp.Universal.Services
 
         private void InitLeaderboardData()
         {
-            var allPhotos = PhotoStreams.SelectMany(s => s.Photos).ToList();
-            var users = _sampleUsers;
-
-            var leaderboard = new Leaderboard
-            {
-                MostGoldCategories = new List<LeaderboardEntry<Category>>
-                {
-                    new LeaderboardEntry<Category>
-                    {
-                        Model = Categories[_random.Next(Categories.Count)],
-                        Rank = 1,
-                        Value = 94
-                    },
-                    new LeaderboardEntry<Category>
-                    {
-                        Model = Categories[_random.Next(Categories.Count)],
-                        Rank = 2,
-                        Value = 79
-                    },
-                    new LeaderboardEntry<Category>
-                    {
-                        Model = Categories[_random.Next(Categories.Count)],
-                        Rank = 3,
-                        Value = 47
-                    }
-                },
-                MostGoldPhotos = new List<LeaderboardEntry<Photo>>
-                {
-                    new LeaderboardEntry<Photo>
-                    {
-                        Model = allPhotos[_random.Next(allPhotos.Count)],
-                        Rank = 1,
-                        Value = 38
-                    },
-                    new LeaderboardEntry<Photo>
-                    {
-                        Model = allPhotos[_random.Next(allPhotos.Count)],
-                        Rank = 2,
-                        Value = 29
-                    },
-                    new LeaderboardEntry<Photo>
-                    {
-                        Model = allPhotos[_random.Next(allPhotos.Count)],
-                        Rank = 3,
-                        Value = 21
-                    }
-                },
-                MostGoldUsers = new List<LeaderboardEntry<User>>
-                {
-                    new LeaderboardEntry<User>
-                    {
-                        Model = users[_random.Next(users.Count)],
-                        Rank = 1,
-                        Value = 68
-                    },
-                    new LeaderboardEntry<User>
-                    {
-                        Model = users[_random.Next(users.Count)],
-                        Rank = 2,
-                        Value = 54
-                    },
-                    new LeaderboardEntry<User>
-                    {
-                        Model = users[_random.Next(users.Count)],
-                        Rank = 3,
-                        Value = 37
-                    }
-                },
-                MostGivingUsers = new List<LeaderboardEntry<User>>
-                {
-                    new LeaderboardEntry<User>
-                    {
-                        Model = users[_random.Next(users.Count)],
-                        Rank = 1,
-                        Value = 34
-                    },
-                    new LeaderboardEntry<User>
-                    {
-                        Model = users[_random.Next(users.Count)],
-                        Rank = 2,
-                        Value = 27
-                    },
-                    new LeaderboardEntry<User>
-                    {
-                        Model = users[_random.Next(users.Count)],
-                        Rank = 3,
-                        Value = 17
-                    }
-                }
-            };
-
-            LeaderboardData = leaderboard;
         }
 
         private void InitPhotoStreams()
         {
-            PhotoStreams = new List<PhotoStream>();
-
-            var captions = new[]
-            {
-                "Yay!",
-                "Having a good day!",
-                "Enjoying... :)",
-                "Isn't that a beautiful shot?",
-                "I like it this way!",
-                "Love it!",
-                "Look at this..."
-            };
-
-            var users = _sampleUsers;
-            var userIndex = 0;
-
-            PhotoStreams.AddRange(TopCategories.Select(c =>
-            {
-                var createdAtMinutes = 45;
-
-                return new PhotoStream
-                {
-                    CateogoryId = c.Id,
-                    Photos = c.PhotoThumbnails.Select(thumb => new Photo
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        Caption = captions[_random.Next(captions.Length)],
-                        ThumbnailUrl = thumb.ImageUrl,
-                        HighResolutionUrl = thumb.ImageUrl.Replace("_tn", ""),
-                        StandardUrl = thumb.ImageUrl.Replace("_tn", ""),
-                        CreatedAt = DateTime.Now.AddMinutes(createdAtMinutes -= 55),
-                        User = users[userIndex++%users.Count],
-                        GoldCount = _random.Next(10),
-                        NumberOfAnnotations = 2,
-                        CategoryId = c.Id,
-                        CategoryName = c.Name,
-                        Status = PhotoStatus.Active
-                    })
-                        .OrderByDescending(p => p.CreatedAt)
-                        .ToList()
-                };
-            }));
         }
 
         private void InitSampleUsers()
         {
-            _sampleUsers = new List<User>();
-            for (var i = 1; i <= 11; i++)
-            {
-                _sampleUsers.Add(new User
-                {
-                    ProfilePictureUrl =
-                        $"https://canaryappstorage.blob.core.windows.net/dummy-container/a{i}_tn.jpg",
-                    UserId = Guid.NewGuid().ToString()
-                });
-            }
+            //_sampleUsers = new List<User>();
+            //for (var i = 1; i <= 11; i++)
+            //{
+            //    _sampleUsers.Add(new User
+            //    {
+            //        ProfilePictureUrl =
+            //            $"https://canaryappstorage.blob.core.windows.net/dummy-container/a{i}_tn.jpg",
+            //        UserId = Guid.NewGuid().ToString()
+            //    });
+            //}
         }
 
         private void InitTopCategories()
@@ -635,7 +501,7 @@ namespace PhotoSharingApp.Universal.Services
                 CreatedTime = DateTime.Now,
                 Id = Guid.NewGuid().ToString(),
                 Text = annotationText,
-                From = AppEnvironment.Instance.CurrentUser,
+                //From = AppEnvironment.Instance.CurrentUser,
                 GoldCount = goldCount
             };
 
@@ -645,7 +511,7 @@ namespace PhotoSharingApp.Universal.Services
 
             if (AppEnvironment.Instance.CurrentUser != null)
             {
-                AppEnvironment.Instance.CurrentUser.GoldBalance -= annotation.GoldCount;
+                //AppEnvironment.Instance.CurrentUser.GoldBalance -= annotation.GoldCount;
             }
 
             return annotation;
@@ -755,9 +621,10 @@ namespace PhotoSharingApp.Universal.Services
         {
             await SimulateWaitAndError();
 
-            AppEnvironment.Instance.CurrentUser.ProfilePictureUrl = photo.ThumbnailUrl;
+            //AppEnvironment.Instance.CurrentUser.ProfilePictureUrl = photo.ThumbnailUrl;
 
-            return AppEnvironment.Instance.CurrentUser;
+            //return AppEnvironment.Instance.CurrentUser;
+            return null;
         }
 
         /// <summary>
@@ -779,12 +646,12 @@ namespace PhotoSharingApp.Universal.Services
                 HighResolutionUrl = localPath,
                 StandardUrl = localPath,
                 CreatedAt = DateTime.Now,
-                User = AppEnvironment.Instance.CurrentUser
+                //User = AppEnvironment.Instance.CurrentUser
             };
 
             PhotoStreams.FirstOrDefault(s => s.CateogoryId == categoryId).Photos.Insert(0, photo);
 
-            AppEnvironment.Instance.CurrentUser.GoldBalance++;
+            //AppEnvironment.Instance.CurrentUser.GoldBalance++;
 
             return photo;
         }

@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Newtonsoft.Json;
+using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -28,6 +29,7 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class MyPetPage : Page
     {
+        private readonly INavigationFacade _navigationFacade = new NavigationFacade();
         private List<ReturnPet> ListPet { get; set; }
         private static ReturnUser User { get; set; }
         public MyPetPage()
@@ -48,7 +50,7 @@ namespace PhotoSharingApp.Universal.Views
                 if (User != null)
                 {
                     InitPetList(User).Wait();
-                    ListPetListView.ItemsSource = ListPet;
+                    PetListView.ItemsSource = ListPet;
                     //CategoriesComboBox.ItemsSource = PetCategory;
                     //CategoriesComboBox.SelectedIndex = 0;
                     NoConnectionGrid.Visibility = Visibility.Collapsed;
@@ -102,6 +104,11 @@ namespace PhotoSharingApp.Universal.Views
         private void AddNewPetButton_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(AddPetPage));
+        }
+
+        private void PetListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _navigationFacade.NavigateToPetDetail(ListPet[PetListView.SelectedIndex]);
         }
     }
 }

@@ -132,6 +132,8 @@ namespace PhotoSharingApp.Universal.Facades
 
         void NavigateToAccessoryDetail(ReturnAccessory accessory);
 
+        void NavigateToPetDetail(ReturnPet pet);
+
         /// <summary>
         /// Navigates to the signed-in user's profile view.
         /// </summary>

@@ -322,6 +322,11 @@ namespace PhotoSharingApp.Universal.Facades
             Navigate(typeof(AccessoryDetailViewModel), accessory);
         }
 
+        public void NavigateToPetDetail(ReturnPet pet)
+        {
+            Navigate(typeof(PetDetailViewModel), pet);
+        }
+
         /// <summary>
         /// Navigates to the signed-in user's profile view.
         /// </summary>

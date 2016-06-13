@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Newtonsoft.Json;
 using PhotoSharingApp.Universal.Models;
+using PhotoSharingApp.Universal.Services;
 using PhotoSharingApp.Universal.ViewModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -434,6 +435,19 @@ namespace PhotoSharingApp.Universal.Views
         {
             ConfirmPassWordPasswordBox.SelectAll();
             ErrorConfirmPasswordTextBlock.Visibility = Visibility.Collapsed;
+        }
+
+        private async void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            Authentication authentication = new Authentication();
+            authentication.LogOut();
+            AppEnvironment.Instance.CurrentUser = authentication.CurrentUser;
+            var dialog = new MessageDialog(
+                        "Thanks for used our services!",
+                        "Goodbye");
+            await dialog.ShowAsync();
+            Frame.Navigate(typeof(SignInPage), true);
+
         }
     }
 }

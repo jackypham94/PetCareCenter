@@ -44,7 +44,7 @@ namespace PhotoSharingApp.Universal.Services
             _resourceLoader = ResourceLoader.GetForCurrentView();
 
             // We need to be aware of when a sign-in happens.
-            AppEnvironment.Instance.CurrentUserChanged += AppEnvironment_CurrentUserChanged;
+            //AppEnvironment.Instance.CurrentUserChanged += AppEnvironment_CurrentUserChanged;
         }
 
         private void AppEnvironment_CurrentUserChanged(object sender, User e)

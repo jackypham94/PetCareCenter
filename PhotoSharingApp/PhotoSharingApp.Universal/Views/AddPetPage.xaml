@@ -81,9 +81,9 @@
                         <TextBlock Text="Status" Margin="0,5,0,0"></TextBlock>
                         <Grid Margin="0,5,0,0">
                             <ComboBox x:Name="StatusComboBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectedIndex="0">
-                                <ComboBoxItem>Normal</ComboBoxItem>
-                                <ComboBoxItem>Sick</ComboBoxItem>
-                                <ComboBoxItem>Other</ComboBoxItem>
+                                <ComboBoxItem Content="Normal"></ComboBoxItem>
+                                <ComboBoxItem Content="Sick"></ComboBoxItem>
+                                <ComboBoxItem Content="Other"></ComboBoxItem>
                             </ComboBox>
                         </Grid>
 

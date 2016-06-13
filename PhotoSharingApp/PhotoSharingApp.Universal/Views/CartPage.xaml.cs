@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Newtonsoft.Json;
 using PhotoSharingApp.Universal.Models;
+using PhotoSharingApp.Universal.Services;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -29,28 +30,31 @@ namespace PhotoSharingApp.Universal.Views
     public sealed partial class CartPage : Page
     {
         private List<ReturnBuyingDetail> BuyingDetails { get; set; }
-        private static ReturnUser User { get; set; }
+        private static ReturnUser CurrentUser { get; set; }
         public CartPage()
         {
             this.InitializeComponent();
-            
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            DeserelizeDataFromJson("user");
+            Authentication authentication = new Authentication();
+            authentication.GetCurrentUser();
+            CurrentUser = authentication.CurrentUser;
             try
             {
-                if (User != null)
+                if (CurrentUser != null)
                 {
-                    InitCartDetail(User).Wait();
+                    InitCartDetail(CurrentUser).Wait();
                     CartListView.ItemsSource = BuyingDetails;
                     NoConnectionGrid.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
                     // Navigate to Login page
+                    ErrorTextBlock.Text = "You must login first!";
+                    NoConnectionGrid.Visibility = Visibility.Visible;
                 }
             }
             catch (Exception ex)
@@ -80,22 +84,6 @@ namespace PhotoSharingApp.Universal.Views
                 }
             }
         }
-        public void DeserelizeDataFromJson(string fileName)
-        {
-            User = new ReturnUser();
-            var folder = Windows.Storage.ApplicationData.Current.LocalFolder;
-            var filePath = folder.Path + @"\" + fileName + ".json";
-            using (StreamReader file = File.OpenText(filePath))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                User = (ReturnUser)serializer.Deserialize(file, typeof(ReturnUser));
-                User.Password = Base64Decode(User.Password);
-            }
-        }
-        public static string Base64Decode(string base64EncodedData)
-        {
-            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
-            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
-        }
+        
     }
 }

@@ -71,8 +71,15 @@
                                         Margin="0,0,8,4" 
                                         Command="{Binding DataContext.PhotoThumbnailSelectedCommand, ElementName=LayoutRoot}" 
                                         CommandParameter="{Binding}">
-                                    <Image Width="{Binding ThumbnailImageSideLength, ElementName=PageRoot}"
+                                    <StackPanel>
+                                        <Image Width="{Binding ThumbnailImageSideLength, ElementName=PageRoot}"
                                            Height="{Binding ThumbnailImageSideLength, ElementName=PageRoot}" Margin="0" Source="{Binding ImagePath}" />
+                                        <TextBlock Margin="0,5,0,0" Text="{Binding Name}"></TextBlock>
+                                        <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Price}"></TextBlock>
+                                            <TextBlock Margin="5,0,0,0" Text="$"></TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
                                 </Button>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

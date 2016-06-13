@@ -56,7 +56,7 @@ namespace PhotoSharingApp.Universal.ViewModels
             BuyGoldCommand = new RelayCommand(OnBuyGold);
 
             // Get current user as UI will bind directly to it.
-            CurrentUser = AppEnvironment.Instance.CurrentUser;
+            //CurrentUser = AppEnvironment.Instance.CurrentUser;
         }
 
         /// <summary>

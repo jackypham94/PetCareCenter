@@ -155,7 +155,7 @@ namespace PhotoSharingApp.Universal.ViewModels
                 var currentUser = AppEnvironment.Instance.CurrentUser;
                 if (currentUser != null)
                 {
-                    return currentUser.UserId;
+                    //return currentUser.UserId;
                 }
 
                 return "Sign in to see your Id";

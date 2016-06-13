@@ -47,6 +47,7 @@ using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 using Windows.Storage.Streams;
 using Windows.UI.Popups;
+using PhotoSharingApp.Universal.Services;
 
 namespace PhotoSharingApp.Universal.Views
 {
@@ -166,8 +167,14 @@ namespace PhotoSharingApp.Universal.Views
             bool isRegstered = e.Parameter != null && (bool)e.Parameter;
             if (isRegstered)
             {
-                Frame.BackStack.RemoveAt(Frame.BackStackDepth - 1);
-                Frame.BackStack.RemoveAt(Frame.BackStackDepth - 1);
+                var framesToRemove = 2;
+                framesToRemove = Math.Min(framesToRemove, Frame.BackStackDepth);
+
+                while (framesToRemove > 0)
+                {
+                    Frame.BackStack.RemoveAt(Frame.BackStackDepth - 1);
+                    framesToRemove--;
+                }
             }
         }
 
@@ -212,11 +219,13 @@ namespace PhotoSharingApp.Universal.Views
                     if (response.IsSuccessStatusCode)
                     {
                         //UserInfo info = await response.Content.ReadAsAsync<UserInfo>();
+                        AppEnvironment.Instance.CurrentUser = user;
 
                         //encode password
                         user.Password = Base64Encode(user.Password);
                         //write to file "user.json"
                         await SerelizeDataToJson(user, "user");
+                        
 
                         // To do: Login to home page
                         isSignIn = true;

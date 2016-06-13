@@ -28,6 +28,7 @@ using PhotoSharingApp.Universal.Views;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using PhotoSharingApp.Universal.Services;
 
 namespace PhotoSharingApp.Universal.NavigationBar
 {
@@ -38,8 +39,11 @@ namespace PhotoSharingApp.Universal.NavigationBar
     public class ProfileNavigationBarMenuItem : NavigationBarMenuItemBase,
         INavigationBarMenuItem
     {
+        Authentication authentication = new Authentication();
         public ProfileNavigationBarMenuItem()
         {
+            authentication.GetCurrentUser();
+            AppEnvironment.Instance.CurrentUser = authentication.CurrentUser;
             AppEnvironment.Instance.CurrentUserChanged += CurrentUserChanged;
         }
 
@@ -49,23 +53,24 @@ namespace PhotoSharingApp.Universal.NavigationBar
         public Type DestPage
         {
             get { return AppEnvironment.Instance.CurrentUser == null ? typeof(SignInPage) : typeof(ProfilePage); }
+            //get { return authentication.CurrentUser == null ? typeof(SignInPage) : typeof(ProfilePage); }
         }
 
         /// <summary>
         /// Gets the image that is displayed in the navigation bar.
         /// </summary>
-        public override ImageSource Image
-        {
-            get
-            {
-                if (AppEnvironment.Instance.CurrentUser?.ProfilePictureUrl == null)
-                {
-                    return null;
-                }
+        //public override ImageSource Image
+        //{
+        //    get
+        //    {
+        //        if (AppEnvironment.Instance.CurrentUser?.ProfilePictureUrl == null)
+        //        {
+        //            return null;
+        //        }
 
-                return new BitmapImage(new Uri(AppEnvironment.Instance.CurrentUser.ProfilePictureUrl));
-            }
-        }
+        //        return new BitmapImage(new Uri(AppEnvironment.Instance.CurrentUser.ProfilePictureUrl));
+        //    }
+        //}
 
         /// <summary>
         /// Gets the title displayed in the navigation bar.
@@ -83,10 +88,11 @@ namespace PhotoSharingApp.Universal.NavigationBar
         /// </summary>
         public override Symbol Symbol
         {
-            get { return Symbol.Contact; }
+            //get { return Symbol.Contact; }
+            get { return AppEnvironment.Instance.CurrentUser == null ? Symbol.Contact : Symbol.Favorite; }
         }
 
-        void CurrentUserChanged(object sender, User e)
+        void CurrentUserChanged(object sender, ReturnUser e)
         {
             // Notify UI that user has changed.
             NotifyPropertyChanged(nameof(Image));

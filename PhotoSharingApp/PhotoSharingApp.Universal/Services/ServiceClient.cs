@@ -454,7 +454,7 @@ namespace PhotoSharingApp.Universal.Services
                 {
                     CreatedAt = DateTime.Now,
                     Text = annotationText,
-                    From = AppEnvironment.Instance.CurrentUser.ToDataContract(),
+                    //From = AppEnvironment.Instance.CurrentUser.ToDataContract(),
                     PhotoId = photo.Id,
                     PhotoOwnerId = photo.User.UserId,
                     GoldCount = goldCount
@@ -475,7 +475,7 @@ namespace PhotoSharingApp.Universal.Services
                     // the current user.
                     if (AppEnvironment.Instance.CurrentUser != null)
                     {
-                        AppEnvironment.Instance.CurrentUser.GoldBalance -= result.GoldCount;
+                        //AppEnvironment.Instance.CurrentUser.GoldBalance -= result.GoldCount;
                     }
                 }
 
@@ -510,9 +510,9 @@ namespace PhotoSharingApp.Universal.Services
 
             try
             {
-                var currentUserId = AppEnvironment.Instance.CurrentUser.UserId;
-                var registrationClient = new NotificationRegistrationClient();
-                await registrationClient.RegisterAsync(channel.Uri, new[] { "user:" + currentUserId });
+                //var currentUserId = AppEnvironment.Instance.CurrentUser.UserId;
+                //var registrationClient = new NotificationRegistrationClient();
+                //await registrationClient.RegisterAsync(channel.Uri, new[] { "user:" + currentUserId });
             }
             catch (Exception)
             {
@@ -620,7 +620,7 @@ namespace PhotoSharingApp.Universal.Services
             await _authenticationHandler.AuthenticateAsync(provider);
 
             var user = await GetCurrentUser();
-            AppEnvironment.Instance.CurrentUser = user;
+            //AppEnvironment.Instance.CurrentUser = user;
 
             RegisterForNotifications();
         }
@@ -685,17 +685,18 @@ namespace PhotoSharingApp.Universal.Services
         {
             try
             {
-                var userContract = AppEnvironment.Instance.CurrentUser.ToDataContract();
-                userContract.ProfilePhotoId = photo.Id;
+                //var userContract = AppEnvironment.Instance.CurrentUser.ToDataContract();
+                //userContract.ProfilePhotoId = photo.Id;
 
-                var result = await _mobileServiceClient.InvokeApiAsync<UserContract, UserContract>("user",
-                    userContract,
-                    HttpMethod.Post,
-                    null);
+                //var result = await _mobileServiceClient.InvokeApiAsync<UserContract, UserContract>("user",
+                //    userContract,
+                //    HttpMethod.Post,
+                //    null);
 
-                var updatedUser = result.ToDataModel();
-                AppEnvironment.Instance.CurrentUser = updatedUser;
-                return updatedUser;
+                //var updatedUser = result.ToDataModel();
+                //AppEnvironment.Instance.CurrentUser = updatedUser;
+                //return updatedUser;
+                return null;
             }
             catch (Exception e)
             {
@@ -738,7 +739,7 @@ namespace PhotoSharingApp.Universal.Services
                     CategoryId = categoryId,
                     Description = caption,
                     OSPlatform = AnalyticsInfo.VersionInfo.DeviceFamily,
-                    User = AppEnvironment.Instance.CurrentUser.ToDataContract(),
+                    //User = AppEnvironment.Instance.CurrentUser.ToDataContract(),
                     ThumbnailUrl =
                         sasContracts.FirstOrDefault(c => c.SasPhotoType == PhotoTypeContract.Thumbnail)?
                             .FullBlobUri.ToString(),

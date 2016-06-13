@@ -412,7 +412,7 @@ namespace PhotoSharingApp.Universal.ViewModels
                 var uploadedPhoto = await _petCareService.UploadPhoto(stream, file.Path, Comment, Category.Id);
 
                 // Refresh gold balance
-                AppEnvironment.Instance.CurrentUser = uploadedPhoto.User;
+                //AppEnvironment.Instance.CurrentUser = uploadedPhoto.User;
 
                 await _uploadFinishedHandler.OnUploadFinished(Category);
             }

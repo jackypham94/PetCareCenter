@@ -116,7 +116,7 @@ namespace PhotoSharingApp.Universal.Facades
                 await CurrentAppProxy.ReportConsumableFulfillmentAsync(productLicense.ProductId, receipt.TransactionId);
 
                 // Now update local gold balance
-                AppEnvironment.Instance.CurrentUser.GoldBalance = user.GoldBalance;
+                //AppEnvironment.Instance.CurrentUser.GoldBalance = user.GoldBalance;
             }
         }
     }

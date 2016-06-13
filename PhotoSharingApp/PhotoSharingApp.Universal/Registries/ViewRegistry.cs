@@ -38,20 +38,21 @@ namespace PhotoSharingApp.Universal.Registries
         /// </summary>
         public void Configure()
         {
-            NavigationFacade.AddType(typeof(StreamPage), typeof(StreamViewModel));
-            NavigationFacade.AddType(typeof(PhotoDetailsPage), typeof(PhotoDetailsViewModel));
+            //NavigationFacade.AddType(typeof(StreamPage), typeof(StreamViewModel));
+            //NavigationFacade.AddType(typeof(PhotoDetailsPage), typeof(PhotoDetailsViewModel));
             NavigationFacade.AddType(typeof(SettingsPage), typeof(SettingsViewModel));
             NavigationFacade.AddType(typeof(ProfilePage), typeof(ProfileViewModel));
             NavigationFacade.AddType(typeof(SignInPage), typeof(SignInViewModel));
             NavigationFacade.AddType(typeof(AboutPage), typeof(AboutViewModel));
             //NavigationFacade.AddType(typeof(UploadPage), typeof(UploadViewModel));
-            NavigationFacade.AddType(typeof(CropPage), typeof(CropViewModel));
-            NavigationFacade.AddType(typeof(CameraPage), typeof(CameraViewModel));
+            //NavigationFacade.AddType(typeof(CropPage), typeof(CropViewModel));
+            //NavigationFacade.AddType(typeof(CameraPage), typeof(CameraViewModel));
             NavigationFacade.AddType(typeof(CategoryPage), typeof(CategoryPageViewModel));
             NavigationFacade.AddType(typeof(WelcomePage), typeof(WelcomeViewModel));
             NavigationFacade.AddType(typeof(MainPage), typeof(MainPageViewModel));
             NavigationFacade.AddType(typeof(RegisterPage), typeof(RegisterViewModel));
             NavigationFacade.AddType(typeof(AccessoryPage), typeof(AccessoryDetailViewModel));
+            NavigationFacade.AddType(typeof(PetInfoPage), typeof(PetDetailViewModel));
 
 #if DEBUG
             NavigationFacade.AddType(typeof(DebugPage), typeof(DebugViewModel));

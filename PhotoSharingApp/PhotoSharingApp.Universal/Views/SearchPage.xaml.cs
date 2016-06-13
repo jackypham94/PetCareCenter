@@ -28,12 +28,13 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class SearchPage : Page
     {
-        private INavigationFacade _navigationFacade = new NavigationFacade();
+        private readonly INavigationFacade _navigationFacade = new NavigationFacade();
         private List<ReturnAccessoryCombination> AccessoryCombinations { get; set; }
         private List<ReturnAccessory> Accessories { get; set; }
         public SearchPage()
         {
             this.InitializeComponent();
+            NoConnectionGrid.Visibility = Visibility.Collapsed;
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)

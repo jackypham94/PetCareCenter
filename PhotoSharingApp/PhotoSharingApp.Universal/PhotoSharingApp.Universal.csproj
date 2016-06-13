@@ -210,6 +210,7 @@
     <Compile Include="NavigationBar\SearchNavigationBarMenuItem.cs" />
     <Compile Include="ServiceEnvironments\ServiceEnvironment.cs" />
     <Compile Include="ServiceEnvironments\ServiceEnvironmentBase.cs" />
+    <Compile Include="Services\Authentication.cs" />
     <Compile Include="Services\InsufficientBalanceException.cs" />
     <Compile Include="Services\SignInCompletionSource.cs" />
     <Compile Include="StateTriggers\DeviceFamilyTrigger.cs" />
@@ -332,6 +333,7 @@
     <Compile Include="ViewModels\IUploadFinishedHandler.cs" />
     <Compile Include="ViewModels\LeaderboardViewModel.cs" />
     <Compile Include="ViewModels\PageHeaderViewModel.cs" />
+    <Compile Include="ViewModels\PetDetailViewModel.cs" />
     <Compile Include="ViewModels\PhotoDetailsViewModel.cs" />
     <Compile Include="ViewModels\PhotoDetailsViewModelArgs.cs" />
     <Compile Include="ViewModels\PhotoDetailsViewModelPhotoIdArgs.cs" />

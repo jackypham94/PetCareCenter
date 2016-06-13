@@ -86,7 +86,7 @@ namespace PhotoSharingApp.Universal.Views
             newPet.Name = NameTextBox.Text.Trim();
             newPet.Age = int.Parse(AgeTextBox.Text.Trim());
             newPet.Gender = GenderComboBox.SelectedIndex;
-            if (StatusComboBox.SelectedItem != null) newPet.Status = StatusComboBox.SelectedItem.ToString();
+            newPet.Status = StatusComboBox.SelectionBoxItem.ToString();
             newPet.PetCategory = PetCategory[CategoriesComboBox.SelectedIndex];
 
             bool check = checkPet(newPet);
