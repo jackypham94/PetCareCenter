@@ -327,6 +327,11 @@ namespace PhotoSharingApp.Universal.Facades
             Navigate(typeof(PetDetailViewModel), pet);
         }
 
+        public void NavigateToCartPage()
+        {
+            Navigate(typeof(CartViewModel));
+        }
+
         /// <summary>
         /// Navigates to the signed-in user's profile view.
         /// </summary>

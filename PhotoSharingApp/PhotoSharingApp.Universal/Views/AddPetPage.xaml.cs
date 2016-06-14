@@ -18,7 +18,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Newtonsoft.Json;
+using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
+using PhotoSharingApp.Universal.Services;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -29,19 +31,38 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class AddPetPage : Page
     {
+        private readonly INavigationFacade _navigationFacade = new NavigationFacade();
+        private AppEnvironment environment = new AppEnvironment();
         private List<ReturnPetCategory> PetCategory { get; set; }
-        private static ReturnUser User { get; set; }
+        private static ReturnUser CurrentUser { get; set; }
         public AddPetPage()
         {
             this.InitializeComponent();
+            
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            InitData();
+            base.OnNavigatedTo(e);
+            Authentication authentication = new Authentication();
+            authentication.GetCurrentUser();
+            CurrentUser = authentication.CurrentUser;
+            if (CurrentUser == null)
+            {
+                NoConnectionGrid.Visibility = Visibility.Collapsed;
+                AuthenticationButton.Visibility = Visibility.Visible;
+                MainScrollViewer.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                AuthenticationButton.Visibility = Visibility.Collapsed;
+                MainScrollViewer.Visibility = Visibility.Visible;
+                InitializeData();
+            }
+            
         }
 
 
-        private void InitData()
+        private void InitializeData()
         {
             try
             {
@@ -83,6 +104,7 @@ namespace PhotoSharingApp.Universal.Views
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
             ReturnPet newPet = new ReturnPet();
+            newPet.Id = -1;
             newPet.Name = NameTextBox.Text.Trim();
             newPet.Age = int.Parse(AgeTextBox.Text.Trim());
             newPet.Gender = GenderComboBox.SelectedIndex;
@@ -95,10 +117,10 @@ namespace PhotoSharingApp.Universal.Views
                 if (check)
                 {
                     DeserelizeDataFromJson("user");
-                    if (User != null)
+                    if (CurrentUser != null)
                     {
                         NoConnectionGrid.Visibility = Visibility.Collapsed;
-                        newPet.user = User;
+                        newPet.user = CurrentUser;
                         RequestToApi(newPet).Wait();
                     }
                     else
@@ -141,14 +163,14 @@ namespace PhotoSharingApp.Universal.Views
 
         public void DeserelizeDataFromJson(string fileName)
         {
-            User = new ReturnUser();
+            CurrentUser = new ReturnUser();
             var folder = Windows.Storage.ApplicationData.Current.LocalFolder;
             var filePath = folder.Path + @"\" + fileName + ".json";
             using (StreamReader file = File.OpenText(filePath))
             {
                 JsonSerializer serializer = new JsonSerializer();
-                User = (ReturnUser)serializer.Deserialize(file, typeof(ReturnUser));
-                User.Password = Base64Decode(User.Password);
+                CurrentUser = (ReturnUser)serializer.Deserialize(file, typeof(ReturnUser));
+                CurrentUser.Password = Base64Decode(CurrentUser.Password);
             }
         }
         public static string Base64Decode(string base64EncodedData)
@@ -186,6 +208,11 @@ namespace PhotoSharingApp.Universal.Views
         {
             AgeTextBox.SelectAll();
             ErrorAgeTextBlock.Visibility = Visibility.Collapsed;
+        }
+
+        private void AuthenticationButton_Click(object sender, RoutedEventArgs e)
+        {
+            _navigationFacade.NavigateToSignInPage();
         }
     }
 }

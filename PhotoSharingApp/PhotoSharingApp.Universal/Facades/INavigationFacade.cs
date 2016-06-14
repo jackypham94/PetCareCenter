@@ -134,6 +134,8 @@ namespace PhotoSharingApp.Universal.Facades
 
         void NavigateToPetDetail(ReturnPet pet);
 
+        void NavigateToCartPage();
+
         /// <summary>
         /// Navigates to the signed-in user's profile view.
         /// </summary>

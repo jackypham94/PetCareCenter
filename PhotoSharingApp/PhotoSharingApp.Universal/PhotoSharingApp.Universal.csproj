@@ -114,8 +114,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="Assets\Images\about.png" />
+    <Content Include="Assets\Images\addYourPet.png" />
+    <Content Include="Assets\Images\cat.png" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
-    <Content Include="Assets\Login\Login.png" />
     <Content Include="Assets\Square150x150Logo.scale-400.png" />
     <Content Include="Assets\Square44x44Logo.scale-400.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-256_altform-unplated.png" />
@@ -370,6 +372,9 @@
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BasePage.cs" />
+    <Compile Include="Views\BuyingDetailPage.xaml.cs">
+      <DependentUpon>BuyingDetailPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CameraPage.xaml.cs">
       <DependentUpon>CameraPage.xaml</DependentUpon>
     </Compile>
@@ -415,9 +420,6 @@
     </Compile>
     <Compile Include="Views\PetInfoPage.xaml.cs">
       <DependentUpon>PetInfoPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PhotoDetailsPage.xaml.cs">
-      <DependentUpon>PhotoDetailsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LeaderboardsPage.xaml.cs">
       <DependentUpon>LeaderboardsPage.xaml</DependentUpon>
@@ -533,6 +535,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\BuyingDetailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CameraPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -590,10 +596,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PetInfoPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\PhotoDetailsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

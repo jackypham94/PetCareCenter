@@ -17,7 +17,7 @@
                                                  FromVerticalOffset="100" />
                         </TransitionCollection>
                     </ItemsControl.ItemContainerTransitions>
-                    <Path Data="M18,16H6V15.1C6,13.1 10,12 12,12C14,12 18,13.1 18,15.1M12,5.3C13.5,5.3 14.7,6.5 14.7,8C14.7,9.5 13.5,10.7 12,10.7C10.5,10.7 9.3,9.5 9.3,8C9.3,6.5 10.5,5.3 12,5.3M19,2H5C3.89,2 3,2.89 3,4V18A2,2 0 0,0 5,20H9L12,23L15,20H19A2,2 0 0,0 21,18V4C21,2.89 20.1,2 19,2Z"
+                    <Path Data="M18,19H6V17.6C6,15.6 10,14.5 12,14.5C14,14.5 18,15.6 18,17.6M12,7A3,3 0 0,1 15,10A3,3 0 0,1 12,13A3,3 0 0,1 9,10A3,3 0 0,1 12,7M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z"
                               Fill="Teal" Margin="10,3,6,5" Stretch="Uniform" Width="70" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.ZIndex="1"/>
 
                     <TextBlock x:Name="DemoBlock" Foreground="Teal" FontSize="20" Text="Profile" HorizontalAlignment="Left"/>

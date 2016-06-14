@@ -29,18 +29,18 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class CategoryPage : Page
+    public sealed partial class CategoryPage : BasePage
     {
         private INavigationFacade _navigationFacade = new NavigationFacade();
         private int _thumbnailImageSideLength;
-        private readonly CategoryPageViewModel _viewModel;
+        //private readonly CategoryPageViewModel _viewModel;
         private ReturnAccessoryCombination Acessory { get; set; }
         public CategoryPage()
         {
             this.InitializeComponent();
             SizeChanged += CategoryPage_SizeChanged;
-            _viewModel = ServiceLocator.Current.GetInstance<CategoryPageViewModel>();
-            DataContext = _viewModel;
+            //_viewModel = ServiceLocator.Current.GetInstance<CategoryPageViewModel>();
+            //DataContext = _viewModel;
         }
 
         private void CategoryPage_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -55,7 +55,7 @@ namespace PhotoSharingApp.Universal.Views
             AccessoryListView.ItemsSource = Acessory.ListOfAccessory;
             HeaderTextBlock.Text = Acessory.Category.CategoryName.ToUpper();
             base.OnNavigatedTo(e);
-            await _viewModel.LoadState();
+            //await _viewModel.LoadState();
         }
 
         public async Task InitializeAccessoriesDetails(int id)
@@ -86,7 +86,7 @@ namespace PhotoSharingApp.Universal.Views
                 if (value != _thumbnailImageSideLength)
                 {
                     _thumbnailImageSideLength = value;
-                    //NotifyPropertyChanged();
+                    NotifyPropertyChanged();
                 }
             }
         }

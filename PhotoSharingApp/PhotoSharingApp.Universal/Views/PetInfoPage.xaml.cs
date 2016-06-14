@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Serialization;
+using PhotoSharingApp.Universal.Services;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -30,6 +31,7 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class PetInfoPage : Page
     {
+        private static ReturnUser CurrentUser { get; set; }
         private ReturnPet Pet { get; set; }
         public PetInfoPage()
         {
@@ -37,24 +39,30 @@ namespace PhotoSharingApp.Universal.Views
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter != null)
+            Authentication authentication = new Authentication();
+            authentication.GetCurrentUser();
+            CurrentUser = authentication.CurrentUser;
+            if (e.Parameter != null && CurrentUser !=null)
             {
                 var args = SerializationHelper.Deserialize<ReturnPet>(e.Parameter as string);
                 try
                 {
-                    InitializePetInfo(args.Id).Wait();
+                    InitializePetInfo(CurrentUser,args.Id).Wait();
 
                     NameTextBlock.Text = Pet.Name;
                     NoConnectionGrid.Visibility = Visibility.Collapsed;
 
                 }
-                catch (AggregateException)
+                catch (Exception ex)
                 {
-                    NoConnectionGrid.Visibility = Visibility.Visible;
+                    if (ex is AggregateException || ex is TimeoutException)
+                    {
+                        NoConnectionGrid.Visibility = Visibility.Visible;
+                    }
                 }
             }
         }
-        public async Task InitializePetInfo(int id)
+        public async Task InitializePetInfo(ReturnUser user, int id)
         {
             using (var client = new HttpClient())
             {
@@ -66,7 +74,7 @@ namespace PhotoSharingApp.Universal.Views
 
                 // New code:
                 String apiUrl = "/api/Pets/" + id;
-                HttpResponseMessage response = await client.GetAsync(apiUrl).ConfigureAwait(false);
+                HttpResponseMessage response = await client.PostAsJsonAsync(apiUrl, user).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     Pet = await response.Content.ReadAsAsync<ReturnPet>();

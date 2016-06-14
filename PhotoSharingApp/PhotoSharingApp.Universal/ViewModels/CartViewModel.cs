@@ -24,13 +24,19 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Views;
 using Windows.ApplicationModel.Resources;
+using Windows.UI.Popups;
+using PhotoSharingApp.Universal.ComponentModel;
+using PhotoSharingApp.Universal.Services;
 
 namespace PhotoSharingApp.Universal.ViewModels
 {
@@ -39,81 +45,36 @@ namespace PhotoSharingApp.Universal.ViewModels
     /// </summary>
     public class CartViewModel : ViewModelBase
     {
+        public bool IsConnect { get; set; }
         private readonly INavigationFacade _navigationFacade;
+        private readonly IDialogService _dialogService;
 
-        private InstructionItem _selectedInstructionItem;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WelcomeViewModel" /> class.
-        /// </summary>
-        /// <param name="navigationFacade">The navigation facade.</param>
-        public CartViewModel(INavigationFacade navigationFacade)
+        public CartViewModel(INavigationFacade navigationFacade, IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
-            NavigateToTargetPageCommand = new RelayCommand<InstructionItem>(OnNavigateToTargetPage);
+            _dialogService = dialogService;
+            // Initialize commands
+            DeleteCommand = new RelayCommand<ReturnBuyingDetail>(OnDeleteSelected);
+            PhotoThumbnailSelectedCommand = new RelayCommand<ReturnAccessory>(OnPhotoThumbnailSelected);
 
-            InitializeInstructionItems();
         }
 
-        /// <summary>
-        /// The instructional items.
-        /// </summary>
-        public IList<InstructionItem> InstructionItems { get; private set; }
+        public RelayCommand<ReturnBuyingDetail> DeleteCommand { get; private set; }
+
+        public RelayCommand<ReturnAccessory> PhotoThumbnailSelectedCommand { get; private set; }
+
+        public ReturnBuyingDetail SelectedBuyingDetail { get; set; }
+
+        public ObservableCollection<ReturnBuyingDetail> Cart { get; set; } =
+            new ObservableCollection<ReturnBuyingDetail>();
 
         /// <summary>
-        /// Gets the navigate to target page command.
+        /// Gets the user selected command.
         /// </summary>
-        public RelayCommand<InstructionItem> NavigateToTargetPageCommand { get; }
+        public RelayCommand<User> UserSelectedCommand { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the current instructional item.
-        /// </summary>
-        public InstructionItem SelectedInstructionItem
-        {
-            get { return _selectedInstructionItem; }
-            set
-            {
-                if (value != _selectedInstructionItem)
-                {
-                    _selectedInstructionItem = value;
-                    NotifyPropertyChanged(nameof(SelectedInstructionItem));
-                }
-            }
-        }
-
-        private void InitializeInstructionItems()
-        {
-            InstructionItems = new List<InstructionItem>();
-
-            var resourceLoader = ResourceLoader.GetForCurrentView();
-
-            var appName = ResourceLoader.GetForCurrentView().GetString("AppName/Text");
-
-            InstructionItems.Add(new InstructionItem(resourceLoader.GetString("WelcomePage_Instruction1_Title"),
-                string.Format(resourceLoader.GetString("WelcomePage_Instruction1_Content"), appName),
-                new Uri("ms-appx:///Assets/Welcome/Instruction1.jpg")));
-
-            InstructionItems.Add(new InstructionItem(resourceLoader.GetString("WelcomePage_Instruction2_Title"),
-                resourceLoader.GetString("WelcomePage_Instruction2_Content"),
-                new Uri("ms-appx:///Assets/Welcome/Instruction1.jpg")));
-
-            InstructionItems.Add(new InstructionItem(resourceLoader.GetString("WelcomePage_Instruction3_Title"),
-                resourceLoader.GetString("WelcomePage_Instruction3_Content"),
-                new Uri("ms-appx:///Assets/Welcome/Instruction2.jpg")));
-
-            InstructionItems.Add(new InstructionItem(resourceLoader.GetString("WelcomePage_Instruction4_Title"),
-                resourceLoader.GetString("WelcomePage_Instruction4_Content"),
-                new Uri("ms-appx:///Assets/Welcome/Instruction3.jpg")));
-
-            InstructionItems.Add(new InstructionItem(resourceLoader.GetString("WelcomePage_Instruction5_Title"),
-                resourceLoader.GetString("WelcomePage_Instruction5_Content"),
-                new Uri("ms-appx:///Assets/Welcome/Instruction4.jpg")));
-
-            InstructionItems.Add(new InstructionItem(resourceLoader.GetString("WelcomePage_Instruction6_Title"),
-                resourceLoader.GetString("WelcomePage_Instruction6_Content"),
-                null,
-                typeof(MainPage)));
-        }
+        readonly Authentication _authentication = new Authentication();
+        private static ReturnUser CurrentUser { get; set; }
 
         /// <summary>
         /// Loads the state.
@@ -121,14 +82,130 @@ namespace PhotoSharingApp.Universal.ViewModels
         public override async Task LoadState()
         {
             await base.LoadState();
+            try
+            {
+                Cart.Clear();
 
-            SelectedInstructionItem = null;
-            SelectedInstructionItem = InstructionItems.FirstOrDefault();
+                // Load categories
+                _authentication.GetCurrentUser();
+                CurrentUser = _authentication.CurrentUser;
+                InitCartDetail(CurrentUser).Wait();
+
+                if (CartItem != null)
+                {
+                    if (CartItem.Count > 0)
+                    {
+                        var cartItem = CartItem;
+
+                        foreach (var c in cartItem)
+                        {
+                            Cart.Add(c);
+
+                            // For UI animation purposes, we wait a little until the next
+                            // element is inserted.
+                            await Task.Delay(200);
+                        }
+                    }
+                }
+
+            }
+            catch (ServiceException)
+            {
+                
+            }
         }
 
-        private void OnNavigateToTargetPage(InstructionItem instructionItem)
+        public List<ReturnBuyingDetail> CartItem { get; private set; }
+
+        public async Task InitCartDetail(ReturnUser user)
         {
-            _navigationFacade.NavigateToMainPage();
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var resourceLoader = ResourceLoader.GetForCurrentView();
+                    string serverUrl = resourceLoader.GetString("ServerURL");
+                    client.BaseAddress = new Uri(serverUrl);
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.Timeout = TimeSpan.FromMilliseconds(2000);
+
+                    HttpResponseMessage response = await client.PostAsJsonAsync("/api/CartDetail", user).ConfigureAwait(false);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        CartItem = await response.Content.ReadAsAsync<List<ReturnBuyingDetail>>();
+                        IsConnect = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is TaskCanceledException || ex is AggregateException)
+                {
+                    IsConnect = false;
+                }
+            }
+            
         }
+
+        private async void OnDeleteSelected(ReturnBuyingDetail buyingDetail)
+        {
+            var confirmationResult = await
+                    _dialogService.ShowYesNoNotification("DeleteAccessory_Message",
+                        "DeleteAccessory_Title");
+            if (confirmationResult)
+            {
+                SelectedBuyingDetail = buyingDetail;
+                DeleteCartItem(CurrentUser, SelectedBuyingDetail.Accessory, 0);
+                _navigationFacade.NavigateToCartPage();
+            }
+        }
+
+        private async void DeleteCartItem(ReturnUser user, ReturnAccessory accessory, int quantity)
+        {
+            //request POST to api
+            using (var client = new HttpClient())
+            {
+                var resourceLoader = ResourceLoader.GetForCurrentView();
+                client.BaseAddress = new Uri(resourceLoader.GetString("ServerURL"));
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.Timeout = TimeSpan.FromMilliseconds(2000);
+
+                AddToCart cart = new AddToCart()
+                {
+                    Username = user.Username,
+                    Password = user.Password,
+                    AccessoryId = accessory.Id,
+                    Quantity = quantity
+                };
+
+                HttpResponseMessage response = await client.PutAsJsonAsync("api/UserBuyingDetail/Edit", cart);
+                if (response.IsSuccessStatusCode)
+                {
+                    //Ignore
+                }
+
+            }
+        }
+
+
+        private void OnPhotoThumbnailSelected(ReturnAccessory accessory)
+        {
+            //var categoryPreview = Cả.SingleOrDefault(c => c.ListOfAccessory.Contains(accessory));
+
+            //if (categoryPreview != null)
+            //{
+            //    //_navigationFacade.NavigateToPhotoStream(categoryPreview, accessory);
+            //    _navigationFacade.NavigateToAccessoryDetail(categoryPreview, accessory);
+            //    //_navigationFacade.NavigateToRegisterPage();
+            //}
+        }
+
+        private void OnUserSelected(User user)
+        {
+            _navigationFacade.NavigateToProfileView(user);
+        }
+
     }
 }

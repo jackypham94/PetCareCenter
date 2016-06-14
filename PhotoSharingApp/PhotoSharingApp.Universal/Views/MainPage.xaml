@@ -12,8 +12,8 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:stateTriggers="using:PhotoSharingApp.Universal.StateTriggers"
     mc:Ignorable="d"
-    x:Name="PageRoot"
-    d:DataContext="{d:DesignInstance design:CategoriesDesignViewModel, IsDesignTimeCreatable=True}">
+    x:Name="PageRoot">
+    <!--d:DataContext="{d:DesignInstance design:CategoriesDesignViewModel, IsDesignTimeCreatable=True}">-->
 
     <Page.Resources>
         <valueConverters:SelectedLegendItemToColorConverter x:Key="SelectedHeroImageToColorConverter" />
@@ -77,7 +77,7 @@
                                         <TextBlock Margin="0,5,0,0" Text="{Binding Name}"></TextBlock>
                                         <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                                             <TextBlock Text="{Binding Price}"></TextBlock>
-                                            <TextBlock Margin="5,0,0,0" Text="$"></TextBlock>
+                                            <TextBlock Margin="5,0,0,0" Foreground="DarkGoldenrod" Text="$"></TextBlock>
                                         </StackPanel>
                                     </StackPanel>
                                 </Button>
@@ -281,6 +281,33 @@
                           RelativePanel.AlignRightWithPanel="True"
                           IsTabStop="False" />
 
+                <Button x:Name="AddNewPetButton" Background="White" Padding="0"
+                        RelativePanel.Below="CategoriesList"
+                        RelativePanel.AlignRightWithPanel="True" 
+                        RelativePanel.AlignLeftWithPanel="True" 
+                        HorizontalAlignment="Stretch" Margin="12,0,12,15" Click="AddNewPetButton_Click">
+                    <Button.BorderBrush>
+                        <SolidColorBrush Color="Tomato" Opacity="0.5"/>
+                    </Button.BorderBrush>
+                    <Grid Margin="20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                              Fill="Teal" Stretch="Uniform" Width="25" Height="25" 
+                              HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
+                        <TextBlock Grid.Column="1" Text="Add your new pet" 
+                                   Margin="15,0,15,0" VerticalAlignment="Center"></TextBlock>
+                        <!--<Path Grid.Column="2" Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                                  Fill="Teal" Stretch="Uniform" Width="25" Height="25" 
+                              HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>-->
+                        <Image Width="70" Grid.Column="2" Source="../Assets/Images/cat.png" 
+                               Stretch="UniformToFill"></Image>
+                    </Grid>
+                </Button>
+
                 <!--<Grid RelativePanel.Below="categoriesList" RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignRightWithPanel="True" x:Name="goldPurchaseSignInPrompt">
 
@@ -304,7 +331,7 @@
                         <stateTriggers:DeviceFamilyTrigger DeviceFamily="Windows.Mobile" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="categoriesList.Margin" Value="0" />
+                        <Setter Target="CategoriesList.Margin" Value="0" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

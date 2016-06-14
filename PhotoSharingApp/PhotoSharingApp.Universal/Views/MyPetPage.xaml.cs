@@ -27,15 +27,48 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MyPetPage : Page
+    public sealed partial class MyPetPage : BasePage
     {
         private readonly INavigationFacade _navigationFacade = new NavigationFacade();
         private List<ReturnPet> ListPet { get; set; }
         private static ReturnUser User { get; set; }
+        private int _thumbnailImageSideLength;
         public MyPetPage()
         {
             this.InitializeComponent();
+            UpdateThumbnailSize();
+            SizeChanged += MyPetPage_SizeChanged;
         }
+
+        private void MyPetPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateThumbnailSize();
+        }
+
+        public int ThumbnailImageSideLength
+        {
+            get { return _thumbnailImageSideLength; }
+            set
+            {
+                if (value != _thumbnailImageSideLength)
+                {
+                    _thumbnailImageSideLength = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        private void UpdateThumbnailSize()
+        {
+            if (PageRoot.ActualWidth > 1300)
+            {
+                ThumbnailImageSideLength = 150;
+            }
+            else
+            {
+                ThumbnailImageSideLength = 100;
+            }
+        }
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             InitData();

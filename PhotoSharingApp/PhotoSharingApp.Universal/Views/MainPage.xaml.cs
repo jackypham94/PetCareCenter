@@ -148,5 +148,10 @@ namespace PhotoSharingApp.Universal.Views
                 ThumbnailImageSideLength = 100;
             }
         }
+
+        private void AddNewPetButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(AddPetPage));
+        }
     }
 }

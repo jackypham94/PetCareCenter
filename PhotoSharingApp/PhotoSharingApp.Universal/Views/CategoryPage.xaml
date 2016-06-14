@@ -1,4 +1,4 @@
-﻿<Page
+﻿<local:BasePage
     x:Class="PhotoSharingApp.Universal.Views.CategoryPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -14,58 +14,37 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <valueConverters:SelectedLegendItemToColorConverter x:Key="SelectedHeroImageToColorConverter" />
-        <DataTemplate x:Key="CategoryListItemTemplate">
-            <Button Background="White" Padding="0" 
-                                        Margin="0,0,8,4" 
-                                        Command="{Binding DataContext.PhotoThumbnailSelectedCommand, ElementName=LayoutRoot}" 
-                                        CommandParameter="{Binding}">
+        <DataTemplate x:Key="AccessoryListItemTemplate">
+            <Grid Margin="5">
+                <Grid.Transitions>
+                    <TransitionCollection>
+                        <AddDeleteThemeTransition/>
+                    </TransitionCollection>
+                </Grid.Transitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
                 <Image Width="{Binding ThumbnailImageSideLength, ElementName=PageRoot}"
-                                           Height="{Binding ThumbnailImageSideLength, ElementName=PageRoot}" Margin="0" Source="{Binding ImagePath}" />
-            </Button>
+                       Height="{Binding ThumbnailImageSideLength, ElementName=PageRoot}" 
+                       Margin="0" Source="{Binding ImagePath}" />
+                <ItemsControl Grid.Row="1">
+                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                        <TextBlock Text="Name:"></TextBlock>
+                        <TextBlock Text="{Binding Category.CategoryName}" Margin="5,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                        <TextBlock Text="Available:"></TextBlock>
+                        <TextBlock Text="{Binding StockQuantity}" Margin="5,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                        <TextBlock Text="Price:"></TextBlock>
+                        <TextBlock Text="{Binding Price}" Margin="5,0,0,0"/>
+                        <TextBlock Text="$" Foreground="DarkGoldenrod" Margin="3,0,0,0"></TextBlock>
+                    </StackPanel>
+                </ItemsControl>
+            </Grid>
         </DataTemplate>
-        <Style x:Key="ListViewItemContainerStyle" TargetType="ListViewItem">
-            <Setter Property="IsTabStop" Value="False" />
-            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
-            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
-            <Setter Property="IsHoldingEnabled" Value="True" />
-            <Setter Property="Padding" Value="12,0,12,0" />
-            <Setter Property="Margin" Value="0,12,0,0" />
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}" />
-            <Setter Property="MinHeight" Value="{ThemeResource ListViewItemMinHeight}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListViewItem">
-                        <ListViewItemPresenter CheckBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
-                                               ContentMargin="{TemplateBinding Padding}" CheckMode="Inline"
-                                               ContentTransitions="{TemplateBinding ContentTransitions}"
-                                               CheckBoxBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
-                                               DragForeground="{ThemeResource ListViewItemDragForegroundThemeBrush}"
-                                               DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}"
-                                               DragBackground="{ThemeResource ListViewItemDragBackgroundThemeBrush}"
-                                               DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}"
-                                               FocusBorderBrush="{ThemeResource SystemControlForegroundAltHighBrush}"
-                                               FocusSecondaryBorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}"
-                                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                               PointerOverForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}"
-                                               PressedBackground="Transparent"
-                                               PlaceholderBackground="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}"
-                                               PointerOverBackground="Transparent"
-                                               ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}"
-                                               SelectedPressedBackground="{ThemeResource SystemControlHighlightListAccentHighBrush}"
-                                               SelectionCheckMarkVisualEnabled="True"
-                                               SelectedForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}"
-                                               SelectedPointerOverBackground="{ThemeResource SystemControlHighlightListAccentMediumBrush}"
-                                               SelectedBackground="{ThemeResource SystemControlHighlightListAccentLowBrush}"
-                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="LayoutRoot">
@@ -82,7 +61,7 @@
             </controls:PageHeader.HeaderContent>
         </controls:PageHeader>
 
-        <ScrollViewer Grid.Row="2" x:Name="mainScrollViewer" IsTabStop="False">
+        <ScrollViewer Grid.Row="2" x:Name="MainScrollViewer" IsTabStop="False">
 
             <!--<ListView RelativePanel.Below="heroImagesStateIndicator"
                           IsItemClickEnabled="True" SelectionMode="None"
@@ -92,7 +71,7 @@
                           x:Name="AccessoriesListView" RelativePanel.AlignLeftWithPanel="True"
                           RelativePanel.AlignRightWithPanel="True"
                           IsTabStop="False" />-->
-            <ListView x:Name="AccessoryListView" Margin="0,10,0,0" SelectionChanged="AccessoryListView_SelectionChanged">
+            <!--<ListView x:Name="AccessoryListView" Margin="0,10,0,0" SelectionChanged="AccessoryListView_SelectionChanged">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid Height="100" Margin="0,5">
@@ -109,53 +88,17 @@
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView>
+            </ListView>-->
+            <GridView x:Name="AccessoryListView"
+                      SelectionChanged="AccessoryListView_SelectionChanged"
+                      IsItemClickEnabled="True"
+                      Margin="12,10,12,0"
+                      ItemTemplate="{StaticResource AccessoryListItemTemplate}"
+                      RelativePanel.AlignLeftWithPanel="True"
+                      RelativePanel.AlignRightWithPanel="True"
+                      IsTabStop="False" />
 
         </ScrollViewer>
 
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <stateTriggers:DeviceFamilyTrigger DeviceFamily="Windows.Mobile" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="categoriesList.Margin" Value="0" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-            <!--<VisualStateGroup>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="HeroImageExpansionContainer.Visibility" Value="Collapsed" />
-                        <Setter Target="GoldButtonContainer.Visibility" Value="Collapsed" />
-                        <Setter Target="HeroImages.ColumnDefinitions[0].Width" Value="Auto" />
-                        <Setter Target="HeroImagesFlipView.MaxHeight" Value="360" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="900" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="HeroImageExpansionContainer.Visibility" Value="Visible" />
-                        <Setter Target="GoldButtonContainer.Visibility" Value="Visible" />
-                        <Setter Target="HeroImagesFlipView.MaxHeight" Value="400" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1300" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="heroImageExpansionContainer.Visibility" Value="Visible" />
-                        <Setter Target="heroImagesFlipView.MaxHeight" Value="500" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>-->
-        </VisualStateManager.VisualStateGroups>
     </Grid>
-</Page>
+</local:BasePage>

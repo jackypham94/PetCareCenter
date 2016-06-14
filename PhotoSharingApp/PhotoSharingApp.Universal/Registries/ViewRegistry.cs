@@ -47,6 +47,7 @@ namespace PhotoSharingApp.Universal.Registries
             //NavigationFacade.AddType(typeof(UploadPage), typeof(UploadViewModel));
             //NavigationFacade.AddType(typeof(CropPage), typeof(CropViewModel));
             //NavigationFacade.AddType(typeof(CameraPage), typeof(CameraViewModel));
+            NavigationFacade.AddType(typeof(CartPage), typeof(CartViewModel));
             NavigationFacade.AddType(typeof(CategoryPage), typeof(CategoryPageViewModel));
             NavigationFacade.AddType(typeof(WelcomePage), typeof(WelcomeViewModel));
             NavigationFacade.AddType(typeof(MainPage), typeof(MainPageViewModel));

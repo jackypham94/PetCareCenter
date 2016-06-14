@@ -26,15 +26,48 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class SearchPage : Page
+    public sealed partial class SearchPage : BasePage
     {
         private readonly INavigationFacade _navigationFacade = new NavigationFacade();
         private List<ReturnAccessoryCombination> AccessoryCombinations { get; set; }
         private List<ReturnAccessory> Accessories { get; set; }
+        private int _thumbnailImageSideLength;
         public SearchPage()
         {
             this.InitializeComponent();
             NoConnectionGrid.Visibility = Visibility.Collapsed;
+            SearchResultTextBlock.Visibility = Visibility.Collapsed;
+            UpdateThumbnailSize();
+            SizeChanged += SearchPage_SizeChanged;
+        }
+
+        private void SearchPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateThumbnailSize();
+        }
+
+        public int ThumbnailImageSideLength
+        {
+            get { return _thumbnailImageSideLength; }
+            set
+            {
+                if (value != _thumbnailImageSideLength)
+                {
+                    _thumbnailImageSideLength = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        private void UpdateThumbnailSize()
+        {
+            if (PageRoot.ActualWidth > 1300)
+            {
+                ThumbnailImageSideLength = 150;
+            }
+            else
+            {
+                ThumbnailImageSideLength = 100;
+            }
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
@@ -45,21 +78,26 @@ namespace PhotoSharingApp.Universal.Views
                 try
                 {
                     SearchByAccessoryName(nameSearch).Wait();
-                    AccessoryListView.ItemsSource = Accessories;
-                    CategoryListView.ItemsSource = null;
-                    if (Accessories == null)
+                    if (Accessories == null || Accessories.Count == 0)
                     {
-                        SearchResultTextBlock.Text = "NOT FOUND";
+                        SearchResultTextBlock.Visibility = Visibility.Visible;
                     }
                     else
                     {
-                        SearchResultTextBlock.Text = "";
+                        SearchResultTextBlock.Visibility = Visibility.Collapsed;
+                        AccessoryListView.ItemsSource = Accessories;
+                        CategoryListView.ItemsSource = null;
+
                     }
                     NoConnectionGrid.Visibility = Visibility.Collapsed;
                 }
-                catch (AggregateException)
+                catch (Exception ex)
                 {
-                    NoConnectionGrid.Visibility = Visibility.Visible;
+                    if (ex is TimeoutException || ex is AggregateException)
+                    {
+                        NoConnectionGrid.Visibility = Visibility.Visible;
+                    }
+
                 }
 
             }
@@ -68,21 +106,25 @@ namespace PhotoSharingApp.Universal.Views
                 try
                 {
                     SearchByCategoryName(nameSearch).Wait();
-                    AccessoryListView.ItemsSource = null;
-                    CategoryListView.ItemsSource = AccessoryCombinations;
                     if (AccessoryCombinations == null)
                     {
-                        SearchResultTextBlock.Text = "NOT FOUND";
+                        SearchResultTextBlock.Visibility = Visibility.Visible;
                     }
                     else
                     {
-                        SearchResultTextBlock.Text = "";
+                        SearchResultTextBlock.Visibility = Visibility.Collapsed;
+                        AccessoryListView.ItemsSource = null;
+                        CategoryListView.ItemsSource = AccessoryCombinations;
                     }
                     NoConnectionGrid.Visibility = Visibility.Collapsed;
                 }
-                catch (AggregateException)
+                catch (Exception ex)
                 {
-                    NoConnectionGrid.Visibility = Visibility.Visible;
+                    if (ex is TimeoutException || ex is AggregateException)
+                    {
+                        NoConnectionGrid.Visibility = Visibility.Visible;
+                    }
+
                 }
 
             }

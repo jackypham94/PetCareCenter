@@ -681,7 +681,7 @@ namespace PhotoSharingApp.Universal.Services
         /// </summary>
         /// <param name="photo">The new profile photo</param>
         /// <returns>The updated user</returns>
-        public async Task<User> UpdateUserProfilePhoto(Photo photo)
+        public Task<User> UpdateUserProfilePhoto(Photo photo)
         {
             try
             {
