@@ -53,6 +53,11 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             _navigationFacade = navigationFacade;
             _dialogService = dialogService;
+
+            _authentication.GetCurrentUser();
+            CurrentUser = _authentication.CurrentUser;
+            InitUserInfo(CurrentUser).Wait();
+
             // Initialize commands
             DeleteCommand = new RelayCommand<ReturnBuyingDetail>(OnDeleteSelected);
             PhotoThumbnailSelectedCommand = new RelayCommand<ReturnAccessory>(OnPhotoThumbnailSelected);
@@ -74,7 +79,14 @@ namespace PhotoSharingApp.Universal.ViewModels
         public RelayCommand<User> UserSelectedCommand { get; private set; }
 
         readonly Authentication _authentication = new Authentication();
-        private static ReturnUser CurrentUser { get; set; }
+
+        public ReturnUser CurrentUser { get; set; }
+
+        public List<ReturnBuyingDetail> CartItem { get; private set; }
+
+        public UserInfo UserInfo { get; private set; }
+
+        public double TotalPrice { get; private set; }
 
         /// <summary>
         /// Loads the state.
@@ -87,35 +99,39 @@ namespace PhotoSharingApp.Universal.ViewModels
                 Cart.Clear();
 
                 // Load categories
-                _authentication.GetCurrentUser();
-                CurrentUser = _authentication.CurrentUser;
+                
                 InitCartDetail(CurrentUser).Wait();
 
-                if (CartItem != null)
+                if (CartItem?.Count > 0)
                 {
-                    if (CartItem.Count > 0)
+                    var cartItem = CartItem;
+
+                    foreach (var c in cartItem)
                     {
-                        var cartItem = CartItem;
+                        Cart.Add(c);
 
-                        foreach (var c in cartItem)
-                        {
-                            Cart.Add(c);
-
-                            // For UI animation purposes, we wait a little until the next
-                            // element is inserted.
-                            await Task.Delay(200);
-                        }
+                        // For UI animation purposes, we wait a little until the next
+                        // element is inserted.
+                        await Task.Delay(200);
                     }
                 }
+                CountTotalPrice();
 
             }
             catch (ServiceException)
             {
-                
+
             }
         }
 
-        public List<ReturnBuyingDetail> CartItem { get; private set; }
+        public void CountTotalPrice()
+        {
+            TotalPrice = 0;
+            foreach (var c in Cart)
+            {
+                TotalPrice += (c.Accessory.Price * c.BuyingQuantity);
+            }
+        }
 
         public async Task InitCartDetail(ReturnUser user)
         {
@@ -145,7 +161,38 @@ namespace PhotoSharingApp.Universal.ViewModels
                     IsConnect = false;
                 }
             }
-            
+
+        }
+
+        public async Task InitUserInfo(ReturnUser user)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var resourceLoader = ResourceLoader.GetForCurrentView();
+                    string serverUrl = resourceLoader.GetString("ServerURL");
+                    client.BaseAddress = new Uri(serverUrl);
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.Timeout = TimeSpan.FromMilliseconds(2000);
+
+                    HttpResponseMessage response = await client.PostAsJsonAsync("api/Users/info", user).ConfigureAwait(false);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        UserInfo = await response.Content.ReadAsAsync<UserInfo>();
+                        IsConnect = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is TaskCanceledException || ex is AggregateException)
+                {
+                    IsConnect = false;
+                }
+            }
+
         }
 
         private async void OnDeleteSelected(ReturnBuyingDetail buyingDetail)

@@ -51,20 +51,19 @@ namespace PhotoSharingApp.Universal.Views
                         "Lorem Ipsum");
                     await dialog.ShowAsync();
                 }
-                catch (AggregateException)
+                catch (Exception ex)
                 {
+                    if (ex is TaskCanceledException || ex is AggregateException)
+                    {
+                        NoConnectionGrid.Visibility = Visibility.Visible;
+                    }
                 }
-                if (Acessories == null)
-                {
-                    NoConnectionGrid.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    NoConnectionGrid.Visibility = Visibility.Collapsed;
-                    CategoryListView.ItemsSource = Acessories.ListOfAccessory;
-                    TitleTextBlock.Text = Acessories.Category.CategoryName.ToUpper();
-                }
-                
+
+                NoConnectionGrid.Visibility = Visibility.Collapsed;
+                CategoryListView.ItemsSource = Acessories.ListOfAccessory;
+                TitleTextBlock.Text = Acessories.Category.CategoryName.ToUpper();
+
+
             }
         }
 

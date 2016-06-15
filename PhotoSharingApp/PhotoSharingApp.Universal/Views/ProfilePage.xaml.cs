@@ -56,7 +56,7 @@ namespace PhotoSharingApp.Universal.Views
             try
             {
                 CreateNewUser newUser = new CreateNewUser();
-                newUser.Name = user.Username;
+                newUser.Name = NameTextBox.Text.Trim();
                 newUser.Username = UsernameTextBox.Text.Trim();
                 newUser.Password = user.Password;
                 newUser.Email = EmailTextBox.Text.Trim();
@@ -151,7 +151,7 @@ namespace PhotoSharingApp.Universal.Views
                         EmailTextBox.Text = info.Email;
                         PhoneTextBox.Text = info.Phone;
                         AddressTextBox.Text = info.Address;
-                        GenderList.SelectedIndex = (int)info.Gender;
+                        if (info.Gender != null) GenderList.SelectedIndex = (int)info.Gender;
                         //PassWordPasswordBox.Password = user.Password;
                     }
                     else
@@ -162,7 +162,7 @@ namespace PhotoSharingApp.Universal.Views
                 }
                 catch (Exception ex)
                 {
-                    if (ex is TimeoutException || ex is AggregateException)
+                    if (ex is TaskCanceledException || ex is AggregateException)
                     {
                         var dialog = new MessageDialog("Cannot connect to server!", "Message");
                         await dialog.ShowAsync();

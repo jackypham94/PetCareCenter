@@ -136,10 +136,12 @@ namespace PhotoSharingApp.Universal.Facades
 
         void NavigateToCartPage();
 
+        void NavigateToBillPage(Bill bill);
+
         /// <summary>
         /// Navigates to the signed-in user's profile view.
         /// </summary>
-        void NavigateToProfileView();
+        void NavigateToProfilePage();
 
         /// <summary>
         /// Navigates to the given user's profile view.

@@ -332,10 +332,15 @@ namespace PhotoSharingApp.Universal.Facades
             Navigate(typeof(CartViewModel));
         }
 
+        public void NavigateToBillPage(Bill bill)
+        {
+            Navigate(typeof(BillViewModel), bill);
+        }
+
         /// <summary>
         /// Navigates to the signed-in user's profile view.
         /// </summary>
-        public void NavigateToProfileView()
+        public void NavigateToProfilePage()
         {
             Navigate(typeof(ProfileViewModel));
         }

@@ -55,7 +55,7 @@ namespace PhotoSharingApp.Universal.Views
                 }
                 catch (Exception ex)
                 {
-                    if (ex is AggregateException || ex is TimeoutException)
+                    if (ex is AggregateException || ex is TaskCanceledException)
                     {
                         NoConnectionGrid.Visibility = Visibility.Visible;
                     }

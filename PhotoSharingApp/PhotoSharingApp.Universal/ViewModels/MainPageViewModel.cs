@@ -383,7 +383,7 @@ namespace PhotoSharingApp.Universal.ViewModels
             }
             catch (Exception ex)
             {
-                if (ex is TimeoutException || ex is AggregateException)
+                if (ex is TaskCanceledException || ex is AggregateException)
                 {
                     IsConnect = false;
                     //AccessoryCombinations = new List<ReturnAccessoryCombination>();

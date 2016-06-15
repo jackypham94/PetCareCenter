@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -73,7 +75,7 @@ namespace PhotoSharingApp.Universal.Views
             }
             catch (Exception ex)
             {
-                if (ex is TimeoutException || ex is AggregateException)
+                if (ex is TaskCanceledException || ex is AggregateException)
                 {
                     NoConnectionGrid.Visibility = Visibility.Visible;
                 }
@@ -111,36 +113,29 @@ namespace PhotoSharingApp.Universal.Views
             newPet.Status = StatusComboBox.SelectionBoxItem.ToString();
             newPet.PetCategory = PetCategory[CategoriesComboBox.SelectedIndex];
 
-            bool check = checkPet(newPet);
+            bool check = CheckPet(newPet);
             try
             {
                 if (check)
                 {
-                    DeserelizeDataFromJson("user");
-                    if (CurrentUser != null)
-                    {
                         NoConnectionGrid.Visibility = Visibility.Collapsed;
                         newPet.user = CurrentUser;
-                        RequestToApi(newPet).Wait();
-                    }
-                    else
-                    {
-
-                    }
+                        RegisterNewPet(newPet).Wait();
                 }
             }
             catch (Exception ex)
             {
-                if (ex is AggregateException || ex is TimeoutException)
+                if (ex is AggregateException || ex is TaskCanceledException)
                 {
                     NoConnectionGrid.Visibility = Visibility.Visible;
+                    MainScrollViewer.Visibility = Visibility.Collapsed;
                 }
             }
             
 
         }
 
-        private bool checkPet(ReturnPet pet)
+        private bool CheckPet(ReturnPet pet)
         {
             var check = true;
             //check name
@@ -161,25 +156,7 @@ namespace PhotoSharingApp.Universal.Views
             return check;
         }
 
-        public void DeserelizeDataFromJson(string fileName)
-        {
-            CurrentUser = new ReturnUser();
-            var folder = Windows.Storage.ApplicationData.Current.LocalFolder;
-            var filePath = folder.Path + @"\" + fileName + ".json";
-            using (StreamReader file = File.OpenText(filePath))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                CurrentUser = (ReturnUser)serializer.Deserialize(file, typeof(ReturnUser));
-                CurrentUser.Password = Base64Decode(CurrentUser.Password);
-            }
-        }
-        public static string Base64Decode(string base64EncodedData)
-        {
-            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
-            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
-        }
-
-        public async Task RequestToApi(ReturnPet newPet)
+        public async Task RegisterNewPet(ReturnPet newPet)
         {
             using (var client = new HttpClient())
             {
@@ -193,7 +170,7 @@ namespace PhotoSharingApp.Universal.Views
                 HttpResponseMessage response = await client.PutAsJsonAsync("/api/Pets/add", newPet).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
-                    Frame.Navigate(typeof (MyPetPage));
+                    Frame.Navigate(typeof(MyPetPage));
                 }
             }
         }
@@ -213,6 +190,23 @@ namespace PhotoSharingApp.Universal.Views
         private void AuthenticationButton_Click(object sender, RoutedEventArgs e)
         {
             _navigationFacade.NavigateToSignInPage();
+        }
+
+        private async void PhotoPickerButton_Click(object sender, RoutedEventArgs e)
+        {
+            var openPicker = new FileOpenPicker();
+            openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            openPicker.FileTypeFilter.Add(".jpg");
+            openPicker.FileTypeFilter.Add(".jpeg");
+            openPicker.FileTypeFilter.Add(".png");
+
+            StorageFile file = await openPicker.PickSingleFileAsync();
+            if (file != null)
+            {
+                // Application now has read/write access to the picked file
+                var dialog = new MessageDialog("Picked photo: " + file.Name, "Message");
+                await dialog.ShowAsync();
+            }
         }
     }
 }

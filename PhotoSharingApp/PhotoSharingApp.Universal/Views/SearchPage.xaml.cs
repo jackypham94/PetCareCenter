@@ -72,13 +72,13 @@ namespace PhotoSharingApp.Universal.Views
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            string nameSearch = SearchTextBox.Text.Trim();
+            var nameSearch = SearchTextBox.Text.Trim();
             if (TypeComboBox.SelectedIndex == 0)
             {
                 try
                 {
                     SearchByAccessoryName(nameSearch).Wait();
-                    if (Accessories == null || Accessories.Count == 0)
+                    if (Accessories?.Count > 0)
                     {
                         SearchResultTextBlock.Visibility = Visibility.Visible;
                     }
@@ -87,26 +87,23 @@ namespace PhotoSharingApp.Universal.Views
                         SearchResultTextBlock.Visibility = Visibility.Collapsed;
                         AccessoryListView.ItemsSource = Accessories;
                         CategoryListView.ItemsSource = null;
-
                     }
                     NoConnectionGrid.Visibility = Visibility.Collapsed;
                 }
                 catch (Exception ex)
                 {
-                    if (ex is TimeoutException || ex is AggregateException)
+                    if (ex is TaskCanceledException || ex is AggregateException)
                     {
                         NoConnectionGrid.Visibility = Visibility.Visible;
                     }
-
                 }
-
             }
             else
             {
                 try
                 {
                     SearchByCategoryName(nameSearch).Wait();
-                    if (AccessoryCombinations == null)
+                    if (AccessoryCombinations?.Count > 0)
                     {
                         SearchResultTextBlock.Visibility = Visibility.Visible;
                     }
@@ -120,13 +117,11 @@ namespace PhotoSharingApp.Universal.Views
                 }
                 catch (Exception ex)
                 {
-                    if (ex is TimeoutException || ex is AggregateException)
+                    if (ex is TaskCanceledException || ex is AggregateException)
                     {
                         NoConnectionGrid.Visibility = Visibility.Visible;
                     }
-
                 }
-
             }
         }
 

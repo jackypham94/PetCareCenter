@@ -194,6 +194,7 @@
     <Compile Include="Extensions\PhotoListExtensions.cs" />
     <Compile Include="Models\AccesoryItem.cs" />
     <Compile Include="Models\AddToCart.cs" />
+    <Compile Include="Models\Bill.cs" />
     <Compile Include="Models\CheckoutInfo.cs" />
     <Compile Include="Models\CreateNewUser.cs" />
     <Compile Include="Models\ReturnAccessory.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\NullToBoolConverter.cs" />
     <Compile Include="ValueConverters\RankConverter.cs" />
+    <Compile Include="ViewModels\BillViewModel.cs" />
     <Compile Include="ViewModels\AccessoryDetailViewModel.cs" />
     <Compile Include="ViewModels\CreateCategoryViewModel.cs" />
     <Compile Include="ValueConverters\InverseBooleanConverter.cs" />
@@ -372,6 +374,9 @@
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BasePage.cs" />
+    <Compile Include="Views\BillPage.xaml.cs">
+      <DependentUpon>BillPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BuyingDetailPage.xaml.cs">
       <DependentUpon>BuyingDetailPage.xaml</DependentUpon>
     </Compile>
@@ -532,6 +537,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AppShell.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BillPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

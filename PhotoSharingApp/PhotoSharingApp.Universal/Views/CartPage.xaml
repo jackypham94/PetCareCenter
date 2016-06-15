@@ -11,6 +11,7 @@
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:stateTriggers="using:PhotoSharingApp.Universal.StateTriggers"
+    xmlns:interop="using:Windows.UI.Xaml.Interop"
     mc:Ignorable="d"
     x:Name="PageRoot"
     d:DataContext="{d:DesignInstance design:CategoriesDesignViewModel, IsDesignTimeCreatable=True}">
@@ -36,10 +37,19 @@
                 <ItemsControl Grid.Column="1" Margin="5,0,0,0">
                     <StackPanel Margin="5,10,5,0" Orientation="Horizontal">
                         <TextBlock Text="Name:"></TextBlock>
-                        <TextBlock Text="{Binding Accessory.Name}"/>
+                        <TextBlock Margin="5,0,0,0" Text="{Binding Accessory.Name}"/>
                     </StackPanel>
-                    <TextBlock Margin="5,10,5,0" Text="{Binding Accessory.Price}"/>
-                    <TextBox Width="150" Text="{Binding BuyingQuantity}" HorizontalAlignment="Left"/>
+                    <StackPanel Margin="5,10,5,0" Orientation="Horizontal">
+                        <TextBlock Text="Price:"></TextBlock>
+                        <TextBlock Margin="5,0,0,0" Text="{Binding Accessory.Price}"/>
+                        <TextBlock Margin="5,0,0,0" Text="$" Foreground="DarkGoldenrod"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Margin="5,10,5,0" Orientation="Horizontal">
+                        <TextBlock Text="Quantity:"></TextBlock>
+                        <TextBlock Margin="5,0,0,0" Text="{Binding BuyingQuantity}"/>
+                    </StackPanel>
+                    <!--<TextBlock Margin="5,10,5,0" Text="{Binding Accessory.Price}"/>
+                    <TextBox Width="150" Text="{Binding BuyingQuantity}" HorizontalAlignment="Left"/>-->
                 </ItemsControl>
                 <ItemsControl Grid.Column="2"
                               Height="{Binding ThumbnailImageSideLength, ElementName=PageRoot}" 
@@ -65,7 +75,7 @@
                                Style="{ThemeResource SubheaderTextBlockStyle}" />
                     </Button>
                 </ItemsControl>
-                
+
             </Grid>
         </DataTemplate>
         <Style x:Key="ListViewItemContainerStyle" TargetType="ListViewItem">
@@ -140,6 +150,7 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -148,8 +159,9 @@
                 <TextBlock Text="CART" Style="{ThemeResource PageTitleTextBlockStyle}" />
             </controls:PageHeader.HeaderContent>
         </controls:PageHeader>
+
         <Grid Grid.Row="1" x:Name="NoConnectionGrid" Margin="0,10,0,0" 
-              Visibility="Visible" HorizontalAlignment="Center" VerticalAlignment="Top">
+              Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -162,42 +174,127 @@
                                 <Span>Please try again later</Span>
             </TextBlock>
         </Grid>
-        <Grid x:Name="ScrollGrid" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <ScrollViewer VerticalScrollBarVisibility="Hidden"
-                Grid.Row="0">
-                <RelativePanel>
-                    <ItemsControl RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-                        <ItemsControl.ItemContainerTransitions>
-                            <TransitionCollection>
-                                <EntranceThemeTransition IsStaggeringEnabled="True"
+        <Button Grid.Row="1" x:Name="AuthenticationButton" Background="White" Padding="0"
+                    RelativePanel.Below="CategoriesList"
+                    RelativePanel.AlignRightWithPanel="True" 
+                    RelativePanel.AlignLeftWithPanel="True" 
+                    HorizontalAlignment="Stretch" Margin="20" Click="AuthenticationButton_Click">
+            <Button.BorderBrush>
+                <SolidColorBrush Color="Tomato"/>
+            </Button.BorderBrush>
+            <Grid Margin="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Path Data="M11.83,1.73C8.43,1.79 6.23,3.32 6.23,3.32C5.95,3.5 5.88,3.91 6.07,4.19C6.27,4.5 6.66,4.55 6.96,4.34C6.96,4.34 11.27,1.15 17.46,4.38C17.75,4.55 18.14,4.45 18.31,4.15C18.5,3.85 18.37,3.47 18.03,3.28C16.36,2.4 14.78,1.96 13.36,1.8C12.83,1.74 12.32,1.72 11.83,1.73M12.22,4.34C6.26,4.26 3.41,9.05 3.41,9.05C3.22,9.34 3.3,9.72 3.58,9.91C3.87,10.1 4.26,10 4.5,9.68C4.5,9.68 6.92,5.5 12.2,5.59C17.5,5.66 19.82,9.65 19.82,9.65C20,9.94 20.38,10.04 20.68,9.87C21,9.69 21.07,9.31 20.9,9C20.9,9 18.15,4.42 12.22,4.34M11.5,6.82C9.82,6.94 8.21,7.55 7,8.56C4.62,10.53 3.1,14.14 4.77,19C4.88,19.33 5.24,19.5 5.57,19.39C5.89,19.28 6.07,18.92 5.95,18.6V18.6C4.41,14.13 5.78,11.2 7.8,9.5C9.77,7.89 13.25,7.5 15.84,9.1C17.11,9.9 18.1,11.28 18.6,12.64C19.11,14 19.08,15.32 18.67,15.94C18.25,16.59 17.4,16.83 16.65,16.64C15.9,16.45 15.29,15.91 15.26,14.77C15.23,13.06 13.89,12 12.5,11.84C11.16,11.68 9.61,12.4 9.21,14C8.45,16.92 10.36,21.07 14.78,22.45C15.11,22.55 15.46,22.37 15.57,22.04C15.67,21.71 15.5,21.35 15.15,21.25C11.32,20.06 9.87,16.43 10.42,14.29C10.66,13.33 11.5,13 12.38,13.08C13.25,13.18 14,13.7 14,14.79C14.05,16.43 15.12,17.54 16.34,17.85C17.56,18.16 18.97,17.77 19.72,16.62C20.5,15.45 20.37,13.8 19.78,12.21C19.18,10.61 18.07,9.03 16.5,8.04C14.96,7.08 13.19,6.7 11.5,6.82M11.86,9.25V9.26C10.08,9.32 8.3,10.24 7.28,12.18C5.96,14.67 6.56,17.21 7.44,19.04C8.33,20.88 9.54,22.1 9.54,22.1C9.78,22.35 10.17,22.35 10.42,22.11C10.67,21.87 10.67,21.5 10.43,21.23C10.43,21.23 9.36,20.13 8.57,18.5C7.78,16.87 7.3,14.81 8.38,12.77C9.5,10.67 11.5,10.16 13.26,10.67C15.04,11.19 16.53,12.74 16.5,15.03C16.46,15.38 16.71,15.68 17.06,15.7C17.4,15.73 17.7,15.47 17.73,15.06C17.79,12.2 15.87,10.13 13.61,9.47C13.04,9.31 12.45,9.23 11.86,9.25M12.08,14.25C11.73,14.26 11.46,14.55 11.47,14.89C11.47,14.89 11.5,16.37 12.31,17.8C13.15,19.23 14.93,20.59 18.03,20.3C18.37,20.28 18.64,20 18.62,19.64C18.6,19.29 18.3,19.03 17.91,19.06C15.19,19.31 14.04,18.28 13.39,17.17C12.74,16.07 12.72,14.88 12.72,14.88C12.72,14.53 12.44,14.25 12.08,14.25Z"
+                              Fill="Tomato" Stretch="Uniform" Width="25" Height="25" 
+                              HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
+                <TextBlock Grid.Column="1" Text="You must login first" Foreground="Tomato"
+                                   Margin="15,0,15,0" VerticalAlignment="Center"></TextBlock>
+            </Grid>
+        </Button>
+        <ScrollViewer x:Name="MainScrollViewer" Grid.Row="2" VerticalScrollBarVisibility="Hidden" IsTabStop="False">
+            <RelativePanel>
+                <ItemsControl RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                    <ItemsControl.ItemContainerTransitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition IsStaggeringEnabled="True"
                                                  FromVerticalOffset="100" />
-                            </TransitionCollection>
-                        </ItemsControl.ItemContainerTransitions>
-                        <ListView x:Name="CartListView" ItemsSource="{Binding Cart}"  RelativePanel.Below="HeroImagesStateIndicator"
-                              IsItemClickEnabled="True" SelectionMode="None"
-                              Margin="12,0"
-                              ItemTemplate="{StaticResource CartListItemTemplate}"
-                              ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
-                              RelativePanel.AlignLeftWithPanel="True"
-                              RelativePanel.AlignRightWithPanel="True"
-                              IsTabStop="False" />
-                    </ItemsControl>
-                </RelativePanel>
-            </ScrollViewer>
-            <StackPanel Grid.Row="1">
-                <TextBlock Text="Pick Delivery Date Before Checkout" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-                <DatePicker HorizontalAlignment="Stretch" Margin="0,5,0,0" VerticalAlignment="Center"/>
-                <Button x:Name="CheckoutButton" Height="70" Foreground="White" Background="Teal"
-                    RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True" HorizontalAlignment="Stretch" Margin="0,5,0,0" Click="CheckoutButton_Click">
-                    <Button.Content>
-                        <TextBlock Text="Checkout" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-                    </Button.Content>
-                </Button>
-            </StackPanel>
-        </Grid>
+                        </TransitionCollection>
+                    </ItemsControl.ItemContainerTransitions>
+                    <TextBlock Margin="20,0" Foreground="Teal" FontSize="25" Text="Your cart"></TextBlock>
+                    <ListView x:Name="CartListView" ItemsSource="{Binding Cart}"  
+                                  IsItemClickEnabled="True" SelectionMode="None"
+                                  Margin="12,0,12,0"
+                                  ItemTemplate="{StaticResource CartListItemTemplate}"
+                                  ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
+                                  RelativePanel.AlignLeftWithPanel="True"
+                                  RelativePanel.AlignRightWithPanel="True"
+                                  IsTabStop="False" />
+
+                    <Grid Margin="20,10,20,0" Background="WhiteSmoke" >
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock FontSize="20" Text="Total: " Margin="5"></TextBlock>
+                            <TextBlock x:Name="TotalTextBlock" Foreground="DarkGoldenrod" FontSize="20" Text="0" Margin="5,5,0,5"></TextBlock>
+                            <TextBlock Foreground="DarkGoldenrod" FontSize="20" Text="$" Margin="5,5,0,5"></TextBlock>
+                        </StackPanel>
+                    </Grid>
+                    <TextBlock Margin="20,20,20,0" Foreground="Teal" FontSize="25" Text="Information"></TextBlock>
+                    <TextBlock Text="Your Name" Margin="20,10,20,0"></TextBlock>
+                    <Grid Margin="20,5,20,0">
+                        <Path x:Name="NamePath" Data="M2,3H22C23.05,3 24,3.95 24,5V19C24,20.05 23.05,21 22,21H2C0.95,21 0,20.05 0,19V5C0,3.95 0.95,3 2,3M14,6V7H22V6H14M14,8V9H21.5L22,9V8H14M14,10V11H21V10H14M8,13.91C6,13.91 2,15 2,17V18H14V17C14,15 10,13.91 8,13.91M8,6A3,3 0 0,0 5,9A3,3 0 0,0 8,12A3,3 0 0,0 11,9A3,3 0 0,0 8,6Z"
+                              Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
+                        <TextBox x:Name="NameTextBox"
+                                 Text="{Binding UserInfo.Name}"
+                                 InputScope="Default" Foreground="Gray" 
+                                 BorderBrush="Gray" VerticalContentAlignment="Center" 
+                                 Padding="30,3,6,5" MaxWidth="456"/>
+                    </Grid>
+                    <TextBlock Text="Your Phone" Margin="20,10,20,0"></TextBlock>
+                    <Grid Margin="20,5,20,0">
+                        <Path x:Name="PhonePath" Data="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"
+                              Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
+                        <TextBox x:Name="PhoneTextBox"
+                                 Text="{Binding UserInfo.Phone}"
+                                 InputScope="TelephoneNumber" 
+                                 Foreground="Gray" BorderBrush="Gray" 
+                                 VerticalContentAlignment="Center" Padding="30,3,6,5" MaxWidth="456" />
+                    </Grid>
+                    <TextBlock Text="Delivery Address" Margin="20,10,20,0"></TextBlock>
+                    <Grid Margin="20,5,20,0">
+                        <Path x:Name="AddressPath" Data="M12,3L2,12H5V20H19V12H22L12,3M12,7.7C14.1,7.7 15.8,9.4 15.8,11.5C15.8,14.5 12,18 12,18C12,18 8.2,14.5 8.2,11.5C8.2,9.4 9.9,7.7 12,7.7M12,10A1.5,1.5 0 0,0 10.5,11.5A1.5,1.5 0 0,0 12,13A1.5,1.5 0 0,0 13.5,11.5A1.5,1.5 0 0,0 12,10Z"
+                                  Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" 
+                                  Width="15" Height="15" HorizontalAlignment="Left" 
+                                  VerticalAlignment="Center" Canvas.ZIndex="1"/>
+                        <TextBox x:Name="AddressTextBox" 
+                                 Text="{Binding UserInfo.Address}"
+                                 InputScope="Default" 
+                                 Foreground="Gray" BorderBrush="Gray" 
+                                 VerticalContentAlignment="Center" Padding="30,3,6,5" MaxWidth="456"/>
+                    </Grid>
+                    <TextBlock Text="Delivery Date" Margin="20,10,20,0"></TextBlock>
+                    <DatePicker x:Name="DeliveryDatePicker"
+                                    HorizontalAlignment="Stretch"
+                                    RelativePanel.Below="CartListView"
+                                    Margin="20,5,20,0"
+                                    VerticalAlignment="Center"/>
+                    <TextBlock Text="Do you want to edit more?" Margin="20,10,20,0"></TextBlock>
+                    <Button x:Name="EditInfoButton" Background="White" Padding="0"
+                            RelativePanel.Below="CategoriesList"
+                            RelativePanel.AlignRightWithPanel="True" 
+                            RelativePanel.AlignLeftWithPanel="True" 
+                            HorizontalAlignment="Stretch" Margin="20,10,20,15" Click="EditInfoButton_Click">
+                        <Button.BorderBrush>
+                            <SolidColorBrush Color="Gray" Opacity="0.5"/>
+                        </Button.BorderBrush>
+                        <Grid Margin="20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Path Data="M16.84,2.73C16.45,2.73 16.07,2.88 15.77,3.17L13.65,5.29L18.95,10.6L21.07,8.5C21.67,7.89 21.67,6.94 21.07,6.36L17.9,3.17C17.6,2.88 17.22,2.73 16.84,2.73M12.94,6L4.84,14.11L7.4,14.39L7.58,16.68L9.86,16.85L10.15,19.41L18.25,11.3M4.25,15.04L2.5,21.73L9.2,19.94L8.96,17.78L6.65,17.61L6.47,15.29"
+                                      Fill="Gray" Stretch="Uniform" Width="25" Height="25" 
+                                      HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
+                            <TextBlock Grid.Column="1" Text="Update another information" 
+                                   Margin="15,0,15,0" VerticalAlignment="Center"></TextBlock>
+                        </Grid>
+                    </Button>
+
+                </ItemsControl>
+            </RelativePanel>
+        </ScrollViewer>
+        <StackPanel Grid.Row="3">
+            <TextBlock Foreground="Tomato" Text="Make sure your information before Checkout" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"></TextBlock>
+            <Button x:Name="CheckoutButton" Height="70" Foreground="White" Background="Teal"
+                    RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True" 
+                    HorizontalAlignment="Stretch" Margin="0,5,0,0" Click="CheckoutButton_Click">
+                <Button.Content>
+                    <TextBlock Text="Checkout" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                </Button.Content>
+            </Button>
+        </StackPanel>
     </Grid>
 </local:BasePage>

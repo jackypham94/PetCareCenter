@@ -57,9 +57,12 @@ namespace PhotoSharingApp.Universal.Views
                     NoConnectionGrid.Visibility = Visibility.Collapsed;
 
                 }
-                catch (AggregateException)
+                catch (Exception ex)
                 {
-                    NoConnectionGrid.Visibility = Visibility.Visible;
+                    if (ex is TaskCanceledException || ex is AggregateException)
+                    {
+                        NoConnectionGrid.Visibility = Visibility.Visible;
+                    }
                 }
             }
         }

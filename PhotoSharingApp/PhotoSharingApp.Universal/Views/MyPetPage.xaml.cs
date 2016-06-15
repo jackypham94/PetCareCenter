@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Navigation;
 using Newtonsoft.Json;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
+using PhotoSharingApp.Universal.Services;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -32,6 +33,7 @@ namespace PhotoSharingApp.Universal.Views
         private readonly INavigationFacade _navigationFacade = new NavigationFacade();
         private List<ReturnPet> ListPet { get; set; }
         private static ReturnUser User { get; set; }
+        private static ReturnUser CurrentUser { get; set; }
         private int _thumbnailImageSideLength;
         public MyPetPage()
         {
@@ -71,7 +73,21 @@ namespace PhotoSharingApp.Universal.Views
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            InitData();
+            Authentication authentication = new Authentication();
+            authentication.GetCurrentUser();
+            CurrentUser = authentication.CurrentUser;
+            if (CurrentUser == null)
+            {
+                NoConnectionGrid.Visibility = Visibility.Collapsed;
+                AuthenticationButton.Visibility = Visibility.Visible;
+                MainScrollViewer.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                AuthenticationButton.Visibility = Visibility.Collapsed;
+                MainScrollViewer.Visibility = Visibility.Visible;
+                InitData();
+            }
         }
 
 
@@ -84,16 +100,15 @@ namespace PhotoSharingApp.Universal.Views
                 {
                     InitPetList(User).Wait();
                     PetListView.ItemsSource = ListPet;
-                    //CategoriesComboBox.ItemsSource = PetCategory;
-                    //CategoriesComboBox.SelectedIndex = 0;
                     NoConnectionGrid.Visibility = Visibility.Collapsed;
                 }
             }
             catch (Exception ex)
             {
-                if (ex is TimeoutException || ex is AggregateException)
+                if (ex is TaskCanceledException || ex is AggregateException)
                 {
                     NoConnectionGrid.Visibility = Visibility.Visible;
+                    MainScrollViewer.Visibility = Visibility.Collapsed;
                 }
 
             }
@@ -142,6 +157,11 @@ namespace PhotoSharingApp.Universal.Views
         private void PetListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _navigationFacade.NavigateToPetDetail(ListPet[PetListView.SelectedIndex]);
+        }
+
+        private void AuthenticationButton_Click(object sender, RoutedEventArgs e)
+        {
+            _navigationFacade.NavigateToSignInPage();
         }
     }
 }

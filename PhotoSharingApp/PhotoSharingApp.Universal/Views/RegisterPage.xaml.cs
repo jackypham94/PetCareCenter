@@ -285,7 +285,7 @@ namespace PhotoSharingApp.Universal.Views
                 }
                 catch (Exception ex)
                 {
-                    if (ex is TimeoutException || ex is AggregateException)
+                    if (ex is TaskCanceledException || ex is AggregateException)
                     {
                         var dialog = new MessageDialog("Cannot connect to server!", "Message");
                         await dialog.ShowAsync();

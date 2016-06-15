@@ -40,14 +40,21 @@ namespace PhotoSharingApp.Universal.Services
             CurrentUser = new ReturnUser();
             var folder = Windows.Storage.ApplicationData.Current.LocalFolder;
             var filePath = folder.Path + @"\" + fileName + ".json";
-            using (StreamReader file = File.OpenText(filePath))
+            try
             {
-                JsonSerializer serializer = new JsonSerializer();
-                CurrentUser = (ReturnUser)serializer.Deserialize(file, typeof(ReturnUser));
-                if (CurrentUser != null)
+                using (StreamReader file = File.OpenText(filePath))
                 {
-                    CurrentUser.Password = Base64Decode(CurrentUser.Password);
+                    JsonSerializer serializer = new JsonSerializer();
+                    CurrentUser = (ReturnUser)serializer.Deserialize(file, typeof(ReturnUser));
+                    if (CurrentUser != null)
+                    {
+                        CurrentUser.Password = Base64Decode(CurrentUser.Password);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+               //Ignore
             }
         }
         private static string Base64Decode(string base64EncodedData)

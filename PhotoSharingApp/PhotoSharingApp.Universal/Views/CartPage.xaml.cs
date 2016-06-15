@@ -1,10 +1,23 @@
 ﻿
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Microsoft.Practices.ServiceLocation;
 using PhotoSharingApp.Universal.Unity;
 using PhotoSharingApp.Universal.ViewModels;
 using Windows.Foundation;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
+using PhotoSharingApp.Universal.Facades;
+using PhotoSharingApp.Universal.Models;
+using PhotoSharingApp.Universal.Serialization;
+using PhotoSharingApp.Universal.Services;
+using User = Windows.System.User;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -18,9 +31,11 @@ namespace PhotoSharingApp.Universal.Views
         //Authentication authentication = new Authentication();
         //private List<ReturnBuyingDetail> BuyingDetails { get; set; }
         //private static ReturnUser CurrentUser { get; set; }
-
+        private readonly INavigationFacade _navigationFacade = new NavigationFacade();
         private int _thumbnailImageSideLength;
         private CartViewModel _viewModel;
+        private static ReturnUser CurrentUser { get; set; }
+
         public CartPage()
         {
             this.InitializeComponent();
@@ -33,31 +48,44 @@ namespace PhotoSharingApp.Universal.Views
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-
-            var loadData = e.NavigationMode != NavigationMode.Back;
-            _viewModel = ServiceLocator.Current.GetInstance<CartViewModel>(loadData);
-            DataContext = _viewModel;
-
-            NoConnectionGrid.Visibility = Visibility.Collapsed;
-            ScrollGrid.Visibility = Visibility.Visible;
-            if (loadData)
+            Authentication authentication = new Authentication();
+            authentication.GetCurrentUser();
+            CurrentUser = authentication.CurrentUser;
+            if (CurrentUser == null)
             {
-                await _viewModel.LoadState();
+                NoConnectionGrid.Visibility = Visibility.Collapsed;
+                AuthenticationButton.Visibility = Visibility.Visible;
+                MainScrollViewer.Visibility = Visibility.Collapsed;
             }
-            if (!_viewModel.IsConnect)
+            else
             {
-                NoConnectionGrid.Visibility = Visibility.Visible;
-                ScrollGrid.Visibility = Visibility.Collapsed;
-            }
+                AuthenticationButton.Visibility = Visibility.Collapsed;
+                MainScrollViewer.Visibility = Visibility.Visible;
+                var loadData = e.NavigationMode != NavigationMode.Back;
+                _viewModel = ServiceLocator.Current.GetInstance<CartViewModel>(loadData);
+                DataContext = _viewModel;
 
-            bool isSignIn = e.Parameter != null && (bool)e.Parameter;
-            if (isSignIn)
-            {
-                Frame.BackStack.RemoveAt(Frame.BackStackDepth - 1);
-            }
+                NoConnectionGrid.Visibility = Visibility.Collapsed;
+                MainScrollViewer.Visibility = Visibility.Visible;
+                if (loadData)
+                {
+                    await _viewModel.LoadState();
+                    TotalTextBlock.Text = _viewModel.TotalPrice.ToString(CultureInfo.InvariantCulture);
+                }
+                if (!_viewModel.IsConnect)
+                {
+                    NoConnectionGrid.Visibility = Visibility.Visible;
+                    MainScrollViewer.Visibility = Visibility.Collapsed;
+                }
 
-            //_viewModel.StartHeroImageSlideShow();
+                bool isSignIn = e.Parameter != null && (bool)e.Parameter;
+                if (isSignIn)
+                {
+                    Frame.BackStack.RemoveAt(Frame.BackStackDepth - 1);
+                }
+            }
         }
+
         private void CartPage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             UpdateThumbnailSize();
@@ -88,85 +116,113 @@ namespace PhotoSharingApp.Universal.Views
             }
         }
 
-        private void CheckoutButton_Click(object sender, RoutedEventArgs e)
+        public async Task UpdateUserInfo(CreateNewUser newUser)
         {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var resourceLoader = ResourceLoader.GetForCurrentView();
+                    string serverUrl = resourceLoader.GetString("ServerURL");
+                    client.BaseAddress = new Uri(serverUrl);
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.Timeout = TimeSpan.FromMilliseconds(2000);
+
+                    HttpResponseMessage response = await client.PutAsJsonAsync("api/Users/", newUser).ConfigureAwait(false);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is TaskCanceledException || ex is AggregateException)
+                {
+                    var dialog = new MessageDialog("Can not connect to server!", "Message");
+                    await dialog.ShowAsync();
+                }
+            }
 
         }
 
-        //protected override void OnNavigatedTo(NavigationEventArgs e)
-        //{
-        //    base.OnNavigatedTo(e);
-        //    authentication.GetCurrentUser();
-        //    CurrentUser = authentication.CurrentUser;
-        //    try
-        //    {
-        //        if (CurrentUser != null)
-        //        {
-        //            InitCartDetail(CurrentUser).Wait();
-        //            CartListView.ItemsSource = BuyingDetails;
-        //            NoConnectionGrid.Visibility = Visibility.Collapsed;
-        //        }
-        //        else
-        //        {
-        //            // Navigate to Login page
-        //            ErrorTextBlock.Text = "You must login first!";
-        //            NoConnectionGrid.Visibility = Visibility.Visible;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        if (ex is AggregateException || ex is TimeoutException)
-        //        {
-        //            NoConnectionGrid.Visibility = Visibility.Visible;
-        //        }
-        //    }
-        //}
+        public async Task CheckOut(CheckoutInfo checkout, UserInfo userInfo)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var resourceLoader = ResourceLoader.GetForCurrentView();
+                    string serverUrl = resourceLoader.GetString("ServerURL");
+                    client.BaseAddress = new Uri(serverUrl);
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.Timeout = TimeSpan.FromMilliseconds(2000);
 
+                    HttpResponseMessage response = await client.PutAsJsonAsync("api/Checkout/", checkout).ConfigureAwait(false);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        BuyingDetail = await response.Content.ReadAsAsync<List<ReturnBuyingDetail>>();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is TaskCanceledException || ex is AggregateException)
+                {
+                    var dialog = new MessageDialog("Can not connect to server!", "Message");
+                    await dialog.ShowAsync();
+                }
+            }
 
+        }
 
-        //private async void DeleteCartItemButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    try
-        //    {
-        //        DeleteCartItem(CurrentUser, BuyingDetails[CartListView.SelectedIndex].Accessory, 0);
-        //        BuyingDetails.RemoveAt(CartListView.SelectedIndex);
-        //    }
-        //    catch (HttpRequestException)
-        //    {
-        //        var dialog = new MessageDialog("Can not connect to server!", "Message");
-        //        await dialog.ShowAsync();
-        //    }
-        //}
+        private List<ReturnBuyingDetail> BuyingDetail { get; set; }
 
-        //private async void DeleteCartItem(ReturnUser user, ReturnAccessory accessory, int quantity)
-        //{
-        //    //request POST to api
-        //    using (var client = new HttpClient())
-        //    {
-        //        var resourceLoader = ResourceLoader.GetForCurrentView();
-        //        client.BaseAddress = new Uri(resourceLoader.GetString("ServerURL"));
-        //        client.DefaultRequestHeaders.Accept.Clear();
-        //        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        //        client.Timeout = TimeSpan.FromMilliseconds(2000);
+        private async void CheckoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            var data = _viewModel.Cart;
+            if (!(data?.Count > 0))
+            {
+                var dialog = new MessageDialog("Buying something before checkout!", "Empty cart");
+                await dialog.ShowAsync();
+                return;
+            }
+            var newUser = new CreateNewUser();
+            var userInfo = _viewModel.UserInfo;
+            var user = _viewModel.CurrentUser;
+            newUser.Name = NameTextBox.Text.Trim();
+            newUser.Username = userInfo.Username;
+            newUser.Password = user.Password;
+            newUser.Email = userInfo.Email;
+            newUser.Address = AddressTextBox.Text.Trim();
+            newUser.Phone = PhoneTextBox.Text.Trim();
+            newUser.Gender = userInfo.Gender;
+            newUser.NewPassword = user.Password;
+            UpdateUserInfo(newUser).Wait();
 
-        //        AddToCart cart = new AddToCart()
-        //        {
-        //            Username = user.Username,
-        //            Password = user.Password,
-        //            AccessoryId = accessory.Id,
-        //            Quantity = quantity
-        //        };
+            var checkoutInfo = new CheckoutInfo
+            {
+                Username = user.Username,
+                Password = user.Password,
+                PlanDate = DeliveryDatePicker.Date.DateTime
+            };
+            CheckOut(checkoutInfo, userInfo).Wait();
+            var bill = new Bill
+            {
+                ReturnBuyingDetail = BuyingDetail,
+                PlanDate = DeliveryDatePicker.Date.DateTime,
+                UserInfo = userInfo
+            };
+            _navigationFacade.NavigateToBillPage(bill);
+        }
 
-        //        HttpResponseMessage response = await client.PutAsJsonAsync("api/UserBuyingDetail/Edit", cart);
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            var dialog = new MessageDialog(
-        //            "You have been deleted ID: " + accessory.Id + " Name: " + accessory.Name,
-        //            "Congratulation");
-        //            await dialog.ShowAsync();
-        //        }
+        private void AuthenticationButton_Click(object sender, RoutedEventArgs e)
+        {
+            _navigationFacade.NavigateToSignInPage();
+        }
 
-        //    }
-        //}
+        private void EditInfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            _navigationFacade.NavigateToProfilePage();
+        }
     }
 }
