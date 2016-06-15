@@ -22,6 +22,7 @@ using Windows.UI.Xaml.Navigation;
 using Newtonsoft.Json;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Serialization;
+using PhotoSharingApp.Universal.Services;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -30,39 +31,62 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class AccessoryPage : Page
+    public sealed partial class AccessoryPage : BasePage
     {
         private ReturnAccessory Acessories { get; set; }
-        private static ReturnUser User { get; set; }
+        private static ReturnUser CurrentUser { get; set; }
+        readonly Authentication _authentication = new Authentication();
+        private int _thumbnailImageSideLength;
         public AccessoryPage()
         {
             this.InitializeComponent();
+            UpdateThumbnailSize();
+            SizeChanged += AccessoryPage_SizeChanged;
+            AuthenticationButton.Visibility = Visibility.Collapsed;
+        }
+
+        private void AccessoryPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateThumbnailSize();
+        }
+
+        public int ThumbnailImageSideLength
+        {
+            get { return _thumbnailImageSideLength; }
+            set
+            {
+                if (value == _thumbnailImageSideLength) return;
+                _thumbnailImageSideLength = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private void UpdateThumbnailSize()
+        {
+            ThumbnailImageSideLength = PageRoot.ActualWidth > 1300 ? 500 : 300;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter != null)
+            if (e.Parameter == null) return;
+            var args = SerializationHelper.Deserialize<ReturnAccessory>(e.Parameter as string);
+            try
             {
-                var args = SerializationHelper.Deserialize<ReturnAccessory>(e.Parameter as string);
-                try
-                {
-                    InitializeAccessoriesDetails(args.Id).Wait();
+                InitializeAccessoriesDetails(args.Id).Wait();
 
-                    Image.Source = new BitmapImage(new Uri(Acessories.ImagePath));
-                    NameTextBlock.Text = Acessories.Name;
-                    SizeTextBlock.Text = Acessories.Size;
-                    ColorTextBlock.Text = Acessories.Color;
-                    StockQuantityTextBlock.Text = Acessories.StockQuantity.ToString();
-                    PriceTextBlock.Text = Acessories.Price.ToString(CultureInfo.InvariantCulture);
-                    NoConnectionGrid.Visibility = Visibility.Collapsed;
+                ImagePath.Source = new BitmapImage(new Uri(Acessories.ImagePath));
+                NameTextBlock.Text = Acessories.Name;
+                SizeTextBlock.Text = Acessories.Size;
+                ColorTextBlock.Text = Acessories.Color;
+                StockQuantityTextBlock.Text = Acessories.StockQuantity.ToString();
+                PriceTextBlock.Text = Acessories.Price.ToString(CultureInfo.InvariantCulture);
+                NoConnectionGrid.Visibility = Visibility.Collapsed;
 
-                }
-                catch (Exception ex)
+            }
+            catch (Exception ex)
+            {
+                if (ex is TaskCanceledException || ex is AggregateException)
                 {
-                    if (ex is TaskCanceledException || ex is AggregateException)
-                    {
-                        NoConnectionGrid.Visibility = Visibility.Visible;
-                    }
+                    NoConnectionGrid.Visibility = Visibility.Visible;
                 }
             }
         }
@@ -88,15 +112,38 @@ namespace PhotoSharingApp.Universal.Views
 
         }
 
-        private void AddToCartButton_Click(object sender, RoutedEventArgs e)
+        private async void AddToCartButton_Click(object sender, RoutedEventArgs e)
         {
-            DeserelizeDataFromJson("user");
-            int quantity = Int32.Parse(QuantityTextBox.Text.Trim());
-            AddToCart(User, Acessories, quantity);
+            _authentication.GetCurrentUser();
+            CurrentUser = _authentication.CurrentUser;
+            if (CurrentUser != null)
+            {
+                int quantity = int.Parse(QuantityTextBox.Text.Trim());
+                try
+                {
+                    AddToCart(CurrentUser, Acessories, quantity).Wait();
+                    var dialog = new MessageDialog(
+                    Acessories.Name + " has been added!!",
+                    "Added");
+                    await dialog.ShowAsync();
+                }
+                catch (Exception ex)
+                {
+                    if (ex is TaskCanceledException || ex is AggregateException)
+                    {
+                        var dialog = new MessageDialog("Can not connect to server!", "Message");
+                        await dialog.ShowAsync();
+                    }
+                }
+            }
+            else
+            {
+                AuthenticationButton.Visibility = Visibility.Visible;
+            }
         }
 
 
-        private async void AddToCart(ReturnUser user, ReturnAccessory accessory, int quantity)
+        private static async Task AddToCart(ReturnUser user, ReturnAccessory accessory, int quantity)
         {
             //request POST to api
             using (var client = new HttpClient())
@@ -106,7 +153,7 @@ namespace PhotoSharingApp.Universal.Views
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.Timeout = TimeSpan.FromMilliseconds(2000);
-                AddToCart cart = new AddToCart()
+                AddToCart cart = new AddToCart
                 {
                     Username = user.Username,
                     Password = user.Password,
@@ -114,44 +161,17 @@ namespace PhotoSharingApp.Universal.Views
                     Quantity = quantity
                 };
 
-                try
-                {
-                    HttpResponseMessage response = await client.PutAsJsonAsync("api/UserBuyingDetail/Add", cart);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var dialog = new MessageDialog(
-                        "You have been add ID: " + accessory.Id + " Name: " + accessory.Name,
-                        "Congratulation");
-                        await dialog.ShowAsync();
-                    }
-
-                }
-                catch (HttpRequestException)
-                {
-                    var dialog = new MessageDialog("Can not connect to server!", "Message");
-                    await dialog.ShowAsync();
-                }
-
+                HttpResponseMessage response = await client.PutAsJsonAsync("api/UserBuyingDetail/Add", cart).ConfigureAwait(false);
+                //if (response.IsSuccessStatusCode)
+                //{
+                    
+                //}
             }
         }
 
-        public void DeserelizeDataFromJson(string fileName)
+        private void AuthenticationButton_Click(object sender, RoutedEventArgs e)
         {
-            User = new ReturnUser();
-            var folder = Windows.Storage.ApplicationData.Current.LocalFolder;
-            var filePath = folder.Path + @"\" + fileName + ".json";
-            using (StreamReader file = File.OpenText(filePath))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                User = (ReturnUser)serializer.Deserialize(file, typeof(ReturnUser));
-                User.Password = Base64Decode(User.Password);
-            }
-        }
-
-        public static string Base64Decode(string base64EncodedData)
-        {
-            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
-            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            Frame.Navigate(typeof(SignInPage));
         }
     }
 }

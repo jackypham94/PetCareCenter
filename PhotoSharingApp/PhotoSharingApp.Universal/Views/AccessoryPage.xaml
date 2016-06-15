@@ -1,12 +1,19 @@
-﻿<Page
+﻿<local:BasePage
     x:Class="PhotoSharingApp.Universal.Views.AccessoryPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:PhotoSharingApp.Universal.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:design="using:PhotoSharingApp.Universal.ViewModels.Design"
+    xmlns:valueConverters="using:PhotoSharingApp.Universal.ValueConverters"
     xmlns:controls="using:PhotoSharingApp.Universal.Controls"
-    mc:Ignorable="d">
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:stateTriggers="using:PhotoSharingApp.Universal.StateTriggers"
+    xmlns:interop="using:Windows.UI.Xaml.Interop"
+    mc:Ignorable="d"
+    x:Name="PageRoot">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
@@ -20,6 +27,7 @@
                 <TextBlock Text="ACCESSORY" Style="{ThemeResource PageTitleTextBlockStyle}" />
             </controls:PageHeader.HeaderContent>
         </controls:PageHeader>
+        
         <Grid  Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -49,12 +57,52 @@
                                 <Span>Please try again later</Span>
                             </TextBlock>
                         </Grid>
-                        <Image x:Name="Image" MaxHeight="300"></Image>
-                        <TextBlock x:Name="NameTextBlock" Margin="10,5,10,0"></TextBlock>
-                        <TextBlock x:Name="SizeTextBlock" Margin="10,5,10,0"></TextBlock>
-                        <TextBlock x:Name="ColorTextBlock" Margin="10,5,10,0"></TextBlock>
-                        <TextBlock x:Name="StockQuantityTextBlock" Margin="10,5,10,0"></TextBlock>
-                        <TextBlock x:Name="PriceTextBlock" Margin="10,5,10,0"></TextBlock>
+                        <Image x:Name="ImagePath"
+                               Width="{Binding ThumbnailImageSideLength, ElementName=PageRoot}"
+                               Height="{Binding ThumbnailImageSideLength, ElementName=PageRoot}"></Image>
+                        <Rectangle Fill="Teal" Height="1" Margin="20,10"></Rectangle>
+                        <StackPanel  Orientation="Horizontal" Margin="25,0">
+                            <Path Data="M11,2H13V4H13.5A1.5,1.5 0 0,1 15,5.5V9L14.56,9.44L16.2,12.28C17.31,11.19 18,9.68 18,8H20C20,10.42 18.93,12.59 17.23,14.06L20.37,19.5L20.5,21.72L18.63,20.5L15.56,15.17C14.5,15.7 13.28,16 12,16C10.72,16 9.5,15.7 8.44,15.17L5.37,20.5L3.5,21.72L3.63,19.5L9.44,9.44L9,9V5.5A1.5,1.5 0 0,1 10.5,4H11V2M9.44,13.43C10.22,13.8 11.09,14 12,14C12.91,14 13.78,13.8 14.56,13.43L13.1,10.9H13.09C12.47,11.5 11.53,11.5 10.91,10.9H10.9L9.44,13.43M12,6A1,1 0 0,0 11,7A1,1 0 0,0 12,8A1,1 0 0,0 13,7A1,1 0 0,0 12,6Z"
+                              Fill="Teal" Stretch="Uniform" Width="20" Height="20" 
+                              HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
+                            <TextBlock Text="Name:" Margin="10,0,0,0" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock Margin="5,0,0,0" FontSize="20" x:Name="NameTextBlock" 
+                                       VerticalAlignment="Center" Foreground="Teal" />
+                        </StackPanel>
+                        <Rectangle Fill="Teal" Height="1" Margin="20,10"></Rectangle>
+                        <StackPanel  Orientation="Horizontal" Margin="25,0">
+                            <Path Data="M10,21V19H6.41L10.91,14.5L9.5,13.09L5,17.59V14H3V21H10M14.5,10.91L19,6.41V10H21V3H14V5H17.59L13.09,9.5L14.5,10.91Z"
+                              Fill="Teal" Stretch="Uniform" Width="20" Height="20" 
+                              HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
+                            <TextBlock Text="Size:" Margin="10,0,0,0"></TextBlock>
+                            <TextBlock Margin="5,0,0,0" x:Name="SizeTextBlock" />
+                        </StackPanel>
+                        <Rectangle Fill="Teal" Height="1" Margin="20,10"></Rectangle>
+                        <StackPanel  Orientation="Horizontal" Margin="25,0">
+                            <Path Data="M19,11.5C19,11.5 17,13.67 17,15A2,2 0 0,0 19,17A2,2 0 0,0 21,15C21,13.67 19,11.5 19,11.5M5.21,10L10,5.21L14.79,10M16.56,8.94L7.62,0L6.21,1.41L8.59,3.79L3.44,8.94C2.85,9.5 2.85,10.47 3.44,11.06L8.94,16.56C9.23,16.85 9.62,17 10,17C10.38,17 10.77,16.85 11.06,16.56L16.56,11.06C17.15,10.47 17.15,9.5 16.56,8.94Z"
+                              Fill="Teal" Stretch="Uniform" Width="20" Height="20" 
+                              HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
+                            <TextBlock Text="Color:" Margin="10,0,0,0"></TextBlock>
+                            <TextBlock Margin="5,0,0,0" x:Name="ColorTextBlock" />
+                        </StackPanel>
+                        <Rectangle Fill="Teal" Height="1" Margin="20,10"></Rectangle>
+                        <StackPanel  Orientation="Horizontal" Margin="25,0">
+                            <Path Data="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                              Fill="Teal" Stretch="Uniform" Width="20" Height="20" 
+                              HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
+                            <TextBlock Text="Available:" Margin="10,0,0,0"></TextBlock>
+                            <TextBlock Margin="5,0,0,0" x:Name="StockQuantityTextBlock" />
+                        </StackPanel>
+                        <Rectangle Fill="Teal" Height="1" Margin="20,10"></Rectangle>
+                        <StackPanel  Orientation="Horizontal" Margin="25,0">
+                            <Path Data="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,17V16H9V14H13V13H10A1,1 0 0,1 9,12V9A1,1 0 0,1 10,8H11V7H13V8H15V10H11V11H14A1,1 0 0,1 15,12V15A1,1 0 0,1 14,16H13V17H11Z"
+                              Fill="Teal" Stretch="Uniform" Width="20" Height="20" 
+                              HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
+                            <TextBlock Text="PriceTextBlock:" Margin="10,0,0,0" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock Margin="5,0,0,0" x:Name="PriceTextBlock" FontSize="20" VerticalAlignment="Center" />
+                            <TextBlock Margin="5,0,0,0" Text="$" FontSize="20" Foreground="DarkGoldenrod" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <Rectangle Fill="Teal" Height="1" Margin="20,10"></Rectangle>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <TextBlock Text="Quantity" VerticalAlignment="Center"></TextBlock>
                             <TextBox x:Name="QuantityTextBox" Text="1" InputScope="Number" Width="50" Margin="10,0,0,0"></TextBox>
@@ -63,6 +111,28 @@
                     </ItemsControl>
                 </RelativePanel>
             </ScrollViewer>
+            
+            <Button Grid.Row="2" x:Name="AuthenticationButton" Background="White" Padding="0"
+                    RelativePanel.Below="CategoriesList"
+                    RelativePanel.AlignRightWithPanel="True" 
+                    RelativePanel.AlignLeftWithPanel="True" 
+                    HorizontalAlignment="Stretch" Margin="20" Click="AuthenticationButton_Click">
+                <Button.BorderBrush>
+                    <SolidColorBrush Color="Tomato"/>
+                </Button.BorderBrush>
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Path Data="M11.83,1.73C8.43,1.79 6.23,3.32 6.23,3.32C5.95,3.5 5.88,3.91 6.07,4.19C6.27,4.5 6.66,4.55 6.96,4.34C6.96,4.34 11.27,1.15 17.46,4.38C17.75,4.55 18.14,4.45 18.31,4.15C18.5,3.85 18.37,3.47 18.03,3.28C16.36,2.4 14.78,1.96 13.36,1.8C12.83,1.74 12.32,1.72 11.83,1.73M12.22,4.34C6.26,4.26 3.41,9.05 3.41,9.05C3.22,9.34 3.3,9.72 3.58,9.91C3.87,10.1 4.26,10 4.5,9.68C4.5,9.68 6.92,5.5 12.2,5.59C17.5,5.66 19.82,9.65 19.82,9.65C20,9.94 20.38,10.04 20.68,9.87C21,9.69 21.07,9.31 20.9,9C20.9,9 18.15,4.42 12.22,4.34M11.5,6.82C9.82,6.94 8.21,7.55 7,8.56C4.62,10.53 3.1,14.14 4.77,19C4.88,19.33 5.24,19.5 5.57,19.39C5.89,19.28 6.07,18.92 5.95,18.6V18.6C4.41,14.13 5.78,11.2 7.8,9.5C9.77,7.89 13.25,7.5 15.84,9.1C17.11,9.9 18.1,11.28 18.6,12.64C19.11,14 19.08,15.32 18.67,15.94C18.25,16.59 17.4,16.83 16.65,16.64C15.9,16.45 15.29,15.91 15.26,14.77C15.23,13.06 13.89,12 12.5,11.84C11.16,11.68 9.61,12.4 9.21,14C8.45,16.92 10.36,21.07 14.78,22.45C15.11,22.55 15.46,22.37 15.57,22.04C15.67,21.71 15.5,21.35 15.15,21.25C11.32,20.06 9.87,16.43 10.42,14.29C10.66,13.33 11.5,13 12.38,13.08C13.25,13.18 14,13.7 14,14.79C14.05,16.43 15.12,17.54 16.34,17.85C17.56,18.16 18.97,17.77 19.72,16.62C20.5,15.45 20.37,13.8 19.78,12.21C19.18,10.61 18.07,9.03 16.5,8.04C14.96,7.08 13.19,6.7 11.5,6.82M11.86,9.25V9.26C10.08,9.32 8.3,10.24 7.28,12.18C5.96,14.67 6.56,17.21 7.44,19.04C8.33,20.88 9.54,22.1 9.54,22.1C9.78,22.35 10.17,22.35 10.42,22.11C10.67,21.87 10.67,21.5 10.43,21.23C10.43,21.23 9.36,20.13 8.57,18.5C7.78,16.87 7.3,14.81 8.38,12.77C9.5,10.67 11.5,10.16 13.26,10.67C15.04,11.19 16.53,12.74 16.5,15.03C16.46,15.38 16.71,15.68 17.06,15.7C17.4,15.73 17.7,15.47 17.73,15.06C17.79,12.2 15.87,10.13 13.61,9.47C13.04,9.31 12.45,9.23 11.86,9.25M12.08,14.25C11.73,14.26 11.46,14.55 11.47,14.89C11.47,14.89 11.5,16.37 12.31,17.8C13.15,19.23 14.93,20.59 18.03,20.3C18.37,20.28 18.64,20 18.62,19.64C18.6,19.29 18.3,19.03 17.91,19.06C15.19,19.31 14.04,18.28 13.39,17.17C12.74,16.07 12.72,14.88 12.72,14.88C12.72,14.53 12.44,14.25 12.08,14.25Z"
+                              Fill="Tomato" Stretch="Uniform" Width="25" Height="25" 
+                              HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
+                    <TextBlock Grid.Column="1" Text="You must login first" Foreground="Tomato"
+                                   Margin="15,0,15,0" VerticalAlignment="Center"></TextBlock>
+                </Grid>
+            </Button>
         </Grid>
     </Grid>
-</Page>
+</local:BasePage>

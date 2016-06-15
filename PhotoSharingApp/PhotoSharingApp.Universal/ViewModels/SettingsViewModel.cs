@@ -29,6 +29,7 @@ using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
 using PhotoSharingApp.Universal.Views;
 using Windows.System;
+using Windows.UI.Popups;
 
 namespace PhotoSharingApp.Universal.ViewModels
 {
@@ -96,16 +97,25 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             try
             {
-                await _petCareService.SignOutAsync();
+                //await _petCareService.SignOutAsync();
 
-                // Resetting the current user.
+                //// Resetting the current user.
+                //AppEnvironment.Instance.CurrentUser = null;
+
+                //NotifyPropertyChanged(nameof(IsUserSignedIn));
+                Authentication authentication = new Authentication();
+                authentication.LogOut();
+
                 AppEnvironment.Instance.CurrentUser = null;
-
                 NotifyPropertyChanged(nameof(IsUserSignedIn));
+                var dialog = new MessageDialog(
+                        "Thanks for used our services!",
+                        "Logout successfull");
+                await dialog.ShowAsync();
             }
             catch (Exception)
             {
-                await _dialogService.ShowGenericServiceErrorNotification();
+                //await _dialogService.ShowGenericServiceErrorNotification();
             }
         }
     }

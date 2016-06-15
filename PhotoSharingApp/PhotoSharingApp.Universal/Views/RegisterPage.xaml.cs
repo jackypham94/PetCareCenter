@@ -47,13 +47,13 @@ namespace PhotoSharingApp.Universal.Views
 
         private void ItemDetailPage_Hiding(InputPane sender, InputPaneVisibilityEventArgs args)
         {
-            layoutRoot.Margin = new Thickness(0);
+            LayoutRoot.Margin = new Thickness(0);
             args.EnsuredFocusedElementInView = true;
         }
 
         private void ItemDetailPage_Showing(InputPane sender, InputPaneVisibilityEventArgs args)
         {
-            layoutRoot.Margin = new Thickness(0, 0, 0, args.OccludedRect.Height);
+            LayoutRoot.Margin = new Thickness(0, 0, 0, args.OccludedRect.Height);
             args.EnsuredFocusedElementInView = true;
         }
 

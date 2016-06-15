@@ -53,20 +53,21 @@ namespace PhotoSharingApp.Universal.Views
             CurrentUser = authentication.CurrentUser;
             if (CurrentUser == null)
             {
-                NoConnectionGrid.Visibility = Visibility.Collapsed;
                 AuthenticationButton.Visibility = Visibility.Visible;
                 MainScrollViewer.Visibility = Visibility.Collapsed;
+                NoConnectionGrid.Visibility = Visibility.Collapsed;
+                CheckoutPanel.Visibility = Visibility.Collapsed;
             }
             else
             {
                 AuthenticationButton.Visibility = Visibility.Collapsed;
                 MainScrollViewer.Visibility = Visibility.Visible;
+                NoConnectionGrid.Visibility = Visibility.Collapsed;
+                CheckoutPanel.Visibility = Visibility.Visible;
                 var loadData = e.NavigationMode != NavigationMode.Back;
                 _viewModel = ServiceLocator.Current.GetInstance<CartViewModel>(loadData);
                 DataContext = _viewModel;
 
-                NoConnectionGrid.Visibility = Visibility.Collapsed;
-                MainScrollViewer.Visibility = Visibility.Visible;
                 if (loadData)
                 {
                     await _viewModel.LoadState();
@@ -76,6 +77,7 @@ namespace PhotoSharingApp.Universal.Views
                 {
                     NoConnectionGrid.Visibility = Visibility.Visible;
                     MainScrollViewer.Visibility = Visibility.Collapsed;
+                    CheckoutPanel.Visibility = Visibility.Collapsed;
                 }
 
                 bool isSignIn = e.Parameter != null && (bool)e.Parameter;
@@ -129,7 +131,7 @@ namespace PhotoSharingApp.Universal.Views
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     client.Timeout = TimeSpan.FromMilliseconds(2000);
 
-                    HttpResponseMessage response = await client.PutAsJsonAsync("api/Users/", newUser).ConfigureAwait(false);
+                    await client.PutAsJsonAsync("api/Users/", newUser).ConfigureAwait(false);
 
                 }
             }
@@ -205,11 +207,13 @@ namespace PhotoSharingApp.Universal.Views
                 Password = user.Password,
                 PlanDate = DeliveryDatePicker.Date.DateTime
             };
+
             CheckOut(checkoutInfo, userInfo).Wait();
             var bill = new Bill
             {
                 ReturnBuyingDetail = BuyingDetail,
                 PlanDate = DeliveryDatePicker.Date.DateTime,
+                Total = Double.Parse(TotalTextBlock.Text.Trim()),
                 UserInfo = userInfo
             };
             _navigationFacade.NavigateToBillPage(bill);
@@ -222,6 +226,18 @@ namespace PhotoSharingApp.Universal.Views
 
         private void EditInfoButton_Click(object sender, RoutedEventArgs e)
         {
+            var newUser = new CreateNewUser();
+            var userInfo = _viewModel.UserInfo;
+            var user = _viewModel.CurrentUser;
+            newUser.Name = NameTextBox.Text.Trim();
+            newUser.Username = userInfo.Username;
+            newUser.Password = user.Password;
+            newUser.Email = userInfo.Email;
+            newUser.Address = AddressTextBox.Text.Trim();
+            newUser.Phone = PhoneTextBox.Text.Trim();
+            newUser.Gender = userInfo.Gender;
+            newUser.NewPassword = user.Password;
+            UpdateUserInfo(newUser).Wait();
             _navigationFacade.NavigateToProfilePage();
         }
     }

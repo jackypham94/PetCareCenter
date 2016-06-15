@@ -55,7 +55,7 @@ namespace PhotoSharingApp.Universal.NavigationBar
         /// </summary>
         public override Symbol Symbol
         {
-            get { return Symbol.Add; }
+            get { return Symbol.List; }
         }
     }
 }

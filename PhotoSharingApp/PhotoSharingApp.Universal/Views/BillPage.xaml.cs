@@ -38,14 +38,19 @@ namespace PhotoSharingApp.Universal.Views
                 var args = SerializationHelper.Deserialize<Bill>(e.Parameter as string);
                 try
                 {
-                    PlandateTextBlock.Text = args.PlanDate.Date.ToString(CultureInfo.InvariantCulture);
+                    NameTextBlock.Text = args.UserInfo.Name;
+                    AddressTextBlock.Text = args.UserInfo.Address;
+                    PhoneTextBlock.Text = args.UserInfo.Phone;
+                    EmailTextBlock.Text = args.UserInfo.Email;
+                    DeliveryDateTextBlock.Text = args.PlanDate.Date.ToString(CultureInfo.InvariantCulture);
+                    TotalTextBlock.Text = args.Total.ToString(CultureInfo.InvariantCulture);
 
                 }
                 catch (Exception ex)
                 {
                     if (ex is TaskCanceledException || ex is AggregateException)
                     {
-                        NoConnectionGrid.Visibility = Visibility.Visible;
+                        //NoConnectionGrid.Visibility = Visibility.Visible;
                     }
                 }
             }

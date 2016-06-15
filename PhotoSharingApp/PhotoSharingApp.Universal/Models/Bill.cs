@@ -10,6 +10,7 @@ namespace PhotoSharingApp.Universal.Models
     {
         public List<ReturnBuyingDetail> ReturnBuyingDetail { get; set; }
         public UserInfo UserInfo { get; set; }
+        public Double Total { get; set; }
         public DateTime PlanDate { get; set; }
     }
 }

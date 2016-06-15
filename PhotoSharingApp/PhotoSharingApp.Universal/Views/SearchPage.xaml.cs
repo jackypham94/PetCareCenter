@@ -78,7 +78,7 @@ namespace PhotoSharingApp.Universal.Views
                 try
                 {
                     SearchByAccessoryName(nameSearch).Wait();
-                    if (Accessories?.Count > 0)
+                    if (Accessories?.Count == 0)
                     {
                         SearchResultTextBlock.Visibility = Visibility.Visible;
                     }
@@ -103,7 +103,7 @@ namespace PhotoSharingApp.Universal.Views
                 try
                 {
                     SearchByCategoryName(nameSearch).Wait();
-                    if (AccessoryCombinations?.Count > 0)
+                    if (AccessoryCombinations?.Count == 0)
                     {
                         SearchResultTextBlock.Visibility = Visibility.Visible;
                     }

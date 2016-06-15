@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -29,15 +30,48 @@ namespace PhotoSharingApp.Universal.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class PetInfoPage : Page
+    public sealed partial class PetInfoPage : BasePage
     {
         private static ReturnUser CurrentUser { get; set; }
         private ReturnPet Pet { get; set; }
+        private int _thumbnailImageSideLength;
         public PetInfoPage()
         {
             this.InitializeComponent();
+            UpdateThumbnailSize();
+            SizeChanged += PetInfoPage_SizeChanged;
         }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+
+        private void PetInfoPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateThumbnailSize();
+        }
+
+        public int ThumbnailImageSideLength
+        {
+            get { return _thumbnailImageSideLength; }
+            set
+            {
+                if (value != _thumbnailImageSideLength)
+                {
+                    _thumbnailImageSideLength = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        private void UpdateThumbnailSize()
+        {
+            if (PageRoot.ActualWidth > 1300)
+            {
+                ThumbnailImageSideLength = 500;
+            }
+            else
+            {
+                ThumbnailImageSideLength = 300;
+            }
+        }
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             Authentication authentication = new Authentication();
             authentication.GetCurrentUser();
@@ -48,16 +82,29 @@ namespace PhotoSharingApp.Universal.Views
                 try
                 {
                     InitializePetInfo(CurrentUser,args.Id).Wait();
-
+                    ImagePath.Source = new BitmapImage(new Uri(Pet.ImagePath));
                     NameTextBlock.Text = Pet.Name;
-                    NoConnectionGrid.Visibility = Visibility.Collapsed;
-
+                    AgeTextBlock.Text = Pet.Age.ToString();
+                    GenderTextBlock.Text = Pet.Gender == 0 ? "Male" : "Female";
+                    StatusTextBlock.Text = Pet.Status;
+                    TypeTextBlock.Text = Pet.PetCategory.Name;
+                    if (Pet.IsDepositing)
+                    {
+                        DepositGrid.Visibility = Visibility.Visible;
+                        DepositPetButton.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        DepositGrid.Visibility = Visibility.Collapsed;
+                        DepositPetButton.Visibility = Visibility.Visible;
+                    }
                 }
                 catch (Exception ex)
                 {
                     if (ex is AggregateException || ex is TaskCanceledException)
                     {
-                        NoConnectionGrid.Visibility = Visibility.Visible;
+                        var dialog = new MessageDialog("Can not connect to server!", "Message");
+                        await dialog.ShowAsync();
                     }
                 }
             }
@@ -81,6 +128,12 @@ namespace PhotoSharingApp.Universal.Views
                 }
             }
 
+        }
+
+        private async void DepositPetButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new MessageDialog("Deposited!", "Welldone");
+            await dialog.ShowAsync();
         }
     }
 }

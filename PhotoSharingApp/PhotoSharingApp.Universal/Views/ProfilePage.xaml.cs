@@ -1,27 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 using Newtonsoft.Json;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
-using PhotoSharingApp.Universal.ViewModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -32,12 +23,13 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class ProfilePage : Page
     {
-        ReturnUser user = new ReturnUser();
+        private ReturnUser _user = new ReturnUser();
+        readonly Authentication _authentication = new Authentication();
 
         public ReturnUser User
         {
-            get { return user; }
-            set { user = value; }
+            get { return _user; }
+            set { _user = value; }
         }
 
         /// <summary>
@@ -49,6 +41,20 @@ namespace PhotoSharingApp.Universal.Views
 
             //initial data to view
             InitialData();
+            InputPane.GetForCurrentView().Showing += ItemDetailPage_Showing;
+            InputPane.GetForCurrentView().Hiding += ItemDetailPage_Hiding;
+        }
+
+        private void ItemDetailPage_Hiding(InputPane sender, InputPaneVisibilityEventArgs args)
+        {
+            LayoutRoot.Margin = new Thickness(0);
+            args.EnsuredFocusedElementInView = true;
+        }
+
+        private void ItemDetailPage_Showing(InputPane sender, InputPaneVisibilityEventArgs args)
+        {
+            LayoutRoot.Margin = new Thickness(0, 0, 0, args.OccludedRect.Height);
+            args.EnsuredFocusedElementInView = true;
         }
 
         private async void EditButton_Click(object sender, RoutedEventArgs e)
@@ -58,7 +64,7 @@ namespace PhotoSharingApp.Universal.Views
                 CreateNewUser newUser = new CreateNewUser();
                 newUser.Name = NameTextBox.Text.Trim();
                 newUser.Username = UsernameTextBox.Text.Trim();
-                newUser.Password = user.Password;
+                newUser.Password = _user.Password;
                 newUser.Email = EmailTextBox.Text.Trim();
                 newUser.Address = AddressTextBox.Text.Trim();
                 newUser.Phone = PhoneTextBox.Text.Trim();
@@ -70,7 +76,7 @@ namespace PhotoSharingApp.Universal.Views
                 }
                 else
                 {
-                    newUser.NewPassword = user.Password;
+                    newUser.NewPassword = _user.Password;
                 }
 
                 bool check = CheckInfo(newUser);
@@ -104,12 +110,8 @@ namespace PhotoSharingApp.Universal.Views
                     HttpResponseMessage response = await client.PutAsJsonAsync("api/Users/", newUser);
                     if (response.IsSuccessStatusCode)
                     {
-                        user.Password = newUser.NewPassword;
-                        //encode user's new password
-                        user.Password = Base64Encode(user.Password);
-
-                        //write data to user.json file
-                        await SerelizeDataToJson(user, "user");
+                        _user.Password = newUser.NewPassword;
+                        _authentication.SerelizeDataToJson(_user,"user");
                         Frame.Navigate(typeof(ProfilePage));
                     }
                     else
@@ -176,13 +178,13 @@ namespace PhotoSharingApp.Universal.Views
             }
         }
 
-        public async void InitialData()
+        public void InitialData()
         {
-            user = await DeserelizeDataFromJson("user", user);  //read data from user.json file
-            if (user != null)
+            _authentication.GetCurrentUser();
+            _user = _authentication.CurrentUser;  //read data from user.json file
+            if (_user != null)
             {
-                user.Password = Base64Decode(user.Password);  //decode user's password
-                RequestPostToApi(user);
+                RequestPostToApi(_user);
             }
             else
             {
@@ -191,42 +193,7 @@ namespace PhotoSharingApp.Universal.Views
             }            
         }
 
-        public static async Task<string> SerelizeDataToJson(ReturnUser user, string filename)
-        {
-            try
-            {
-                var folder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                var file =
-                    await
-                        folder.CreateFileAsync(filename + ".json",
-                            Windows.Storage.CreationCollisionOption.ReplaceExisting);
-                var data = await file.OpenStreamForWriteAsync();
 
-                using (StreamWriter r = new StreamWriter(data))
-                {
-                    var serelizedfile = JsonConvert.SerializeObject(user);
-                    r.Write(serelizedfile);
-
-                }
-                return filename;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-
-        public static string Base64Encode(string plainText)
-        {
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
-            return System.Convert.ToBase64String(plainTextBytes);
-        }
-
-        public static string Base64Decode(string base64EncodedData)
-        {
-            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
-            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
-        }
 
         public static async Task<ReturnUser> DeserelizeDataFromJson(string fileName, ReturnUser user)
         {

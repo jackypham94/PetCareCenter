@@ -48,7 +48,7 @@ namespace PhotoSharingApp.Universal.Views
             UpdateThumbnailSize();
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             var args = SerializationHelper.Deserialize<ReturnAccessoryCombination>(e.Parameter as string);
             InitializeAccessoriesDetails(args.Category.Id).Wait();

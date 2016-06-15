@@ -1,25 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Newtonsoft.Json;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
@@ -40,8 +31,22 @@ namespace PhotoSharingApp.Universal.Views
         public AddPetPage()
         {
             this.InitializeComponent();
-            
+            InputPane.GetForCurrentView().Showing += ItemDetailPage_Showing;
+            InputPane.GetForCurrentView().Hiding += ItemDetailPage_Hiding;
         }
+
+        private void ItemDetailPage_Hiding(InputPane sender, InputPaneVisibilityEventArgs args)
+        {
+            LayoutRoot.Margin = new Thickness(0);
+            args.EnsuredFocusedElementInView = true;
+        }
+
+        private void ItemDetailPage_Showing(InputPane sender, InputPaneVisibilityEventArgs args)
+        {
+            LayoutRoot.Margin = new Thickness(0, 0, 0, args.OccludedRect.Height);
+            args.EnsuredFocusedElementInView = true;
+        }
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
@@ -207,6 +212,11 @@ namespace PhotoSharingApp.Universal.Views
                 var dialog = new MessageDialog("Picked photo: " + file.Name, "Message");
                 await dialog.ShowAsync();
             }
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(MyPetPage));
         }
     }
 }

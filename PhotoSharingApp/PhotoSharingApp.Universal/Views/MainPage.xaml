@@ -285,7 +285,7 @@
                         RelativePanel.Below="CategoriesList"
                         RelativePanel.AlignRightWithPanel="True" 
                         RelativePanel.AlignLeftWithPanel="True" 
-                        HorizontalAlignment="Stretch" Margin="12,0,12,15" Click="AddNewPetButton_Click">
+                        HorizontalAlignment="Stretch" Margin="20,0,20,15" Click="AddNewPetButton_Click">
                     <Button.BorderBrush>
                         <SolidColorBrush Color="Teal" Opacity="0.5"/>
                     </Button.BorderBrush>
@@ -300,9 +300,6 @@
                               HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
                         <TextBlock Grid.Column="1" Text="Add your new pet" 
                                    Margin="15,0,15,0" VerticalAlignment="Center"></TextBlock>
-                        <!--<Path Grid.Column="2" Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
-                                  Fill="Teal" Stretch="Uniform" Width="25" Height="25" 
-                              HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>-->
                         <Image Width="70" Grid.Column="2" Source="../Assets/Images/cat.png" 
                                Stretch="UniformToFill"></Image>
                     </Grid>

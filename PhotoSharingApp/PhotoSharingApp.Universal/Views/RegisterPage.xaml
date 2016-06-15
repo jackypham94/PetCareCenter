@@ -10,7 +10,7 @@
     mc:Ignorable="d"
     x:Name="pageRoot">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="layoutRoot">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="LayoutRoot">
         <ScrollViewer x:Name="RegisterScrollViewer" VerticalScrollMode="Enabled" KeyDown="RegisterScrollViewer_KeyDown">
             <RelativePanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <ItemsControl Width="300">

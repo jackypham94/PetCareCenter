@@ -31,7 +31,7 @@
                 <RowDefinition />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Grid x:Name="NoConnectionGrid" Visibility="Visible" HorizontalAlignment="Center" Margin="0,10">
+            <!--<Grid x:Name="NoConnectionGrid" Visibility="Visible" HorizontalAlignment="Center" Margin="0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -43,7 +43,8 @@
                                 <LineBreak/>
                                 <Span>Please try again later</Span>
                 </TextBlock>
-            </Grid>
+            </Grid>-->
+            
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
                 <RelativePanel>
                     <ItemsControl RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
@@ -53,8 +54,65 @@
                                                  FromVerticalOffset="100" />
                             </TransitionCollection>
                         </ItemsControl.ItemContainerTransitions>
-                        
-                        <TextBlock x:Name="PlandateTextBlock"></TextBlock>
+                        <TextBlock Text="PET CARE CENTER" FontSize="25" Margin="20,0"></TextBlock>
+                        <TextBlock Text="Invoice" FontSize="25" Margin="20,0"></TextBlock>
+                        <StackPanel  Orientation="Horizontal" Margin="20,5">
+                            <TextBlock Text="Reciever Name:"></TextBlock>
+                            <TextBlock Margin="5,0,0,0" x:Name="NameTextBlock" />
+                        </StackPanel>
+                        <StackPanel  Orientation="Horizontal" Margin="20,5">
+                            <TextBlock Text="Address:"></TextBlock>
+                            <TextBlock Margin="5,0,0,0" x:Name="AddressTextBlock" />
+                        </StackPanel>
+                        <StackPanel  Orientation="Horizontal" Margin="20,5">
+                            <TextBlock Text="Phone Number:"></TextBlock>
+                            <TextBlock Margin="5,0,0,0" x:Name="PhoneTextBlock" />
+                        </StackPanel>
+                        <StackPanel  Orientation="Horizontal" Margin="20,5">
+                            <TextBlock Text="Email:"></TextBlock>
+                            <TextBlock Margin="5,0,0,0" x:Name="EmailTextBlock" />
+                        </StackPanel>
+                        <StackPanel  Orientation="Horizontal" Margin="20,5">
+                            <TextBlock Text="Delivery Date:"></TextBlock>
+                            <TextBlock Margin="5,0,0,0" x:Name="DeliveryDateTextBlock" />
+                        </StackPanel>
+                        <StackPanel  Orientation="Horizontal" Margin="20,5">
+                            <TextBlock Text="Total Bill:"></TextBlock>
+                            <TextBlock Margin="5,0,0,0" x:Name="TotalTextBlock" />
+                        </StackPanel>
+                       
+                        <TextBlock Margin="20,5" FontSize="25" Text="Details" />
+                        <Grid Margin="20,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/> 
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Name"></TextBlock>
+                            <TextBlock Grid.Column="1" Text="Quantity"></TextBlock>
+                            <TextBlock Grid.Column="2" Text="Price"></TextBlock>
+                            <TextBlock Grid.Column="3" Text="Total"></TextBlock>
+                        </Grid>
+                        <ListView x:Name="AccessoryListView" Margin="20,5">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding A}"></TextBlock>
+                                        <TextBlock Grid.Column="1" Text="{Binding B}"></TextBlock>
+                                        <TextBlock Grid.Column="2" Text="{Binding C}"></TextBlock>
+                                        <TextBlock Grid.Column="3" Text="{Binding D}"></TextBlock>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <TextBlock x:Name="PlandateTextBlock" Margin="20,0"></TextBlock>
                         
                     </ItemsControl>
                 </RelativePanel>

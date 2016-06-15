@@ -43,8 +43,6 @@ namespace PhotoSharingApp.Universal.Services
     /// </summary>
     public class PetCareDummyService : IPetCareService
     {
-        private readonly Random _random;
-        private List<User> _sampleUsers;
         private bool _showError = true;
 
         /// <summary>
@@ -54,15 +52,13 @@ namespace PhotoSharingApp.Universal.Services
         /// </summary>
         public PetCareDummyService()
         {
-            _random = new Random();
-
-            InitSampleUsers();
-            InitUser();
-            InitTopCategories();
-            InitCategories();
-            InitPhotoStreams();
-            InitAnnotations();
-            InitLeaderboardData();
+            //InitSampleUsers();
+            //InitUser();
+            //InitTopCategories();
+            //InitCategories();
+            //InitPhotoStreams();
+            //InitAnnotations();
+            //InitLeaderboardData();
 
             //AppEnvironment.Instance.CurrentUser = User;
         }

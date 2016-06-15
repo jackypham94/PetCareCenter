@@ -35,9 +35,21 @@ namespace PhotoSharingApp.Universal.Services
             }
         }
 
+        public void SerelizeDataToJson(ReturnUser user, string fileName)
+        {
+            var folder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            var filePath = folder.Path + @"\" + fileName + ".json";
+            using (StreamWriter file = File.CreateText(filePath))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+
+                serializer.Serialize(file, user);
+            }
+        }
+
         private void DeserelizeDataFromJson(string fileName)
         {
-            CurrentUser = new ReturnUser();
+            //CurrentUser = new ReturnUser();
             var folder = Windows.Storage.ApplicationData.Current.LocalFolder;
             var filePath = folder.Path + @"\" + fileName + ".json";
             try
@@ -46,7 +58,7 @@ namespace PhotoSharingApp.Universal.Services
                 {
                     JsonSerializer serializer = new JsonSerializer();
                     CurrentUser = (ReturnUser)serializer.Deserialize(file, typeof(ReturnUser));
-                    if (CurrentUser != null)
+                    if (CurrentUser.Password != null)
                     {
                         CurrentUser.Password = Base64Decode(CurrentUser.Password);
                     }
@@ -54,13 +66,20 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception)
             {
-               //Ignore
+                //Ignore
             }
         }
+
         private static string Base64Decode(string base64EncodedData)
         {
             var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
             return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+        }
+
+        public static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
         }
     }
 }
