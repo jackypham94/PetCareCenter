@@ -31,7 +31,7 @@
                 <RowDefinition />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            
+
             <ScrollViewer Grid.Row="1">
                 <RelativePanel>
                     <ItemsControl RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
@@ -41,10 +41,15 @@
                                                  FromVerticalOffset="100" />
                             </TransitionCollection>
                         </ItemsControl.ItemContainerTransitions>
-                        
-                        <Image x:Name="ImagePath"
+
+                        <Grid>
+                            <Image x:Name="ImagePath"
                                Width="{Binding ThumbnailImageSideLength, ElementName=PageRoot}"
                                Height="{Binding ThumbnailImageSideLength, ElementName=PageRoot}"></Image>
+                            <Image Width="{Binding ThumbnailImageSideLength, ElementName=PageRoot}"
+                               Height="{Binding ThumbnailImageSideLength, ElementName=PageRoot}" 
+                               Margin="0" Source="../Assets/Images/pet_default.jpg" />
+                        </Grid>
                         <Rectangle Fill="Teal" Height="1" Margin="20,10"></Rectangle>
                         <StackPanel  Orientation="Horizontal" Margin="25,0">
                             <Path Data="M18,17H10.5L12.5,15H18M6,17V14.5L13.88,6.65C14.07,6.45 14.39,6.45 14.59,6.65L16.35,8.41C16.55,8.61 16.55,8.92 16.35,9.12L8.47,17M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z"
@@ -93,6 +98,45 @@
                             <Rectangle Stroke="Green" Height="50" StrokeThickness="2"></Rectangle>
                             <TextBlock Foreground="Green" Text="DEPOSITING" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                         </Grid>
+                        <TextBlock Text="Pet care type" Margin="20,10,20,0"></TextBlock>
+                        <Grid Margin="20,5,20,0">
+                            <Path x:Name="NamePath" Data="M2,3H22C23.05,3 24,3.95 24,5V19C24,20.05 23.05,21 22,21H2C0.95,21 0,20.05 0,19V5C0,3.95 0.95,3 2,3M14,6V7H22V6H14M14,8V9H21.5L22,9V8H14M14,10V11H21V10H14M8,13.91C6,13.91 2,15 2,17V18H14V17C14,15 10,13.91 8,13.91M8,6A3,3 0 0,0 5,9A3,3 0 0,0 8,12A3,3 0 0,0 11,9A3,3 0 0,0 8,6Z"
+                              Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
+                            <ComboBox x:Name="PetCareTypeComboBox"
+                                 Foreground="Gray" 
+                                 BorderBrush="Gray" VerticalContentAlignment="Center" 
+                                 Padding="30,3,6,5" MaxWidth="456" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"></TextBlock>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Grid>
+                        <TextBlock Text="Deposit Date" Margin="20,10,20,0"></TextBlock>
+                        <DatePicker x:Name="DepositDatePicker"
+                                    HorizontalAlignment="Stretch"
+                                    RelativePanel.Below="CartListView"
+                                    Margin="20,5,20,0"
+                                    VerticalAlignment="Center"/>
+                        <TextBlock Text="Recieve Date" Margin="20,10,20,0"></TextBlock>
+                        <DatePicker x:Name="RecieveDatePicker"
+                                    HorizontalAlignment="Stretch"
+                                    RelativePanel.Below="CartListView"
+                                    Margin="20,5,20,0"
+                                    VerticalAlignment="Center"/>
+                        <TextBlock Text="Note" Margin="20,10,20,0"></TextBlock>
+                        <Grid Margin="20,5,20,15">
+                            <Path Data="M2,3H22C23.05,3 24,3.95 24,5V19C24,20.05 23.05,21 22,21H2C0.95,21 0,20.05 0,19V5C0,3.95 0.95,3 2,3M14,6V7H22V6H14M14,8V9H21.5L22,9V8H14M14,10V11H21V10H14M8,13.91C6,13.91 2,15 2,17V18H14V17C14,15 10,13.91 8,13.91M8,6A3,3 0 0,0 5,9A3,3 0 0,0 8,12A3,3 0 0,0 11,9A3,3 0 0,0 8,6Z"
+                              Fill="Gray" Margin="10,3,6,5" Stretch="Uniform" Width="15" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="1"/>
+                            <TextBox x:Name="AddressTextBox" 
+                                     InputScope="Default" 
+                                     PlaceholderText="Write your note..."
+                                     TextWrapping="Wrap"
+                                     Foreground="Gray" BorderBrush="Gray" 
+                                     VerticalContentAlignment="Center" Padding="30,3,6,5" Height="50"/>
+                        </Grid>
+
                         <Button x:Name="DepositPetButton" Background="White" Padding="0"
                                 RelativePanel.AlignRightWithPanel="True" 
                                 RelativePanel.AlignLeftWithPanel="True" 

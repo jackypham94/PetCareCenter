@@ -26,9 +26,12 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Image Width="{Binding ThumbnailImageSideLength, ElementName=PageRoot}"
+                <Image Grid.Column="0" Width="{Binding ThumbnailImageSideLength, ElementName=PageRoot}"
                        Height="{Binding ThumbnailImageSideLength, ElementName=PageRoot}" 
-                       Margin="0" Source="{Binding ImagePath}" />
+                       Margin="0" Source="{Binding ImagePath}" Canvas.ZIndex="1" />
+                <Image Grid.Column="0" Width="{Binding ThumbnailImageSideLength, ElementName=PageRoot}"
+                       Height="{Binding ThumbnailImageSideLength, ElementName=PageRoot}" 
+                       Margin="0" Source="../Assets/Images/pet_default.jpg" />
                 <ItemsControl Grid.Column="1" Margin="15,0,0,0">
                     <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
                         <TextBlock Text="Name:"></TextBlock>

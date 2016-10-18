@@ -15,7 +15,7 @@
     mc:Ignorable="d"
     x:Name="PageRoot">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -103,7 +103,7 @@
                             <TextBlock Margin="5,0,0,0" Text="$" FontSize="20" Foreground="DarkGoldenrod" VerticalAlignment="Center" />
                         </StackPanel>
                         <Rectangle Fill="Teal" Height="1" Margin="20,10"></Rectangle>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
                             <TextBlock Text="Quantity" VerticalAlignment="Center"></TextBlock>
                             <TextBox x:Name="QuantityTextBox" Text="1" InputScope="Number" Width="50" Margin="10,0,0,0"></TextBox>
                             <Button x:Name="AddToCartButton" Content="Add to cart" Margin="10,0,0,0" Click="AddToCartButton_Click"></Button>

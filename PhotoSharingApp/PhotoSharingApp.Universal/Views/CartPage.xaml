@@ -20,7 +20,7 @@
         <valueConverters:SelectedLegendItemToColorConverter x:Key="SelectedHeroImageToColorConverter" />
         <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <DataTemplate x:Key="CartListItemTemplate">
-            <Grid Margin="0,10,0,0">
+            <Grid Margin="0,5">
                 <Grid.Transitions>
                     <TransitionCollection>
                         <AddDeleteThemeTransition/>
@@ -56,27 +56,16 @@
                               Height="{Binding ThumbnailImageSideLength, ElementName=PageRoot}" 
                               VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Button
+                        Height="{Binding ThumbnailImageSideLength, ElementName=PageRoot}"
                         Width="{Binding ThumbnailImageSideLength, ElementName=PageRoot}"
-                        Foreground="White" Background="DarkSeaGreen"
-                        Command="{Binding DataContext.EditCommand, ElementName=LayoutRoot}"
-                        CommandParameter="{Binding}" Margin="5,0,0,2.5">
-                        <TextBlock 
-                               Foreground="White" FontSize="16"
-                               Text="Edit"
-                               Style="{ThemeResource SubheaderTextBlockStyle}" />
-                    </Button>
-                    <Button
-                        Width="{Binding ThumbnailImageSideLength, ElementName=PageRoot}"
-                        Foreground="White" Background="Tomato"
+                        Background="White"
                         Command="{Binding DataContext.DeleteCommand, ElementName=LayoutRoot}"
-                        CommandParameter="{Binding}" Margin="5,2.5,0,0">
-                        <TextBlock 
-                               Foreground="White" FontSize="16"
-                               Text="Delete"
-                               Style="{ThemeResource SubheaderTextBlockStyle}" />
+                        CommandParameter="{Binding}">
+                        <Path Margin="10" Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+                              Fill="Tomato" Stretch="Uniform" Width="25" Height="25" 
+                              HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.ZIndex="1"/>
                     </Button>
                 </ItemsControl>
-
             </Grid>
         </DataTemplate>
         <Style x:Key="ListViewItemContainerStyle" TargetType="ListViewItem">
@@ -117,32 +106,6 @@
                                                SelectedPointerOverBackground="{ThemeResource SystemControlHighlightListAccentMediumBrush}"
                                                SelectedBackground="{ThemeResource SystemControlHighlightListAccentLowBrush}"
                                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="HeroImagesLegendItemContainerStyle" TargetType="GridViewItem">
-            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
-            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
-            <Setter Property="IsHoldingEnabled" Value="True" />
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="Margin" Value="0,0,4,4" />
-            <Setter Property="MinWidth" Value="15" />
-            <Setter Property="MinHeight" Value="{ThemeResource GridViewItemMinHeight}" />
-            <Setter Property="IsTabStop" Value="False" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="GridViewItem">
-                        <Grid>
-                            <!--We add the actual control in the container because we need the selection state to change
-                            the control's color.-->
-                            <Ellipse Width="5" Height="5"
-                                     Fill="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent},
-                                Converter={StaticResource SelectedHeroImageToColorConverter}}" />
-                        </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

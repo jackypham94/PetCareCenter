@@ -238,13 +238,13 @@
     <value>Having bussy day? Long trip? You don't have time for pet? Your pet is sickness? {0} will take care of your pet.</value>
   </data>
   <data name="WelcomePage_Instruction1_Title" xml:space="preserve">
-    <value>We'll take care of your pet</value>
+    <value>Take care of your pet</value>
   </data>
   <data name="WelcomePage_Instruction2_Content" xml:space="preserve">
     <value>This app will help your to track your pet' status.</value>
   </data>
   <data name="WelcomePage_Instruction2_Title" xml:space="preserve">
-    <value>Keep track of your pet</value>
+    <value>Keep track</value>
   </data>
   <data name="WelcomePage_Instruction3_Content" xml:space="preserve">
     <value>You can buy food for your pet easily with this app.</value>
@@ -262,7 +262,7 @@
     <value>They will be well-treated during the time they stay with us.</value>
   </data>
   <data name="WelcomePage_Instruction5_Title" xml:space="preserve">
-    <value>Don't worry about your pet</value>
+    <value>Don't worry</value>
   </data>
   <data name="WelcomePage_Instruction6_Content" xml:space="preserve">
     <value>Let start now.</value>
@@ -271,7 +271,7 @@
     <value>Ready?</value>
   </data>
   <data name="ServerURL" xml:space="preserve">
-    <value>http://192.168.0.107:62252</value>
+    <value>http://172.20.10.4:62252</value>
     <comment>http://10.82.131.113:62252</comment>
   </data>
   <data name="DeleteAccessory_Message" xml:space="preserve">

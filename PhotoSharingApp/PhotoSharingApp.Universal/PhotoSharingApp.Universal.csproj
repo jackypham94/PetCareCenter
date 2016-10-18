@@ -117,6 +117,7 @@
     <Content Include="Assets\Images\about.png" />
     <Content Include="Assets\Images\addYourPet.png" />
     <Content Include="Assets\Images\cat.png" />
+    <Content Include="Assets\Images\pet_default.jpg" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-400.png" />
     <Content Include="Assets\Square44x44Logo.scale-400.png" />
@@ -197,6 +198,8 @@
     <Compile Include="Models\Bill.cs" />
     <Compile Include="Models\CheckoutInfo.cs" />
     <Compile Include="Models\CreateNewUser.cs" />
+    <Compile Include="Models\PetCareType.cs" />
+    <Compile Include="Models\PetDeposition.cs" />
     <Compile Include="Models\ReturnAccessory.cs" />
     <Compile Include="Models\ReturnAccessoryCategory.cs" />
     <Compile Include="Models\ReturnAccessoryCombination.cs" />

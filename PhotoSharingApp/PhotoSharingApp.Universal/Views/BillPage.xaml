@@ -94,24 +94,27 @@
                             <TextBlock Grid.Column="2" Text="Price"></TextBlock>
                             <TextBlock Grid.Column="3" Text="Total"></TextBlock>
                         </Grid>
-                        <ListView x:Name="AccessoryListView" Margin="20,5">
-                            <ListView.ItemTemplate>
+                        <ItemsControl x:Name="AccessoryListView" Margin="20,5">
+                            <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding A}"></TextBlock>
-                                        <TextBlock Grid.Column="1" Text="{Binding B}"></TextBlock>
-                                        <TextBlock Grid.Column="2" Text="{Binding C}"></TextBlock>
-                                        <TextBlock Grid.Column="3" Text="{Binding D}"></TextBlock>
-                                    </Grid>
+                                    <StackPanel>
+                                        <Grid RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Accessory.Name}"></TextBlock>
+                                            <TextBlock Grid.Column="1" Text="{Binding BuyingQuantity}"></TextBlock>
+                                            <TextBlock Grid.Column="2" Text="{Binding Accessory.Price}"></TextBlock>
+                                            <TextBlock Grid.Column="3" Text="{Binding Accessory.Price}"></TextBlock>
+                                        </Grid>
+                                        <Rectangle Fill="Gray" Height="1" Margin="0,5"></Rectangle>
+                                    </StackPanel>
                                 </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                         <TextBlock x:Name="PlandateTextBlock" Margin="20,0"></TextBlock>
                         
                     </ItemsControl>

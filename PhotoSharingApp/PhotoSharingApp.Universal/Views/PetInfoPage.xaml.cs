@@ -82,6 +82,9 @@ namespace PhotoSharingApp.Universal.Views
                 try
                 {
                     InitializePetInfo(CurrentUser,args.Id).Wait();
+                    GetPetCareType().Wait();
+                    PetCareTypeComboBox.ItemsSource = PetCareType;
+                    PetCareTypeComboBox.SelectedIndex = 0;
                     ImagePath.Source = new BitmapImage(new Uri(Pet.ImagePath));
                     NameTextBlock.Text = Pet.Name;
                     AgeTextBlock.Text = Pet.Age.ToString();
@@ -128,6 +131,27 @@ namespace PhotoSharingApp.Universal.Views
                 }
             }
 
+        }
+
+        private List<PetCareType> PetCareType { get; set; }
+        public async Task GetPetCareType()
+        {
+            using (var client = new HttpClient())
+            {
+                var resourceLoader = ResourceLoader.GetForCurrentView();
+                string serverUrl = resourceLoader.GetString("ServerURL");
+                client.BaseAddress = new Uri(serverUrl);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.Timeout = TimeSpan.FromMilliseconds(2000);
+
+                String apiUrl = "/api/PetCareTypes";
+                HttpResponseMessage response = await client.GetAsync(apiUrl).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    PetCareType = await response.Content.ReadAsAsync<List<PetCareType>>();
+                }
+            }
         }
 
         private async void DepositPetButton_Click(object sender, RoutedEventArgs e)

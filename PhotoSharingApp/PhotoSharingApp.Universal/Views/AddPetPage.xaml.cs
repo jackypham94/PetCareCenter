@@ -65,7 +65,7 @@ namespace PhotoSharingApp.Universal.Views
                 MainScrollViewer.Visibility = Visibility.Visible;
                 InitializeData();
             }
-            
+
         }
 
 
@@ -121,12 +121,11 @@ namespace PhotoSharingApp.Universal.Views
             bool check = CheckPet(newPet);
             try
             {
-                if (check)
-                {
-                        NoConnectionGrid.Visibility = Visibility.Collapsed;
-                        newPet.user = CurrentUser;
-                        RegisterNewPet(newPet).Wait();
-                }
+                if (!check) return;
+                NoConnectionGrid.Visibility = Visibility.Collapsed;
+                newPet.user = CurrentUser;
+                RegisterNewPet(newPet).Wait();
+                Frame.Navigate(typeof(MyPetPage));
             }
             catch (Exception ex)
             {
@@ -136,7 +135,7 @@ namespace PhotoSharingApp.Universal.Views
                     MainScrollViewer.Visibility = Visibility.Collapsed;
                 }
             }
-            
+
 
         }
 
@@ -175,7 +174,7 @@ namespace PhotoSharingApp.Universal.Views
                 HttpResponseMessage response = await client.PutAsJsonAsync("/api/Pets/add", newPet).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
-                    Frame.Navigate(typeof(MyPetPage));
+
                 }
             }
         }

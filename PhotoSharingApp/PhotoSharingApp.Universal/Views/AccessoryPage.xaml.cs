@@ -11,6 +11,7 @@ using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -43,6 +44,20 @@ namespace PhotoSharingApp.Universal.Views
             UpdateThumbnailSize();
             SizeChanged += AccessoryPage_SizeChanged;
             AuthenticationButton.Visibility = Visibility.Collapsed;
+            InputPane.GetForCurrentView().Showing += ItemDetailPage_Showing;
+            InputPane.GetForCurrentView().Hiding += ItemDetailPage_Hiding;
+        }
+
+        private void ItemDetailPage_Hiding(InputPane sender, InputPaneVisibilityEventArgs args)
+        {
+            LayoutRoot.Margin = new Thickness(0);
+            args.EnsuredFocusedElementInView = true;
+        }
+
+        private void ItemDetailPage_Showing(InputPane sender, InputPaneVisibilityEventArgs args)
+        {
+            LayoutRoot.Margin = new Thickness(0, 0, 0, args.OccludedRect.Height);
+            args.EnsuredFocusedElementInView = true;
         }
 
         private void AccessoryPage_SizeChanged(object sender, SizeChangedEventArgs e)

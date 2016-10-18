@@ -44,6 +44,7 @@ namespace PhotoSharingApp.Universal.Views
                     EmailTextBlock.Text = args.UserInfo.Email;
                     DeliveryDateTextBlock.Text = args.PlanDate.Date.ToString(CultureInfo.InvariantCulture);
                     TotalTextBlock.Text = args.Total.ToString(CultureInfo.InvariantCulture);
+                    AccessoryListView.ItemsSource = args.ReturnBuyingDetail;
 
                 }
                 catch (Exception ex)
